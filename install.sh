@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # =====================================================================
 #  install.sh — one-command setup for Huawei Document Templates
-#  Installs XeLaTeX, LaTeX packages, latexmk, and fallback fonts.
+#  Installs XeLaTeX, LaTeX packages, latexmk, fallback fonts,
+#  the opencode skill, and the VS Code LaTeX Workshop extension.
 #  Tested on Ubuntu 22.04 / 24.04 (WSL and native).
 # =====================================================================
 set -euo pipefail
@@ -60,7 +61,7 @@ fc-cache -f
 info "Font cache updated"
 
 # ---- Verify toolchain ----------------------------------------------
-step "Verifying installation"
+step "Verifying toolchain"
 
 verify() {
     if command -v "$1" &>/dev/null; then
@@ -84,6 +85,68 @@ if fc-list | grep -q "DejaVu Sans Mono"; then
     info "DejaVu Sans Mono: available (code font fallback)"
 else
     warn "DejaVu Sans Mono not found — code font may not render correctly"
+fi
+
+# ---- Install opencode skill ----------------------------------------
+step "Installing opencode skill"
+
+SKILL_SRC="$SCRIPT_DIR/.opencode/skills/labguide/SKILL.md"
+SKILL_DST_DIR="$HOME/.config/opencode/skills/labguide"
+SKILL_DST="$SKILL_DST_DIR/SKILL.md"
+
+if [[ ! -f "$SKILL_SRC" ]]; then
+    warn "Skill source not found at $SKILL_SRC — skipping"
+else
+    # Project-level skill (already in repo, just verify)
+    info "Project skill: .opencode/skills/labguide/SKILL.md (in repo)"
+
+    # Global skill (so /skill labguide works from any directory)
+    mkdir -p "$SKILL_DST_DIR"
+    cp "$SKILL_SRC" "$SKILL_DST"
+    info "Global skill: $SKILL_DST"
+    echo "  /skill labguide will be available project-wide and globally"
+    echo "  (restart opencode for the global skill to be discovered)"
+fi
+
+# ---- Install VS Code extension -------------------------------------
+step "Configuring VS Code"
+
+VSCODE_SETTINGS=(
+    "$SCRIPT_DIR/.vscode/settings.json"
+    "$SCRIPT_DIR/templates/labguide/.vscode/settings.json"
+)
+
+# Verify settings files exist
+for f in "${VSCODE_SETTINGS[@]}"; do
+    if [[ -f "$f" ]]; then
+        info "Settings: $f"
+    else
+        warn "Settings not found: $f"
+    fi
+done
+
+# Install LaTeX Workshop extension if VS Code CLI is available
+if command -v code &>/dev/null; then
+    info "VS Code CLI detected: $(command -v code)"
+
+    if code --install-extension James-Yu.latex-workshop --force 2>/dev/null; then
+        info "Extension installed: LaTeX Workshop (James-Yu.latex-workshop)"
+    else
+        warn "Failed to install LaTeX Workshop extension"
+    fi
+
+    # Optional: LTeX for spell/grammar checking
+    if code --install-extension valentjn.vscode-ltex --force 2>/dev/null; then
+        info "Extension installed: LTeX (valentjn.vscode-ltex)"
+    else
+        warn "Failed to install LTeX extension (optional — spell/grammar checking)"
+    fi
+else
+    warn "VS Code CLI (code) not found — skipping extension installation"
+    echo "  To install manually:"
+    echo "    1. Install VS Code: https://code.visualstudio.com/"
+    echo "    2. Install LaTeX Workshop extension from the marketplace"
+    echo "    3. The .vscode/settings.json files are already in the repo"
 fi
 
 # ---- Test compile --------------------------------------------------
@@ -120,15 +183,18 @@ step "Setup complete!"
 
 echo ""
 echo -e "${BOLD}What was installed:${RESET}"
-echo "  • XeLaTeX (TeX Live) — LaTeX engine with system font support"
-echo "  • latexmk             — build automation (uses .latexmkrc → xelatex)"
-echo "  • LaTeX packages      — titlesec, tocloft, enumitem, tcolorbox, babel, etc."
-echo "  • Liberation Sans     — fallback for Huawei Sans (proprietary)"
+echo "  • XeLaTeX (TeX Live)    — LaTeX engine with system font support"
+echo "  • latexmk                — build automation (uses .latexmkrc → xelatex)"
+echo "  • LaTeX packages         — titlesec, tocloft, enumitem, tcolorbox, babel, etc."
+echo "  • Liberation Sans        — fallback for Huawei Sans (proprietary)"
+echo "  • opencode skill         — /skill labguide (project + global)"
+echo "  • VS Code LaTeX Workshop — XeLaTeX recipes, PDF preview, SyncTeX"
 echo ""
 echo -e "${BOLD}Next steps:${RESET}"
 echo "  1. Open this project in opencode"
 echo "  2. Run ${BOLD}/skill labguide${RESET} to create a new lab guide document"
-echo "  3. Or compile the samples manually:"
+echo "  3. Or open in VS Code and save main.tex — PDF preview appears automatically"
+echo "  4. Or compile manually:"
 echo "       cd templates/labguide && latexmk main.tex      # Portuguese"
 echo "       cd templates/labguide && latexmk main_en.tex   # English"
 echo ""

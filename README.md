@@ -8,7 +8,7 @@ self-contained directory under `templates/` — compile with XeLaTeX.
 ```bash
 git clone <repo-url> Huawei-doc-templates
 cd Huawei-doc-templates
-./install.sh          # installs XeLaTeX, latexmk, fonts (Ubuntu/Debian)
+./install.sh          # installs XeLaTeX, latexmk, fonts, opencode skill, VS Code extension
 ```
 
 Then open the project in [opencode](https://opencode.ai) and run:

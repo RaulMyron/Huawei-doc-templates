@@ -1,7 +1,7 @@
-%% labguide.cls
+%% guide.cls
 %% =====================================================================
-%%  Classe LaTeX para guias de laboratório (Huawei Cloud)
-%%  (Huawei Cloud). Requer XeLaTeX ou LuaLaTeX (por causa do fontspec).
+%%  Classe LaTeX para guias (Huawei Cloud)
+%%  Requer XeLaTeX ou LuaLaTeX (por causa do fontspec).
 %%
 %%  Fontes usadas:
 %%    - Texto  : Huawei Sans   (fallback: Liberation Sans / Arial)
@@ -15,7 +15,7 @@
 %%    <qualquer>  -> repassada para a classe article.
 %% =====================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{labguide}[2025/07/20 Huawei Lab Guide template]
+\ProvidesClass{guide}[2025/07/20 Huawei Guide template]
 
 % ---- Opções --------------------------------------------------------
 \newif\if@indentbody \@indentbodyfalse
@@ -56,12 +56,18 @@
 \definecolor{linkblue}{HTML}{0000FF} % hyperlinks (sem sublinhado)
 \definecolor{huaweired}{HTML}{C7000B}% vermelho da marca (acentos)
 \definecolor{ruleblack}{HTML}{000000} % cor das regras horizontais (preto)
+\definecolor{warningbg}{HTML}{FFF8E1} % fundo dos avisos (âmbar claro)
+\definecolor{warningfg}{HTML}{F57C00} % borda dos avisos (âmbar)
+\definecolor{tipbg}{HTML}{E8F5E9}     % fundo das dicas (verde claro)
+\definecolor{tipfg}{HTML}{2E7D32}     % borda das dicas (verde)
+\definecolor{infobg}{HTML}{E3F2FD}    % fundo das infos (azul claro)
+\definecolor{infofg}{HTML}{1565C0}    % borda das infos (azul)
 
 % =====================================================================
 %  FONTES  (com fallback automático se as proprietárias faltarem)
 % =====================================================================
 \newcommand{\lg@warnfont}[2]{%
-  \ClassWarning{labguide}{Fonte "#1" nao encontrada; usando fallback "#2".
+  \ClassWarning{guide}{Fonte "#1" nao encontrada; usando fallback "#2".
     Instale a fonte para fidelidade total.}}
 
 \IfFontExistsTF{Huawei Sans}
@@ -208,13 +214,13 @@
 % =====================================================================
 %  CAPA
 % =====================================================================
-% \setlabtitle{...}  -> título grande da capa (e default do header)
+% \setguidetitle{...}  -> título grande da capa (e default do header)
 \if@english
-  \newcommand{\lg@labtitle}{Lab Guide}
+  \newcommand{\lg@guidetitle}{Guide}
 \else
-  \newcommand{\lg@labtitle}{Guia de Laboratório}
+  \newcommand{\lg@guidetitle}{Guia}
 \fi
-\newcommand{\setlabtitle}[1]{\renewcommand{\lg@labtitle}{#1}}
+\newcommand{\setguidetitle}[1]{\renewcommand{\lg@guidetitle}{#1}}
 \newcommand{\lg@covertext}{Huawei Technologies CO., LTD}
 \newcommand{\setcovertext}[1]{\renewcommand{\lg@covertext}{#1}}
 \newcommand{\lg@coverlogo}{assets/huawei-logo-cover.png}
@@ -226,7 +232,7 @@
   \thispagestyle{fancy}%
   \vspace*{2.2cm}%
   {\centering
-   \fontsize{36}{42}\selectfont \lg@labtitle\par}%
+   \fontsize{36}{42}\selectfont \lg@guidetitle\par}%
   \vspace{4.5cm}%
   {\centering
    \includegraphics[width=3.6cm]{\lg@coverlogo}\par}%
@@ -337,5 +343,38 @@
 
 % Link textual azul (sem sublinhado), preservando destino clicável
 \newcommand{\weblink}[2]{\href{#1}{\textcolor{linkblue}{#2}}}
+
+% =====================================================================
+%  CAIXAS DE AVISO  (callout boxes: aviso, dica, info)
+% =====================================================================
+% Uso:
+%   \begin{aviso} ... \end{aviso}   — atenção / cuidado (âmbar)
+%   \begin{dica}  ... \end{dica}    — sugestão / dica (verde)
+%   \begin{info}  ... \end{info}    — informação adicional (azul)
+\newtcolorbox{aviso}{
+  colback=warningbg, colframe=warningfg,
+  boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  before skip=6pt, after skip=6pt, breakable, enhanced jigsaw
+}
+\newtcolorbox{dica}{
+  colback=tipbg, colframe=tipfg,
+  boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  before skip=6pt, after skip=6pt, breakable, enhanced jigsaw
+}
+\newtcolorbox{info}{
+  colback=infobg, colframe=infofg,
+  boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  before skip=6pt, after skip=6pt, breakable, enhanced jigsaw
+}
+
+% =====================================================================
+%  ETIQUETA / BADGE  (rótulo colorido inline)
+% =====================================================================
+% Uso: \badge{Novo}  -> rótulo vermelho com texto branco
+\newcommand{\badge}[1]{%
+  \colorbox{huaweired}{\textcolor{white}{\footnotesize\bfseries\strut~#1~}}}
 
 \endinput

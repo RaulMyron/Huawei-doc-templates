@@ -15,10 +15,10 @@ cd Huawei-doc-templates
 Then open the project in [opencode](https://opencode.ai) and run:
 
 ```
-/skill labguide
+/skill guide
 ```
 
-to create a new lab guide document. The skill guides you through title,
+to create a new guide document. The skill guides you through title,
 language, and content, then compiles and verifies the PDF.
 
 ## How it works
@@ -35,7 +35,7 @@ language, and content, then compiles and verifies the PDF.
 ## Manual usage
 
 ```bash
-cd templates/labguide
+cd templates/guide
 latexmk main.tex        # Portuguese sample (uses .latexmkrc → xelatex)
 latexmk main_en.tex     # English sample
 ```
@@ -43,18 +43,18 @@ latexmk main_en.tex     # English sample
 Or with raw XeLaTeX (run twice for the TOC):
 
 ```bash
-cd templates/labguide
+cd templates/guide
 xelatex main.tex && xelatex main.tex
 ```
 
-See the template's own [`README.md`](templates/labguide/README.md) for its
+See the template's own [`README.md`](templates/guide/README.md) for its
 commands, environments, and options.
 
 ## Templates
 
 | Template | Skill | Description |
 |---|---|---|
-| [`labguide`](templates/labguide/) | `/skill labguide` | Huawei Cloud lab guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks. Portuguese (default) and English. |
+| [`guide`](templates/guide/) | `/skill guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, callout boxes, badges. Portuguese (default) and English. |
 
 ## Requirements
 
@@ -77,10 +77,10 @@ commands, environments, and options.
 ├── .vscode/
 │   └── settings.json        # VS Code + LaTeX Workshop config (XeLaTeX recipe)
 └── templates/
-    └── labguide/            # self-contained template + skill
-        ├── SKILL.md         # opencode skill (/skill labguide) + agent reference
+    └── guide/            # self-contained template + skill
+        ├── SKILL.md         # opencode skill (/skill guide) + agent reference
         ├── README.md        # human docs
-        ├── labguide.cls     # the class — all formatting lives here
+        ├── guide.cls     # the class — all formatting lives here
         ├── main.tex         # sample document in Portuguese
         ├── main_en.tex      # sample document in English
         ├── .latexmkrc       # latexmk config (XeLaTeX by default)

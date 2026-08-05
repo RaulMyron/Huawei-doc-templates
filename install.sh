@@ -116,7 +116,7 @@ step "Configuring VS Code"
 
 VSCODE_SETTINGS=(
     "$SCRIPT_DIR/.vscode/settings.json"
-    "$SCRIPT_DIR/templates/labguide/.vscode/settings.json"
+    "$SCRIPT_DIR/templates/guide/.vscode/settings.json"
 )
 
 # Verify settings files exist
@@ -155,7 +155,7 @@ fi
 # ---- Test compile --------------------------------------------------
 step "Test compilation"
 
-LABGUIDE_DIR="$SCRIPT_DIR/templates/labguide"
+LABGUIDE_DIR="$SCRIPT_DIR/templates/guide"
 if [[ -f "$LABGUIDE_DIR/main.tex" ]]; then
     cd "$LABGUIDE_DIR"
     latexmk -C main.tex 2>/dev/null
@@ -164,7 +164,7 @@ if [[ -f "$LABGUIDE_DIR/main.tex" ]]; then
         info "Portuguese sample compiled successfully (${PAGES:-?} pages)"
         latexmk -C main.tex 2>/dev/null
     else
-        warn "Portuguese sample compile failed — check templates/labguide/main.log"
+        warn "Portuguese sample compile failed — check templates/guide/main.log"
     fi
 
     if [[ -f "main_en.tex" ]]; then
@@ -174,7 +174,7 @@ if [[ -f "$LABGUIDE_DIR/main.tex" ]]; then
             info "English sample compiled successfully (${PAGES:-?} pages)"
             latexmk -C main_en.tex 2>/dev/null
         else
-            warn "English sample compile failed — check templates/labguide/main_en.log"
+            warn "English sample compile failed — check templates/guide/main_en.log"
         fi
     fi
 else
@@ -190,16 +190,16 @@ echo "  • XeLaTeX (TeX Live)    — LaTeX engine with system font support"
 echo "  • latexmk                — build automation (uses .latexmkrc → xelatex)"
 echo "  • LaTeX packages         — titlesec, tocloft, enumitem, tcolorbox, babel, etc."
 echo "  • Liberation Sans        — fallback for Huawei Sans (proprietary)"
-echo "  • opencode skill         — /skill labguide (project + global)"
+echo "  • opencode skill         — /skill guide (project + global)"
 echo "  • VS Code LaTeX Workshop — XeLaTeX recipes, PDF preview, SyncTeX"
 echo ""
 echo -e "${BOLD}Next steps:${RESET}"
 echo "  1. Open this project in opencode"
-echo "  2. Run ${BOLD}/skill labguide${RESET} to create a new lab guide document"
+echo "  2. Run ${BOLD}/skill guide${RESET} to create a new guide document"
 echo "  3. Or open in VS Code and save main.tex — PDF preview appears automatically"
 echo "  4. Or compile manually:"
-echo "       cd templates/labguide && latexmk main.tex      # Portuguese"
-echo "       cd templates/labguide && latexmk main_en.tex   # English"
+echo "       cd templates/guide && latexmk main.tex      # Portuguese"
+echo "       cd templates/guide && latexmk main_en.tex   # English"
 echo ""
 echo -e "${BOLD}Optional (for full font fidelity):${RESET}"
 echo "  • Install Huawei Sans (proprietary — obtain from Huawei)"

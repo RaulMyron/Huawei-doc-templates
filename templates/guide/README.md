@@ -1,21 +1,21 @@
-# Huawei Cloud Lab Guide — LaTeX Template
+# Huawei Cloud Guide — LaTeX Template
 
-A LaTeX template that produces a Huawei Cloud lab guide PDF: cover page, header,
-table of contents, giant chapter numbers, objectives box, code blocks, colors,
-spacing, and fonts.
+A LaTeX template that produces a Huawei Cloud guide PDF: cover page, header,
+table of contents, giant chapter numbers, objectives box, code blocks,
+callout boxes, badges, colors, spacing, and fonts.
 
-> **Language note:** by default the lab guide renders in **Portuguese** — the
+> **Language note:** by default the guide renders in **Portuguese** — the
 > class loads `babel` with the `brazilian` language and built-in labels such as
 > *Sumário*, *Objetivo Geral:*, *Objetivo da prática:*, *Pré-requisitos:* and
 > *Passo a passo:* are in Portuguese. Pass the **`english`** class option
-> (`\documentclass[english]{labguide}`) to switch all labels to English and load
+> (`\documentclass[english]{guide}`) to switch all labels to English and load
 > `babel` with `english` instead. See [Class options](#class-options) below.
 
 ## Project structure
 
 ```
 .
-├── labguide.cls      # the class — all formatting lives here
+├── guide.cls      # the class — all formatting lives here
 ├── main.tex          # sample document in Portuguese (starting point)
 ├── main_en.tex       # sample document in English (uses [english] option)
 ├── README.md         # this file (human guide)
@@ -139,7 +139,7 @@ works out of the box — just open the folder and start editing.
    ```
 
 3. **Open the project in VS Code** — `File → Open Folder…` and select either
-   the repo root or `templates/labguide/`. Both have a `.vscode/settings.json`
+   the repo root or `templates/guide/`. Both have a `.vscode/settings.json`
    pre-configured for XeLaTeX, so LaTeX Workshop never falls back to pdflatex.
 
 4. **Open `main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
@@ -195,7 +195,7 @@ works out of the box — just open the folder and start editing.
 
 Install the **LTeX** extension (publisher: *valentjn*) for inline grammar and
 spell checking in LaTeX text. It supports both Portuguese and English —
-configure it per workspace to match your `labguide` language option.
+configure it per workspace to match your `guide` language option.
 
 #### Alternative: TeXworks
 
@@ -254,7 +254,7 @@ commands that, in this template, produce a specific look.
 
 | Command | What it does |
 |---|---|
-| `\setlabtitle{...}` | Sets the large **cover** title. |
+| `\setguidetitle{...}` | Sets the large **cover** title. |
 | `\setheadertitle{...}` | Sets the centered **header** text (repeated on every page). |
 | `\setcovertext{...}` | Sets the line below the cover logo (default: `Huawei Technologies CO., LTD`). |
 | `\setheaderlogo{path}` | Sets the **header logo** image path (default: `assets/huawei-logo-header.png`). |
@@ -263,8 +263,8 @@ commands that, in this template, produce a specific look.
 Example:
 
 ```latex
-\setlabtitle{Guia de Laboratório: Salada de frutas}
-\setheadertitle{Huawei Cloud -- Guia do laboratório sobre bananas e maçãs}
+\setguidetitle{Guia: Salada de frutas}
+\setheadertitle{Huawei Cloud -- Guia sobre bananas e maçãs}
 \setcovertext{Huawei Technologies CO., LTD}
 ```
 
@@ -380,6 +380,30 @@ Examples:
 | `\href{url}{text}` | Standard `hyperref` link (also blue via `urlcolor`). |
 | `\textbf{...}` | Bold — used to highlight interface terms (e.g. **Console**). |
 
+### 9. Callout boxes
+
+| Environment | Color | Use |
+|---|---|---|
+| `\begin{aviso} ... \end{aviso}` | Amber | **Warning / caution** — potential pitfalls. |
+| `\begin{dica} ... \end{dica}` | Green | **Tip / suggestion** — best practices. |
+| `\begin{info} ... \end{info}` | Blue | **Informational note** — helpful context. |
+
+All boxes have a 3pt left border, light background, and break across pages.
+
+Example:
+
+```latex
+\begin{aviso}
+The EIP is released when the instance is deleted.
+\end{aviso}
+```
+
+### 10. Badge
+
+| Command | Result |
+|---|---|
+| `\badge{...}` | Inline **red label** with white text (e.g. `\badge{Novo}`). |
+
 ---
 
 ## Format tokens (quick reference)
@@ -397,15 +421,18 @@ Examples:
 | Code background | `#F6F8FA` |
 | Code text color | `#1F2328` |
 | Link color | `#0000FF` (no underline) |
-| Brand red | `#C7000B` (`huaweired` — H1 chapter rules & accents) |
+| Brand red | `#C7000B` (`huaweired` — H1 chapter rules, accents, badge) |
+| Warning box | `#FFF8E1` bg / `#F57C00` border |
+| Tip box | `#E8F5E9` bg / `#2E7D32` border |
+| Info box | `#E3F2FD` bg / `#1565C0` border |
 
-These colors are defined in `labguide.cls` (`codebg`, `codetext`, `linkblue`,
+These colors are defined in `guide.cls` (`codebg`, `codetext`, `linkblue`,
 `huaweired`) and can be reused with `\textcolor{name}{...}`.
 
 ## Class options
 
 ```latex
-\documentclass[english,indentbody]{labguide}
+\documentclass[english,indentbody]{guide}
 ```
 
 - `english` — switches all predefined labels to English (Contents, General
@@ -421,7 +448,7 @@ These colors are defined in `labguide.cls` (`codebg`, `codetext`, `linkblue`,
 | Token | Portuguese (default) | English (`[english]`) |
 |---|---|---|
 | TOC title | Sumário | Contents |
-| Cover title default | Guia de Laboratório | Lab Guide |
+| Cover title default | Guia | Guide |
 | `\objgeral` label | Objetivo Geral: | General Objective: |
 | `\objpratica` label | Objetivo da prática: | Practice Objective: |
 | `\prerequisitos` label | Pré-requisitos: | Prerequisites: |
@@ -432,7 +459,7 @@ These colors are defined in `labguide.cls` (`codebg`, `codetext`, `linkblue`,
 
 - **Swap the logo:** replace the files in `assets/` keeping the names, or use
   `\setheaderlogo{path}` and `\setcoverlogo{path}` in the preamble.
-- **Adjust colors:** edit the `\definecolor` block at the top of `labguide.cls`.
+- **Adjust colors:** edit the `\definecolor` block at the top of `guide.cls`.
 - **Adjust sizes/spacing:** each concern is in a commented section of
-  `labguide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section and
+  `guide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section and
   edit there.

@@ -19,6 +19,7 @@
 *.lof
 *.lot
 *.xdy
+*.xdv
 *.dvi
 *.ps
 *.listing

@@ -1,15 +1,15 @@
 % =====================================================================
-%  Guia de Laboratório — exemplo de uso do template labguide.cls
+%  Guia — exemplo de uso do template guide.cls
 %  Compilar com XeLaTeX ou LuaLaTeX:
 %      xelatex main.tex   (rode 2x para o sumário)
 %
-%  Para versão em inglês, use:  \documentclass[english]{labguide}
+%  Para versão em inglês, use:  \documentclass[english]{guide}
 % =====================================================================
-\documentclass{labguide}
+\documentclass{guide}
 
 % --- Configuração do documento --------------------------------------
-\setlabtitle{Guia de Laboratório: Acessar o Console da Huawei Cloud}
-\setheadertitle{Huawei Cloud -- Guia do laboratório sobre acesso ao Console}
+\setguidetitle{Guia: Acessar o Console da Huawei Cloud}
+\setheadertitle{Huawei Cloud -- Guia de acesso ao Console}
 \setcovertext{Huawei Technologies CO., LTD}
 
 \begin{document}
@@ -44,6 +44,11 @@
   \end{itemize}
 \end{objetivos}
 
+\begin{info}
+Este guia cobre o fluxo básico de acesso ao Console. Para operações
+avançadas, consulte a documentação oficial da Huawei Cloud.
+\end{info}
+
 \subsection{Acessar e navegar no Console}
 
 \objpratica{Realizar o login no portal da Huawei Cloud e percorrer os
@@ -73,6 +78,11 @@
   \nota{A região selecionada no Console define onde os novos recursos são
     provisionados. Recursos já existentes em outras regiões continuam visíveis
     apenas quando você alterna para a região correspondente.}
+
+  \begin{aviso}
+  A região não pode ser alterada para recursos já provisionados.
+  Planeje a região antes de criar seus recursos.
+  \end{aviso}
 \end{enumerate}
 
 \subsection{Explorar o Console}
@@ -167,8 +177,15 @@ Com o provider declarado, você pode começar a definir recursos no
 documentação oficial em
 \weblink{https://registry.terraform.io/providers/huaweicloud/huaweicloud/latest/docs}{Huawei Cloud Provider}.
 
-\nota{Este laboratório é um exemplo de uso do template \code{labguide.cls};
-  ajuste os textos, imagens e blocos de código conforme o fluxo real do seu
-  laboratório.}
+\begin{dica}
+Use \code{terraform validate} para verificar a sintaxe antes de aplicar
+as alterações.
+\end{dica}
+
+\badge{Exemplo}
+
+\nota{Este guia é um exemplo de uso do template \code{guide.cls};
+  ajuste os textos, imagens e blocos de código conforme o fluxo real do
+  seu guia.}
 
 \end{document}

@@ -1,13 +1,13 @@
 % =====================================================================
-%  Lab Guide — English sample (verifies all template features)
+%  Guide — English sample (verifies all template features)
 %  Compile with XeLaTeX:
 %      xelatex main_en.tex   (run 2x for the TOC)
 % =====================================================================
-\documentclass[english]{labguide}
+\documentclass[english]{guide}
 
 % --- Document configuration -----------------------------------------
-\setlabtitle{Lab Guide: Getting Started with Huawei Cloud ECS}
-\setheadertitle{Huawei Cloud -- ECS Quick Start Lab}
+\setguidetitle{Guide: Getting Started with Huawei Cloud ECS}
+\setheadertitle{Huawei Cloud -- ECS Quick Start Guide}
 \setcovertext{Huawei Technologies CO., LTD}
 
 \begin{document}
@@ -41,6 +41,11 @@
   \end{itemize}
 \end{objetivos}
 
+\begin{info}
+This guide covers the basic ECS provisioning flow. For advanced operations,
+consult the official Huawei Cloud documentation.
+\end{info}
+
 \subsection{Launch the instance}
 
 \objpratica{Create a single ECS instance in the \code{sa-brazil-1} region
@@ -73,6 +78,11 @@ Security Group: sg-ssh (allows inbound TCP 22)
 
   \nota{The instance is assigned a public IP (EIP). If you need a fixed IP,
     allocate a dedicated EIP and bind it after creation.}
+
+  \begin{aviso}
+  The EIP assigned during creation is released when the instance is deleted.
+  Allocate a dedicated EIP if you need to keep the address.
+  \end{aviso}
 \end{enumerate}
 
 \subsection{Connect over SSH}
@@ -105,9 +115,9 @@ df -h             # check disk space
 systemctl status  # verify services are running
 \end{codigo}
 
-\nota{This lab is an English sample that exercises every command and
-  environment provided by the \code{labguide} class. Use it as a reference
-  when writing your own lab guides.}
+\nota{This is an English sample that exercises every command and
+  environment provided by the \code{guide} class. Use it as a reference
+  when writing your own guides.}
 
 % =====================================================================
 %  Chapter 2 — Configure the Terraform Provider
@@ -182,6 +192,12 @@ With the provider declared, you can start defining resources in
 \code{terraform}. For the full list of available resources, see the official
 documentation at
 \weblink{https://registry.terraform.io/providers/huaweicloud/huaweicloud/latest/docs}{Huawei Cloud Provider}.
+
+\begin{dica}
+Use \code{terraform validate} to check syntax before applying changes.
+\end{dica}
+
+\badge{Example}
 
 % =====================================================================
 %  Chapter 3 — Clean Up

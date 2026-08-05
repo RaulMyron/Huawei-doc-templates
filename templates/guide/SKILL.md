@@ -1,18 +1,18 @@
 ---
-name: labguide
-description: Create or edit Huawei Cloud lab guide documents using the LaTeX labguide template. Use when the user wants to write, extend, or fix a lab guide, or asks to create a new document for Huawei Cloud labs. Triggers on keywords like labguide, lab guide, guia de laboratório, Huawei Cloud document.
+name: guide
+description: Create or edit Huawei Cloud guide documents using the LaTeX guide template. Use when the user wants to write, extend, or fix a guide, or asks to create a new document for Huawei Cloud. Triggers on keywords like guide, guia, Huawei Cloud document.
 ---
 
-# Huawei Cloud Lab Guide — Skill
+# Huawei Cloud Guide — Skill
 
-Create, edit, and compile Huawei Cloud lab guide documents using the
-`labguide` LaTeX class in this directory.
+Create, edit, and compile Huawei Cloud guide documents using the
+`guide` LaTeX class in this directory.
 
 ## When to use
 
-Use this skill when the task is to **write, extend, or fix a Huawei Cloud lab
+Use this skill when the task is to **write, extend, or fix a Huawei Cloud
 guide**. The output is a PDF compiled from LaTeX. Content defaults to
-Portuguese ("Guia de Laboratório"); pass the `english` class option for English
+Portuguese ("Guia"); pass the `english` class option for English
 labels. Do **not** use this for general LaTeX documents — the formatting is
 hard-coded to the Huawei house style.
 
@@ -50,7 +50,7 @@ hard-coded to the Huawei house style.
 
 ```
 .
-├── labguide.cls      # the class — ALL formatting lives here
+├── guide.cls      # the class — ALL formatting lives here
 ├── main.tex          # Portuguese sample (reference)
 ├── main_en.tex       # English sample (reference)
 ├── README.md         # human docs
@@ -66,7 +66,7 @@ hard-coded to the Huawei house style.
 ```
 
 **Rule of thumb:** content/structure goes in `.tex` files; look-and-feel goes
-in `labguide.cls`. Do not inline formatting overrides in the document unless
+in `guide.cls`. Do not inline formatting overrides in the document unless
 the user asks.
 
 ---
@@ -76,9 +76,9 @@ the user asks.
 ### Portuguese (default)
 
 ```latex
-\documentclass{labguide}
+\documentclass{guide}
 
-\setlabtitle{Guia de Laboratório: <topic>}
+\setguidetitle{Guia: <topic>}
 \setheadertitle{Huawei Cloud -- <short title>}
 \setcovertext{Huawei Technologies CO., LTD}
 
@@ -112,7 +112,7 @@ the user asks.
 
 ### English
 
-Same skeleton but with `\documentclass[english]{labguide}`. Labels switch
+Same skeleton but with `\documentclass[english]{guide}`. Labels switch
 automatically: *Contents*, *General Objective:*, *Practice Objective:*,
 *Prerequisites:*, *Step by step:*, *Page*.
 
@@ -127,7 +127,7 @@ Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 ### Preamble configuration
 | Command | Purpose |
 |---|---|
-| `\setlabtitle{...}` | Big cover title. |
+| `\setguidetitle{...}` | Big cover title. |
 | `\setheadertitle{...}` | Centered header text on every page. |
 | `\setcovertext{...}` | Line under the cover logo (default `Huawei Technologies CO., LTD`). |
 | `\setheaderlogo{path}` | Header logo image path (default `assets/huawei-logo-header.png`). |
@@ -204,12 +204,26 @@ use `\code{...}` and escape LaTeX specials normally.
 | `\href{url}{text}` | Standard `hyperref` link (also blue via `urlcolor`). |
 | `\textbf{...}` | Bold — use for UI terms (e.g. **Console**). |
 
+### Callout boxes
+| Environment | Color | Use |
+|---|---|---|
+| `\begin{aviso} ... \end{aviso}` | Amber (`#FFF8E1` bg, `#F57C00` border) | Warning / caution — potential pitfalls. |
+| `\begin{dica} ... \end{dica}` | Green (`#E8F5E9` bg, `#2E7D32` border) | Tip / suggestion — best practices. |
+| `\begin{info} ... \end{info}` | Blue (`#E3F2FD` bg, `#1565C0` border) | Informational note — helpful context. |
+
+All boxes are breakable across pages and have a 3pt left border.
+
+### Badge
+| Command | Result |
+|---|---|
+| `\badge{...}` | Inline red label with white text (e.g. `\badge{Novo}`). |
+
 ---
 
 ## Class options
 
 ```latex
-\documentclass[english,indentbody]{labguide}
+\documentclass[english,indentbody]{guide}
 ```
 - `english` — switches all predefined labels to English and loads `babel` with
   `english`. Default off (Portuguese / `brazilian`).
@@ -218,14 +232,20 @@ use `\code{...}` and escape LaTeX specials normally.
 
 ---
 
-## Colors (defined in `labguide.cls`, reusable via `\textcolor{name}{...}`)
+## Colors (defined in `guide.cls`, reusable via `\textcolor{name}{...}`)
 | Name | Hex | Use |
 |---|---|---|
 | `codebg` | `#F6F8FA` | Code block background |
 | `codetext` | `#1F2328` | Code text |
 | `linkblue` | `#0000FF` | Links |
-| `huaweired` | `#C7000B` | Brand red (H1 chapter rules, accents) |
+| `huaweired` | `#C7000B` | Brand red (H1 chapter rules, accents, badge) |
 | `ruleblack` | `#000000` | Horizontal rules (TOC, objectives) |
+| `warningbg` | `#FFF8E1` | Warning box background |
+| `warningfg` | `#F57C00` | Warning box border |
+| `tipbg` | `#E8F5E9` | Tip box background |
+| `tipfg` | `#2E7D32` | Tip box border |
+| `infobg` | `#E3F2FD` | Info box background |
+| `infofg` | `#1565C0` | Info box border |
 
 ---
 
@@ -257,9 +277,9 @@ xelatex <filename>.tex && xelatex <filename>.tex   # two passes for TOC
 ## Customization pointers (when the user asks to change the look)
 - **Logos:** replace files in `assets/` keeping the names, or use
   `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
-- **Colors:** edit the `\definecolor` block at the top of `labguide.cls`.
+- **Colors:** edit the `\definecolor` block at the top of `guide.cls`.
 - **Sizes/spacing:** each concern is in a commented section of
-  `labguide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section,
+  `guide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section,
   edit there.
 
 ---
@@ -267,7 +287,7 @@ xelatex <filename>.tex && xelatex <filename>.tex   # two passes for TOC
 ## Agent workflow checklist
 1. Confirm the engine: never run `pdflatex`. Use `xelatex` (twice) or
    `latexmk` (handles it via `.latexmkrc`).
-2. Edit `.tex` files for content; touch `labguide.cls` only for look-and-feel
+2. Edit `.tex` files for content; touch `guide.cls` only for look-and-feel
    changes the user explicitly requested.
 3. Keep body order: `\makecover` → `\sumario` → `\startbody` → sections.
 4. Inside `codigo`, write literal code. In prose, use `\code{...}` with normal

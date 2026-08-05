@@ -112,11 +112,92 @@ differs by operating system — follow the section for yours.
 5. **Missing packages** — install the relevant `texlive-*` package via your
    package manager, or fall back to `texlive-full` / `texlive-scheme-full`.
 
-### Code editor (optional, both OSes)
+### Code editor — VS Code with LaTeX Workshop (recommended)
 
-Use TeXworks (bundled with MiKTeX on Windows; available with TeX Live on Linux)
-or install [VS Code](https://code.visualstudio.com/) with the **LaTeX Workshop**
-extension — it compiles with one click and previews the PDF side by side.
+[VS Code](https://code.visualstudio.com/) with the **LaTeX Workshop** extension
+gives you syntax highlighting, compile-on-save, a live PDF preview side-by-side,
+and SyncTeX (click in the PDF to jump to the source line, and vice versa).
+
+This template ships a ready-made `.vscode/settings.json` (in the template
+folder) pre-configured for **XeLaTeX with a two-pass recipe**, so the build
+works out of the box — just open the folder and start editing.
+
+#### Step-by-step setup
+
+1. **Install VS Code** — download from <https://code.visualstudio.com/> and
+   follow the installer for your OS.
+
+2. **Install the LaTeX Workshop extension** — open VS Code, go to the Extensions
+   sidebar (`Ctrl+Shift+X` / `Cmd+Shift+X`), search for **LaTeX Workshop**
+   (publisher: *James Yu*), and click **Install**. Or from the terminal:
+   ```bash
+   code --install-extension James-Yu.latex-workshop
+   ```
+
+3. **Open the template folder** — in VS Code, `File → Open Folder…` and select
+   `templates/labguide/` (the folder containing `main.tex` and `labguide.cls`).
+   The included `.vscode/settings.json` is picked up automatically.
+
+4. **Open `main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
+   Workshop compiles with XeLaTeX automatically (two passes for the TOC) and
+   opens the PDF preview in a side tab.
+
+5. **View the PDF** — if the preview doesn't open automatically, click the
+   **View LaTeX PDF** icon in the top-right of the editor, or press
+   `Ctrl+Alt+V` (`Cmd+Option+V` on macOS).
+
+#### Useful shortcuts
+
+| Action | Shortcut |
+|---|---|
+| Build (compile) | `Ctrl+Alt+B` / `Cmd+Option+B` |
+| View PDF | `Ctrl+Alt+V` / `Cmd+Option+V` |
+| SyncTeX: PDF → source | `Ctrl+click` in the PDF |
+| SyncTeX: source → PDF | `Ctrl+Alt+J` / `Cmd+Option+J` |
+
+#### What `.vscode/settings.json` configures
+
+```json
+{
+  "latex-workshop.latex.recipe.default": "xelatex×2",
+  "latex-workshop.latex.recipes": [
+    { "name": "xelatex×2", "tools": ["xelatex", "xelatex"] },
+    { "name": "xelatex",   "tools": ["xelatex"] }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "xelatex",
+      "command": "xelatex",
+      "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"]
+    }
+  ],
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.latex.autoBuild.run": "onSave"
+}
+```
+
+- **`xelatex×2`** recipe — runs XeLaTeX twice so the TOC and page numbers
+  settle (the default recipe). A single-pass `xelatex` recipe is also available.
+- **`-synctex=1`** — enables SyncTeX (click-to-jump between PDF and source).
+- **`-interaction=nonstopmode`** — continues past errors instead of prompting.
+- **`viewer: tab`** — opens the PDF inside VS Code instead of an external app.
+- **`autoBuild: onSave`** — recompiles every time you save.
+
+> **pdflatex won't work.** The class loads `fontspec` (system fonts), which
+> requires XeLaTeX or LuaLaTeX. The included settings enforce XeLaTeX so you
+> don't accidentally use pdflatex.
+
+#### Optional: spell and grammar checking
+
+Install the **LTeX** extension (publisher: *valentjn*) for inline grammar and
+spell checking in LaTeX text. It supports both Portuguese and English —
+configure it per workspace to match your `labguide` language option.
+
+#### Alternative: TeXworks
+
+TeXworks (bundled with MiKTeX on Windows; available with TeX Live on Linux) is
+a simpler editor with a built-in PDF preview. Choose it if you prefer a
+lightweight single-purpose tool over VS Code.
 
 ---
 

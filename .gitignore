@@ -1,0 +1,28 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.nav
+*.snm
+*.vrb
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+*.xdy
+*.dvi
+*.ps
+# compiled output (uncomment to ignore the PDF)
+# *.pdf
+# editor / os cruft
+.DS_Store
+*.swp

@@ -175,8 +175,8 @@ use `\code{...}` and escape LaTeX specials normally.
 | `codebg` | `#F6F8FA` | Code block background |
 | `codetext` | `#1F2328` | Code text |
 | `linkblue` | `#0000FF` | Links |
-| `huaweired` | `#C7000B` | Brand red (accents) |
-| `ruleblack` | `#000000` | Horizontal rules |
+| `huaweired` | `#C7000B` | Brand red (H1 chapter rules, accents) |
+| `ruleblack` | `#000000` | Horizontal rules (TOC, objectives) |
 
 ---
 

@@ -297,7 +297,7 @@ Examples:
 | Code background | `#F6F8FA` |
 | Code text color | `#1F2328` |
 | Link color | `#0000FF` (no underline) |
-| Brand red | `#C7000B` (`\huaweired`, for accents) |
+| Brand red | `#C7000B` (`huaweired` — H1 chapter rules & accents) |
 
 These colors are defined in `labguide.cls` (`codebg`, `codetext`, `linkblue`,
 `huaweired`) and can be reused with `\textcolor{name}{...}`.

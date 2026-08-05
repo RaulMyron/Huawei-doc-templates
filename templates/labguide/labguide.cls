@@ -123,7 +123,7 @@
   {\makebox[0pt][l]{\fontsize{72}{72}\selectfont\thesection}}
   {0pt}
   {\raggedleft\hspace*{1.6cm}}          % empurra o título p/ direita
-  [\vspace{2pt}{\color{rulegray}\titlerule[1.5pt]}\vspace{18pt}]
+  [\vspace{2pt}{\color{huaweired}\titlerule[1.5pt]}\vspace{18pt}]
 \titlespacing*{\section}{0pt}{0pt}{40pt} % antes 0 / depois 40pt
 % Cada \section (capítulo) começa em uma nova página
 \let\lg@origsection\section

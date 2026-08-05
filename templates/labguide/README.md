@@ -20,6 +20,7 @@ spacing, and fonts.
 ├── main_en.tex       # sample document in English (uses [english] option)
 ├── README.md         # this file (human guide)
 ├── SKILL.md          # agent orientation
+├── .latexmkrc        # latexmk config (uses XeLaTeX by default)
 ├── .vscode/
 │   └── settings.json # VS Code + LaTeX Workshop config (XeLaTeX recipe)
 └── assets/
@@ -232,10 +233,12 @@ xelatex main_en.tex   # run TWICE so the TOC and page numbers are correct
 xelatex main_en.tex
 ```
 
-(or `lualatex main.tex`). With `latexmk`:
+(or `lualatex main.tex`). With `latexmk` (the included `.latexmkrc` sets
+XeLaTeX as the default engine, so no `-xelatex` flag is needed):
 
 ```bash
-latexmk -xelatex main.tex
+latexmk main.tex       # Portuguese
+latexmk main_en.tex    # English
 ```
 
 `latexmk` needs Perl — see Environment setup above.

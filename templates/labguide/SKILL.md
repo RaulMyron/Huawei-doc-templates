@@ -176,7 +176,7 @@ use `\code{...}` and escape LaTeX specials normally.
 | `codetext` | `#1F2328` | Code text |
 | `linkblue` | `#0000FF` | Links |
 | `huaweired` | `#C7000B` | Brand red (accents) |
-| `rulegray` | `#000000` | Horizontal rules |
+| `ruleblack` | `#000000` | Horizontal rules |
 
 ---
 

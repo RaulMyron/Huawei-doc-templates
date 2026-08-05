@@ -47,7 +47,7 @@
 \definecolor{codetext}{HTML}{1F2328} % texto do código
 \definecolor{linkblue}{HTML}{0000FF} % hyperlinks (sem sublinhado)
 \definecolor{huaweired}{HTML}{C7000B}% vermelho da marca (acentos)
-\definecolor{rulegray}{HTML}{000000} % cor das regras horizontais
+\definecolor{ruleblack}{HTML}{000000} % cor das regras horizontais (preto)
 
 % =====================================================================
 %  FONTES  (com fallback automático se as proprietárias faltarem)
@@ -154,7 +154,7 @@
 \renewcommand{\contentsname}{Sumário}
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\bfseries\fontsize{22}{26}\selectfont}
 \renewcommand{\cftaftertoctitle}{\par\vspace{2pt}%
-  {\color{rulegray}\hrule height 0.5pt}\vspace{6pt}}
+  {\color{ruleblack}\hrule height 0.5pt}\vspace{6pt}}
 % Nível 1: negrito 12pt
 \renewcommand{\cftsecfont}{\bfseries\fontsize{12}{15}\selectfont}
 \renewcommand{\cftsecpagefont}{\bfseries\fontsize{12}{15}\selectfont}
@@ -224,7 +224,7 @@
 \newenvironment{objetivos}
   {\par\medskip}
   {\par\vspace{4pt}%
-   {\leftskip=0pt\relax\noindent{\color{rulegray}\rule{\linewidth}{1.5pt}}}%
+   {\leftskip=0pt\relax\noindent{\color{ruleblack}\rule{\linewidth}{1.5pt}}}%
    \par\vspace{10pt}}
 
 % =====================================================================

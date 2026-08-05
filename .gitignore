@@ -21,8 +21,8 @@
 *.xdy
 *.dvi
 *.ps
-# compiled output (uncomment to ignore the PDF)
-# *.pdf
+# compiled output
+*.pdf
 # editor / os cruft
 .DS_Store
 *.swp

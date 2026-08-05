@@ -1,6 +1,6 @@
 ---
 name: huawei-template-guide
-description: Create or edit Huawei Cloud guide documents using the LaTeX guide template. Use when the user wants to write, extend, or fix a guide, or asks to create a new document for Huawei Cloud. Triggers on keywords like huawei-template-guide, guide, guia, Huawei Cloud document.
+description: Create or edit Huawei Cloud guide documents using the LaTeX guide template. Use when the user wants to write, extend, or fix a guide, or asks to create a new document for Huawei Cloud. Triggers on keywords like huawei-template-guide, huawei guide, guia huawei, Huawei Cloud document.
 ---
 
 # Huawei Cloud Guide — Skill
@@ -25,9 +25,10 @@ hard-coded to the Huawei house style.
    - **Language** — Portuguese (default) or English
    - **Filename** — e.g. `ecs-lab.tex` (defaults to `my-guide.tex`)
 
-2. **Create the file** in `samples/<lang>/<project-name>/` (a self-contained
-   folder). Copy `.latexmkrc` from `samples/pt/` into the new folder so the
-   build finds `guide.cls` via `TEXINPUTS`.
+2. **Create the file** in `samples/<lang>/` (alongside the existing
+   `.latexmkrc`). The `.latexmkrc` there sets `TEXINPUTS=../../` so
+   `guide.cls` and `assets/` are found from the template root.
+   Use a descriptive filename, e.g. `samples/pt/ecs-provisioning.tex`.
 
 3. **Compile and verify** with `latexmk <filename>.tex` from the project folder.
 

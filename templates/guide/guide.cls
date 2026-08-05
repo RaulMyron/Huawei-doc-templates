@@ -72,10 +72,12 @@
 
 \IfFontExistsTF{Huawei Sans}
   {\setmainfont{Huawei Sans}}
-  {\lg@warnfont{Huawei Sans}{Liberation Sans}%
-   \IfFontExistsTF{Liberation Sans}
-     {\setmainfont{Liberation Sans}}
-     {\setmainfont{Arial}}}
+   {\lg@warnfont{Huawei Sans}{Liberation Sans}%
+    \IfFontExistsTF{Liberation Sans}
+      {\setmainfont{Liberation Sans}}
+      {\IfFontExistsTF{Arial}
+        {\setmainfont{Arial}}
+         {\lg@warnfont{Arial}{fontspec default}}}}
 
 \IfFontExistsTF{Consolas}
   {\newfontfamily\consolasfont{Consolas}}
@@ -304,13 +306,13 @@
 
 % Bloco de código a partir de arquivo externo
 \newcommand{\codigoarquivo}[2][]{%
-  \begin{tcolorbox}[listing only,listing style=lgcode,
+  \begin{tcolorbox}[listing style=lgcode,
+      listing file={#2},
       listing options={language=#1},
       colback=codebg,colframe=codebg,boxrule=0pt,arc=0pt,outer arc=0pt,
       left=8pt,right=8pt,top=6pt,bottom=6pt,
       before skip=6pt, after skip=6pt,
       breakable, enhanced jigsaw, left skip=0.7cm]
-    \lstinputlisting[style=lgcode]{#2}
   \end{tcolorbox}}
 
 % Código inline: \code{...}

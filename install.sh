@@ -51,6 +51,7 @@ $SUDO apt-get install -y \
     texlive-lang-portuguese \
     latexmk \
     fonts-liberation \
+    poppler-utils \
     2>&1 | tail -5
 
 info "TeX Live packages installed"
@@ -95,7 +96,7 @@ SKILL_COUNT=0
 
 for skill_file in "$SCRIPT_DIR"/templates/*/SKILL.md; do
     if [[ -f "$skill_file" ]]; then
-        skill_name=$(basename "$(dirname "$skill_file")")
+        skill_name=$(awk '/^name:/{print $2}' "$skill_file")
         skill_dst_dir="$GLOBAL_SKILLS_DIR/$skill_name"
         mkdir -p "$skill_dst_dir"
         cp "$skill_file" "$skill_dst_dir/SKILL.md"

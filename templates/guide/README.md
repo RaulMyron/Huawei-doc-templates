@@ -107,13 +107,14 @@ differs by operating system — follow the section for yours.
    - Without these, the template falls back to **DejaVu Sans Mono** (preinstalled
      on virtually all Linux distros) and still compiles.
 
-4. **Compile** — in the template folder:
+4. **Compile** — in the sample folder (e.g., `samples/pt/`):
    ```
+   cd samples/pt
    xelatex main.tex
    xelatex main.tex
    ```
    Run **twice** so the TOC and page numbers settle. Or automate with
-   `latexmk -xelatex main.tex` (Perl is preinstalled on Linux, so `latexmk`
+   `latexmk main.tex` (Perl is preinstalled on Linux, so `latexmk`
    works once the package above is installed).
 
 5. **Missing packages** — install the relevant `texlive-*` package via your
@@ -125,9 +126,9 @@ differs by operating system — follow the section for yours.
 gives you syntax highlighting, compile-on-save, a live PDF preview side-by-side,
 and SyncTeX (click in the PDF to jump to the source line, and vice versa).
 
-This template ships a ready-made `.vscode/settings.json` (in the template
-folder) pre-configured for **XeLaTeX with a two-pass recipe**, so the build
-works out of the box — just open the folder and start editing.
+This template ships a ready-made `.vscode/settings.json` at the repo root
+pre-configured for **latexmk (XeLaTeX)**, so the build works out of the box —
+just open the repo root and start editing.
 
 #### Step-by-step setup
 

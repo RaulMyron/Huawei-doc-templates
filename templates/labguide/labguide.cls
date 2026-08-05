@@ -266,7 +266,9 @@
   \begin{tcolorbox}[listing only,listing style=lgcode,
       listing options={language=#1},
       colback=codebg,colframe=codebg,boxrule=0pt,arc=0pt,outer arc=0pt,
-      left=8pt,right=8pt,top=6pt,bottom=6pt,breakable,left skip=0.7cm]
+      left=8pt,right=8pt,top=6pt,bottom=6pt,
+      before skip=6pt, after skip=6pt,
+      breakable, enhanced jigsaw, left skip=0.7cm]
     \lstinputlisting[style=lgcode]{#2}
   \end{tcolorbox}}
 

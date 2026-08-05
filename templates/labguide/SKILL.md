@@ -13,9 +13,10 @@ This file is the orientation for **AI agents**. For the human-facing README, see
 ## When to use
 
 Use this project when the task is to **write, extend, or fix a Huawei Cloud lab
-guide** (Portuguese, "Guia de Laboratório"). The output is a PDF compiled from
-LaTeX. Do **not** use this for general LaTeX documents — the formatting is
-hard-coded to the Huawei house style.
+guide**. The output is a PDF compiled from LaTeX. Content defaults to Portuguese
+("Guia de Laboratório"); pass the `english` class option for English labels.
+Do **not** use this for general LaTeX documents — the formatting is hard-coded
+to the Huawei house style.
 
 ---
 
@@ -128,6 +129,9 @@ subsection).
 | `\prerequisitos` | **"Pré-requisitos:"** label (put a list after). |
 | `\passoapasso` | **"Passo a passo:"** label (put a numbered list after). |
 
+With `[english]`, labels become: *General Objective:*, *Practice Objective:*,
+*Prerequisites:*, *Step by step:*.
+
 ### Lists
 Use standard `itemize` / `enumerate` — indent and spacing are already set by the
 class. Do not pass `enumitem` options unless asked.
@@ -165,8 +169,11 @@ use `\code{...}` and escape LaTeX specials normally.
 ## Class options
 
 ```latex
-\documentclass[indentbody]{labguide}
+\documentclass[english,indentbody]{labguide}
 ```
+- `english` — switches all predefined labels to English (Contents, General
+  Objective:, Practice Objective:, Prerequisites:, Step by step:, Page) and
+  loads `babel` with `english`. Default off (Portuguese / `brazilian`).
 - `indentbody` — indents all running text by `\contentindent` (0.6cm). Default off (text flush to the left margin).
 
 ---

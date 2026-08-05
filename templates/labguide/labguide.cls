@@ -8,6 +8,8 @@
 %%    - Código : Consolas      (fallback: DejaVu Sans Mono)
 %%
 %%  Opções de classe:
+%%    english     -> usa inglês nos rótulos predefinidos e no babel.
+%%                   (padrão: português brasileiro).
 %%    indentbody  -> recua todo o texto corrido em \contentindent,
 %%                   (padrão: desligado).
 %%    <qualquer>  -> repassada para a classe article.
@@ -18,6 +20,8 @@
 % ---- Opções --------------------------------------------------------
 \newif\if@indentbody \@indentbodyfalse
 \DeclareOption{indentbody}{\@indentbodytrue}
+\newif\if@english \@englishfalse
+\DeclareOption{english}{\@englishtrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 \LoadClass[a4paper,10pt]{article}
@@ -37,7 +41,11 @@
 \RequirePackage{ragged2e}
 \RequirePackage{needspace}
 \RequirePackage{babel}
-\babelprovide[import,main]{brazilian}
+\if@english
+  \babelprovide[import,main]{english}
+\else
+  \babelprovide[import,main]{brazilian}
+\fi
 \RequirePackage[hidelinks]{hyperref}
 
 % =====================================================================
@@ -83,6 +91,25 @@
 \fi
 
 % =====================================================================
+%  IDIOMA  (rótulos predefinidos conforme a opção [english])
+% =====================================================================
+\if@english
+  \newcommand{\lg@sumario}{Contents}
+  \newcommand{\lg@objgerallabel}{General Objective:}
+  \newcommand{\lg@objpraticalabel}{Practice Objective:}
+  \newcommand{\lg@prerequisitoslabel}{Prerequisites:}
+  \newcommand{\lg@passoapassolabel}{Step by step:}
+  \newcommand{\lg@paginalabel}{Page}
+\else
+  \newcommand{\lg@sumario}{Sumário}
+  \newcommand{\lg@objgerallabel}{Objetivo Geral:}
+  \newcommand{\lg@objpraticalabel}{Objetivo da prática:}
+  \newcommand{\lg@prerequisitoslabel}{Pré-requisitos:}
+  \newcommand{\lg@passoapassolabel}{Passo a passo:}
+  \newcommand{\lg@paginalabel}{Página}
+\fi
+
+% =====================================================================
 %  HYPERREF  (links azuis, sem sublinhado)
 % =====================================================================
 \hypersetup{
@@ -112,7 +139,7 @@
 \fancyhead[L]{\raisebox{-0.35cm}[0pt][0pt]{%
     \includegraphics[height=1.05cm]{\lg@headerlogo}}}
 \fancyhead[C]{\normalfont\fontsize{10}{12}\selectfont \lg@headertitle}
-\fancyhead[R]{\normalfont\fontsize{10}{12}\selectfont Página~\thepage}
+\fancyhead[R]{\normalfont\fontsize{10}{12}\selectfont \lg@paginalabel~\thepage}
 
 % =====================================================================
 %  TÍTULOS (headings)
@@ -153,7 +180,7 @@
 % =====================================================================
 %  SUMÁRIO (TOC) — título "Sumário" à direita + regra; leaders pontilhados
 % =====================================================================
-\renewcommand{\contentsname}{Sumário}
+\renewcommand{\contentsname}{\lg@sumario}
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\bfseries\fontsize{22}{26}\selectfont}
 \renewcommand{\cftaftertoctitle}{\par\vspace{2pt}%
   {\color{ruleblack}\hrule height 0.5pt}\vspace{6pt}}
@@ -182,7 +209,11 @@
 %  CAPA
 % =====================================================================
 % \setlabtitle{...}  -> título grande da capa (e default do header)
-\newcommand{\lg@labtitle}{Guia de Laboratório}
+\if@english
+  \newcommand{\lg@labtitle}{Lab Guide}
+\else
+  \newcommand{\lg@labtitle}{Guia de Laboratório}
+\fi
 \newcommand{\setlabtitle}[1]{\renewcommand{\lg@labtitle}{#1}}
 \newcommand{\lg@covertext}{Huawei Technologies CO., LTD}
 \newcommand{\setcovertext}[1]{\renewcommand{\lg@covertext}{#1}}
@@ -220,10 +251,10 @@
 %       \item ...
 %   \end{objetivos}
 \newcommand{\lg@rotulo}[1]{\textbf{#1}}
-\newcommand{\objgeral}[1]{\par\lg@rotulo{Objetivo Geral:} #1\par}
-\newcommand{\objpratica}[1]{\par\lg@rotulo{Objetivo da prática:} #1\par}
-\newcommand{\passoapasso}{\par\lg@rotulo{Passo a passo:}\par}
-\newcommand{\prerequisitos}{\par\lg@rotulo{Pré-requisitos:}\par}
+\newcommand{\objgeral}[1]{\par\lg@rotulo{\lg@objgerallabel} #1\par}
+\newcommand{\objpratica}[1]{\par\lg@rotulo{\lg@objpraticalabel} #1\par}
+\newcommand{\passoapasso}{\par\lg@rotulo{\lg@passoapassolabel}\par}
+\newcommand{\prerequisitos}{\par\lg@rotulo{\lg@prerequisitoslabel}\par}
 
 \newenvironment{objetivos}
   {\par\medskip}

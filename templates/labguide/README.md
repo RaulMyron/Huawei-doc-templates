@@ -4,10 +4,12 @@ A LaTeX template that produces a Huawei Cloud lab guide PDF: cover page, header,
 table of contents, giant chapter numbers, objectives box, code blocks, colors,
 spacing, and fonts.
 
-> **Language note:** the lab guide content is written in **Portuguese** and the
-> class loads `babel` with the `brazilian` language (`labguide.cls`), so built-in
-> labels such as *Sumário*, *Objetivo Geral:*, *Objetivo da prática:*,
-> *Pré-requisitos:* and *Passo a passo:* render in Portuguese by design.
+> **Language note:** by default the lab guide renders in **Portuguese** — the
+> class loads `babel` with the `brazilian` language and built-in labels such as
+> *Sumário*, *Objetivo Geral:*, *Objetivo da prática:*, *Pré-requisitos:* and
+> *Passo a passo:* are in Portuguese. Pass the **`english`** class option
+> (`\documentclass[english]{labguide}`) to switch all labels to English and load
+> `babel` with `english` instead. See [Class options](#class-options) below.
 
 ## Project structure
 
@@ -307,12 +309,28 @@ These colors are defined in `labguide.cls` (`codebg`, `codetext`, `linkblue`,
 ## Class options
 
 ```latex
-\documentclass[indentbody]{labguide}
+\documentclass[english,indentbody]{labguide}
 ```
 
+- `english` — switches all predefined labels to English (Contents, General
+  Objective:, Practice Objective:, Prerequisites:, Step by step:, Page) and
+  loads `babel` with the `english` language. Without this option (default),
+  labels are in Portuguese and `babel` loads `brazilian`.
 - `indentbody` — indents **all running text** by `\contentindent` (0.6 cm),
   reproducing the body indent of the original layout. Without the option
   (default), text is flush to the left margin, aligned with the heading rules.
+
+### Label translations
+
+| Token | Portuguese (default) | English (`[english]`) |
+|---|---|---|
+| TOC title | Sumário | Contents |
+| Cover title default | Guia de Laboratório | Lab Guide |
+| `\objgeral` label | Objetivo Geral: | General Objective: |
+| `\objpratica` label | Objetivo da prática: | Practice Objective: |
+| `\prerequisitos` label | Pré-requisitos: | Prerequisites: |
+| `\passoapasso` label | Passo a passo: | Step by step: |
+| Header page label | Página | Page |
 
 ## Customization
 

@@ -116,7 +116,6 @@ step "Configuring VS Code"
 
 VSCODE_SETTINGS=(
     "$SCRIPT_DIR/.vscode/settings.json"
-    "$SCRIPT_DIR/templates/guide/.vscode/settings.json"
 )
 
 # Verify settings files exist
@@ -155,30 +154,35 @@ fi
 # ---- Test compile --------------------------------------------------
 step "Test compilation"
 
-SAMPLES_DIR="$SCRIPT_DIR/templates/guide/samples"
-if [[ -f "$SAMPLES_DIR/main.tex" ]]; then
-    cd "$SAMPLES_DIR"
+PT_DIR="$SCRIPT_DIR/templates/guide/samples/pt"
+EN_DIR="$SCRIPT_DIR/templates/guide/samples/en"
+
+if [[ -f "$PT_DIR/main.tex" ]]; then
+    cd "$PT_DIR"
     latexmk -C main.tex 2>/dev/null
     if latexmk main.tex 2>/dev/null; then
         PAGES=$(pdfinfo main.pdf 2>/dev/null | grep "^Pages:" | awk '{print $2}')
         info "Portuguese sample compiled successfully (${PAGES:-?} pages)"
         latexmk -C main.tex 2>/dev/null
     else
-        warn "Portuguese sample compile failed — check templates/guide/samples/main.log"
-    fi
-
-    if [[ -f "main_en.tex" ]]; then
-        latexmk -C main_en.tex 2>/dev/null
-        if latexmk main_en.tex 2>/dev/null; then
-            PAGES=$(pdfinfo main_en.pdf 2>/dev/null | grep "^Pages:" | awk '{print $2}')
-            info "English sample compiled successfully (${PAGES:-?} pages)"
-            latexmk -C main_en.tex 2>/dev/null
-        else
-            warn "English sample compile failed — check templates/guide/samples/main_en.log"
-        fi
+        warn "Portuguese sample compile failed — check templates/guide/samples/pt/main.log"
     fi
 else
-    warn "Template not found at $SAMPLES_DIR — skipping test compile"
+    warn "PT sample not found at $PT_DIR — skipping"
+fi
+
+if [[ -f "$EN_DIR/main.tex" ]]; then
+    cd "$EN_DIR"
+    latexmk -C main.tex 2>/dev/null
+    if latexmk main.tex 2>/dev/null; then
+        PAGES=$(pdfinfo main.pdf 2>/dev/null | grep "^Pages:" | awk '{print $2}')
+        info "English sample compiled successfully (${PAGES:-?} pages)"
+        latexmk -C main.tex 2>/dev/null
+    else
+        warn "English sample compile failed — check templates/guide/samples/en/main.log"
+    fi
+else
+    warn "EN sample not found at $EN_DIR — skipping"
 fi
 
 # ---- Done ----------------------------------------------------------
@@ -196,10 +200,10 @@ echo ""
 echo -e "${BOLD}Next steps:${RESET}"
 echo "  1. Open this project in opencode"
 echo "  2. Run ${BOLD}/skill guide${RESET} to create a new guide document"
-echo "  3. Or open in VS Code and save samples/main.tex — PDF preview appears automatically"
+echo "  3. Or open in VS Code and save samples/pt/main.tex — PDF preview appears automatically"
 echo "  4. Or compile manually:"
-echo "       cd templates/guide/samples && latexmk main.tex      # Portuguese"
-echo "       cd templates/guide/samples && latexmk main_en.tex   # English"
+echo "       cd templates/guide/samples/pt && latexmk main.tex   # Portuguese"
+echo "       cd templates/guide/samples/en && latexmk main.tex   # English"
 echo ""
 echo -e "${BOLD}Optional (for full font fidelity):${RESET}"
 echo "  • Install Huawei Sans (proprietary — obtain from Huawei)"

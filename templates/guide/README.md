@@ -19,17 +19,18 @@ callout boxes, badges, colors, spacing, and fonts.
 ├── README.md           # this file (human guide)
 ├── SKILL.md            # agent orientation
 ├── .latexmkrc          # latexmk config (uses XeLaTeX by default)
-├── .vscode/
-│   └── settings.json   # VS Code + LaTeX Workshop config (XeLaTeX recipe)
 ├── assets/
 │   ├── huawei-logo-header.png   # header logo
 │   ├── huawei-logo-cover.png    # cover logo
 │   ├── exemplo-menu.png         # sample image
 │   └── exemplo-login.png        # sample image
-└── samples/            # self-contained project folders
-    ├── .latexmkrc      # TEXINPUTS=../ so guide.cls is found
-    ├── main.tex        # sample document in Portuguese (starting point)
-    └── main_en.tex     # sample document in English (uses [english] option)
+└── samples/            # self-contained project folders by language
+    ├── pt/
+    │   ├── .latexmkrc  # TEXINPUTS=../../ so guide.cls is found
+    │   └── main.tex    # sample document in Portuguese (starting point)
+    └── en/
+        ├── .latexmkrc
+        └── main.tex    # sample document in English (uses [english] option)
 ```
 
 ## Environment setup
@@ -140,11 +141,11 @@ works out of the box — just open the folder and start editing.
    code --install-extension James-Yu.latex-workshop
    ```
 
-3. **Open the project in VS Code** — `File → Open Folder…` and select either
-   the repo root or `templates/guide/`. Both have a `.vscode/settings.json`
-   pre-configured for XeLaTeX, so LaTeX Workshop never falls back to pdflatex.
+3. **Open the project in VS Code** — `File → Open Folder…` and select the
+   repo root. The `.vscode/settings.json` at the root is pre-configured for
+   XeLaTeX (via `latexmk`), so LaTeX Workshop never falls back to pdflatex.
 
-4. **Open `samples/main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
+4. **Open `samples/pt/main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
    Workshop compiles with XeLaTeX automatically (two passes for the TOC) and
    opens the PDF preview in a side tab.
 
@@ -228,14 +229,13 @@ lightweight single-purpose tool over VS Code.
 
 ## How to compile
 
-All commands run from `samples/` (or your project folder). The
-`samples/.latexmkrc` sets `TEXINPUTS=../` so `guide.cls` and `assets/`
-are found from the parent template directory.
+Each `samples/<lang>/` folder has a `.latexmkrc` that sets `TEXINPUTS=../../`
+so `guide.cls` and `assets/` are found from the template root.
 
 **Portuguese** (default):
 
 ```bash
-cd samples
+cd samples/pt
 xelatex main.tex      # run TWICE so the TOC and page numbers are correct
 xelatex main.tex
 ```
@@ -243,18 +243,17 @@ xelatex main.tex
 **English** (uses the `[english]` class option):
 
 ```bash
-cd samples
-xelatex main_en.tex   # run TWICE so the TOC and page numbers are correct
-xelatex main_en.tex
+cd samples/en
+xelatex main.tex      # run TWICE so the TOC and page numbers are correct
+xelatex main.tex
 ```
 
 (or `lualatex main.tex`). With `latexmk` (the included `.latexmkrc` sets
 XeLaTeX as the default engine, so no `-xelatex` flag is needed):
 
 ```bash
-cd samples
-latexmk main.tex       # Portuguese
-latexmk main_en.tex    # English
+cd samples/pt && latexmk main.tex    # Portuguese
+cd samples/en && latexmk main.tex    # English
 ```
 
 `latexmk` needs Perl — see Environment setup above.

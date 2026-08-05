@@ -1,5 +1,5 @@
 # latexmkrc — use XeLaTeX by default (the class loads fontspec, so pdflatex won't work)
-# TEXINPUTS includes ../ so guide.cls and assets/ are found from the parent template dir
-$ENV{TEXINPUTS} = "../:" . ($ENV{TEXINPUTS} || "");
+# TEXINPUTS includes ../../ so guide.cls and assets/ are found from the template root
+$ENV{TEXINPUTS} = "../../:" . ($ENV{TEXINPUTS} || "");
 $pdf_mode = 5;    # 5 = xelatex
 $xelatex = 'xelatex -interaction=nonstopmode %O %S';

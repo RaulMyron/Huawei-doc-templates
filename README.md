@@ -35,15 +35,14 @@ language, and content, then compiles and verifies the PDF.
 ## Manual usage
 
 ```bash
-cd templates/guide/samples
-latexmk main.tex        # Portuguese sample (uses .latexmkrc → xelatex)
-latexmk main_en.tex     # English sample
+cd templates/guide/samples/pt && latexmk main.tex   # Portuguese
+cd templates/guide/samples/en && latexmk main.tex   # English
 ```
 
 Or with raw XeLaTeX (run twice for the TOC):
 
 ```bash
-cd templates/guide/samples
+cd templates/guide/samples/pt
 xelatex main.tex && xelatex main.tex
 ```
 
@@ -75,20 +74,21 @@ commands, environments, and options.
 ├── README.md                # this file (collection index)
 ├── LICENSE                  # MIT
 ├── .vscode/
-│   └── settings.json        # VS Code + LaTeX Workshop config (XeLaTeX recipe)
+│   └── settings.json        # VS Code + LaTeX Workshop config (latexmk recipe)
 └── templates/
     └── guide/               # self-contained template + skill
         ├── SKILL.md          # opencode skill (/skill guide) + agent reference
         ├── README.md         # human docs
         ├── guide.cls         # the class — all formatting lives here
         ├── .latexmkrc        # latexmk config (XeLaTeX by default)
-        ├── .vscode/
-        │   └── settings.json # XeLaTeX config (for opening this subfolder)
         ├── assets/           # logos and sample images
-        └── samples/          # self-contained project folders
-            ├── .latexmkrc    # TEXINPUTS=../ so guide.cls is found
-            ├── main.tex      # sample document in Portuguese
-            └── main_en.tex   # sample document in English
+        └── samples/          # self-contained project folders by language
+            ├── pt/
+            │   ├── .latexmkrc  # TEXINPUTS=../../ so guide.cls is found
+            │   └── main.tex    # sample document in Portuguese
+            └── en/
+                ├── .latexmkrc
+                └── main.tex    # sample document in English
 ```
 
 ## Adding a new template

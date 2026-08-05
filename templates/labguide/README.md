@@ -138,9 +138,9 @@ works out of the box — just open the folder and start editing.
    code --install-extension James-Yu.latex-workshop
    ```
 
-3. **Open the template folder** — in VS Code, `File → Open Folder…` and select
-   `templates/labguide/` (the folder containing `main.tex` and `labguide.cls`).
-   The included `.vscode/settings.json` is picked up automatically.
+3. **Open the project in VS Code** — `File → Open Folder…` and select either
+   the repo root or `templates/labguide/`. Both have a `.vscode/settings.json`
+   pre-configured for XeLaTeX, so LaTeX Workshop never falls back to pdflatex.
 
 4. **Open `main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
    Workshop compiles with XeLaTeX automatically (two passes for the TOC) and

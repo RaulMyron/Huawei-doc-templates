@@ -21,6 +21,7 @@
 *.xdy
 *.dvi
 *.ps
+*.listing
 # compiled output
 *.pdf
 # editor / os cruft

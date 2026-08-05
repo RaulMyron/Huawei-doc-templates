@@ -155,16 +155,16 @@ fi
 # ---- Test compile --------------------------------------------------
 step "Test compilation"
 
-LABGUIDE_DIR="$SCRIPT_DIR/templates/guide"
-if [[ -f "$LABGUIDE_DIR/main.tex" ]]; then
-    cd "$LABGUIDE_DIR"
+SAMPLES_DIR="$SCRIPT_DIR/templates/guide/samples"
+if [[ -f "$SAMPLES_DIR/main.tex" ]]; then
+    cd "$SAMPLES_DIR"
     latexmk -C main.tex 2>/dev/null
     if latexmk main.tex 2>/dev/null; then
         PAGES=$(pdfinfo main.pdf 2>/dev/null | grep "^Pages:" | awk '{print $2}')
         info "Portuguese sample compiled successfully (${PAGES:-?} pages)"
         latexmk -C main.tex 2>/dev/null
     else
-        warn "Portuguese sample compile failed — check templates/guide/main.log"
+        warn "Portuguese sample compile failed — check templates/guide/samples/main.log"
     fi
 
     if [[ -f "main_en.tex" ]]; then
@@ -174,11 +174,11 @@ if [[ -f "$LABGUIDE_DIR/main.tex" ]]; then
             info "English sample compiled successfully (${PAGES:-?} pages)"
             latexmk -C main_en.tex 2>/dev/null
         else
-            warn "English sample compile failed — check templates/guide/main_en.log"
+            warn "English sample compile failed — check templates/guide/samples/main_en.log"
         fi
     fi
 else
-    warn "Template not found at $LABGUIDE_DIR — skipping test compile"
+    warn "Template not found at $SAMPLES_DIR — skipping test compile"
 fi
 
 # ---- Done ----------------------------------------------------------
@@ -196,10 +196,10 @@ echo ""
 echo -e "${BOLD}Next steps:${RESET}"
 echo "  1. Open this project in opencode"
 echo "  2. Run ${BOLD}/skill guide${RESET} to create a new guide document"
-echo "  3. Or open in VS Code and save main.tex — PDF preview appears automatically"
+echo "  3. Or open in VS Code and save samples/main.tex — PDF preview appears automatically"
 echo "  4. Or compile manually:"
-echo "       cd templates/guide && latexmk main.tex      # Portuguese"
-echo "       cd templates/guide && latexmk main_en.tex   # English"
+echo "       cd templates/guide/samples && latexmk main.tex      # Portuguese"
+echo "       cd templates/guide/samples && latexmk main_en.tex   # English"
 echo ""
 echo -e "${BOLD}Optional (for full font fidelity):${RESET}"
 echo "  • Install Huawei Sans (proprietary — obtain from Huawei)"

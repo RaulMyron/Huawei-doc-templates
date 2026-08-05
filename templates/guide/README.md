@@ -15,19 +15,21 @@ callout boxes, badges, colors, spacing, and fonts.
 
 ```
 .
-├── guide.cls      # the class — all formatting lives here
-├── main.tex          # sample document in Portuguese (starting point)
-├── main_en.tex       # sample document in English (uses [english] option)
-├── README.md         # this file (human guide)
-├── SKILL.md          # agent orientation
-├── .latexmkrc        # latexmk config (uses XeLaTeX by default)
+├── guide.cls          # the class — all formatting lives here
+├── README.md           # this file (human guide)
+├── SKILL.md            # agent orientation
+├── .latexmkrc          # latexmk config (uses XeLaTeX by default)
 ├── .vscode/
-│   └── settings.json # VS Code + LaTeX Workshop config (XeLaTeX recipe)
-└── assets/
-    ├── huawei-logo-header.png   # header logo
-    ├── huawei-logo-cover.png    # cover logo
-    ├── exemplo-menu.png         # sample image
-    └── exemplo-login.png        # sample image
+│   └── settings.json   # VS Code + LaTeX Workshop config (XeLaTeX recipe)
+├── assets/
+│   ├── huawei-logo-header.png   # header logo
+│   ├── huawei-logo-cover.png    # cover logo
+│   ├── exemplo-menu.png         # sample image
+│   └── exemplo-login.png        # sample image
+└── samples/            # self-contained project folders
+    ├── .latexmkrc      # TEXINPUTS=../ so guide.cls is found
+    ├── main.tex        # sample document in Portuguese (starting point)
+    └── main_en.tex     # sample document in English (uses [english] option)
 ```
 
 ## Environment setup
@@ -142,7 +144,7 @@ works out of the box — just open the folder and start editing.
    the repo root or `templates/guide/`. Both have a `.vscode/settings.json`
    pre-configured for XeLaTeX, so LaTeX Workshop never falls back to pdflatex.
 
-4. **Open `main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
+4. **Open `samples/main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
    Workshop compiles with XeLaTeX automatically (two passes for the TOC) and
    opens the PDF preview in a side tab.
 
@@ -163,12 +165,18 @@ works out of the box — just open the folder and start editing.
 
 ```json
 {
-  "latex-workshop.latex.recipe.default": "xelatex×2",
+  "latex-workshop.latex.recipe.default": "latexmk",
   "latex-workshop.latex.recipes": [
+    { "name": "latexmk", "tools": ["latexmk"] },
     { "name": "xelatex×2", "tools": ["xelatex", "xelatex"] },
     { "name": "xelatex",   "tools": ["xelatex"] }
   ],
   "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": ["%DOC%"]
+    },
     {
       "name": "xelatex",
       "command": "xelatex",
@@ -180,10 +188,11 @@ works out of the box — just open the folder and start editing.
 }
 ```
 
-- **`xelatex×2`** recipe — runs XeLaTeX twice so the TOC and page numbers
-  settle (the default recipe). A single-pass `xelatex` recipe is also available.
-- **`-synctex=1`** — enables SyncTeX (click-to-jump between PDF and source).
-- **`-interaction=nonstopmode`** — continues past errors instead of prompting.
+- **`latexmk`** recipe — the default. Reads `.latexmkrc` (which sets XeLaTeX
+  and `TEXINPUTS`), handles multi-pass automatically, and finds `guide.cls`
+  from the parent template directory.
+- **`xelatex×2`** / **`xelatex`** recipes — available for manual use; note
+  these bypass `.latexmkrc` so `TEXINPUTS` must be set separately.
 - **`viewer: tab`** — opens the PDF inside VS Code instead of an external app.
 - **`autoBuild: onSave`** — recompiles every time you save.
 
@@ -219,9 +228,14 @@ lightweight single-purpose tool over VS Code.
 
 ## How to compile
 
+All commands run from `samples/` (or your project folder). The
+`samples/.latexmkrc` sets `TEXINPUTS=../` so `guide.cls` and `assets/`
+are found from the parent template directory.
+
 **Portuguese** (default):
 
 ```bash
+cd samples
 xelatex main.tex      # run TWICE so the TOC and page numbers are correct
 xelatex main.tex
 ```
@@ -229,6 +243,7 @@ xelatex main.tex
 **English** (uses the `[english]` class option):
 
 ```bash
+cd samples
 xelatex main_en.tex   # run TWICE so the TOC and page numbers are correct
 xelatex main_en.tex
 ```
@@ -237,6 +252,7 @@ xelatex main_en.tex
 XeLaTeX as the default engine, so no `-xelatex` flag is needed):
 
 ```bash
+cd samples
 latexmk main.tex       # Portuguese
 latexmk main_en.tex    # English
 ```

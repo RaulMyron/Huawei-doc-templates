@@ -25,9 +25,11 @@ hard-coded to the Huawei house style.
    - **Language** — Portuguese (default) or English
    - **Filename** — e.g. `ecs-lab.tex` (defaults to `my-guide.tex`)
 
-2. **Create the file** in this directory using the document skeleton below.
+2. **Create the file** in `samples/<project-name>/` (a self-contained folder).
+   Copy `.latexmkrc` from `samples/` into the new folder so the build finds
+   `guide.cls` via `TEXINPUTS`.
 
-3. **Compile and verify** with `latexmk <filename>.tex`.
+3. **Compile and verify** with `latexmk <filename>.tex` from the project folder.
 
 4. **Report** the page count and any warnings to the user.
 
@@ -50,19 +52,21 @@ hard-coded to the Huawei house style.
 
 ```
 .
-├── guide.cls      # the class — ALL formatting lives here
-├── main.tex          # Portuguese sample (reference)
-├── main_en.tex       # English sample (reference)
-├── README.md         # human docs
-├── SKILL.md          # this file (opencode skill)
-├── .latexmkrc        # latexmk config (XeLaTeX by default)
+├── guide.cls          # the class — ALL formatting lives here
+├── README.md           # human docs
+├── SKILL.md            # this file (opencode skill)
+├── .latexmkrc          # latexmk config (XeLaTeX by default)
 ├── .vscode/
-│   └── settings.json # VS Code + LaTeX Workshop config
-└── assets/
-    ├── huawei-logo-header.png   # header logo
-    ├── huawei-logo-cover.png    # cover logo
-    ├── exemplo-menu.png         # sample image
-    └── exemplo-login.png        # sample image
+│   └── settings.json   # VS Code + LaTeX Workshop config
+├── assets/
+│   ├── huawei-logo-header.png   # header logo
+│   ├── huawei-logo-cover.png    # cover logo
+│   ├── exemplo-menu.png         # sample image
+│   └── exemplo-login.png        # sample image
+└── samples/            # self-contained project folders
+    ├── .latexmkrc      # TEXINPUTS=../ so guide.cls is found
+    ├── main.tex        # Portuguese sample (reference)
+    └── main_en.tex     # English sample (reference)
 ```
 
 **Rule of thumb:** content/structure goes in `.tex` files; look-and-feel goes
@@ -261,6 +265,8 @@ All boxes are breakable across pages and have a 3pt left border.
 
 ## Compilation
 
+From a project folder (e.g. `samples/`):
+
 ```bash
 latexmk <filename>.tex        # uses .latexmkrc → xelatex, auto two-pass
 ```
@@ -271,6 +277,10 @@ xelatex <filename>.tex && xelatex <filename>.tex   # two passes for TOC
 ```
 
 **Never use pdflatex** — the class loads `fontspec` which requires XeLaTeX.
+
+The `samples/.latexmkrc` sets `TEXINPUTS=../` so `guide.cls` and `assets/`
+are found from the parent template directory. New project folders should
+copy this `.latexmkrc`.
 
 ---
 

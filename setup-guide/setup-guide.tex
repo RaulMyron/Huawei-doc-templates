@@ -1,0 +1,466 @@
+% =====================================================================
+%  Guide — Environment Setup: ECS + SSH Proxy + OpenCode + Huawei Project
+%  Compile with XeLaTeX:
+%      xelatex setup-guide.tex   (run 2x for the TOC)
+% =====================================================================
+\documentclass[english]{guide}
+
+% --- Document configuration -----------------------------------------
+\setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
+\setheadertitle{Huawei Cloud -- ECS + SSH + OpenCode Setup}
+\setcovertext{Huawei Technologies CO., LTD}
+
+\begin{document}
+
+% ---- COVER ---------------------------------------------------------
+\makecover
+
+% ---- TABLE OF CONTENTS ---------------------------------------------
+\sumario
+
+% ---- BODY (restarts page numbering at 1) ---------------------------
+\startbody
+
+% =====================================================================
+%  Chapter 1 — Provision an ECS Instance
+% =====================================================================
+\section{Provision an ECS Instance on Huawei Cloud}
+
+\begin{objetivos}
+  \objgeral{Provision an Elastic Cloud Server (ECS) on Huawei Cloud that will
+  serve as the development environment for OpenCode and the Huawei document
+  templates project. By the end of this chapter you will have a running ECS
+  instance with a public IP accessible over SSH.}
+
+  \prerequisitos
+  \begin{itemize}
+    \item Active Huawei Cloud account with IAM credentials.
+    \item Permission to create ECS instances, EIPs, and security groups.
+    \item A key pair created in the Console, or permission to create one.
+    \item A web browser (Chrome, Firefox, or Edge).
+  \end{itemize}
+\end{objetivos}
+
+\begin{infobox}
+This guide assumes the \code{sa-brazil-1} region. Adjust the region if your
+account is registered elsewhere.
+\end{infobox}
+
+\subsection{Create the ECS instance}
+
+\objpratica{Launch a single ECS instance using the Console wizard.}
+
+\passoapasso
+\begin{enumerate}
+  \item Log in to the \weblink{https://console.huaweicloud.com/}{Huawei Cloud
+        Console} and select the \code{sa-brazil-1} region in the top-right
+        corner.
+
+  \item Open the service catalog and select \textbf{Elastic Cloud Server
+        (ECS)}.
+
+  \item Click \textbf{Create ECS} and fill in the basic configuration:
+
+  \begin{codigo}
+Name:           dev-server-01
+Flavor:         s6.large.1 (2 vCPU, 2 GB RAM)
+Image:          Ubuntu 22.04 Server 64bit
+Disk:           40 GB General Purpose SSD
+VPC:            vpc-default
+Subnet:         subnet-default
+Security Group: sg-ssh (allows inbound TCP 22)
+  \end{codigo}
+
+  \item Under \textbf{Login Configuration}, select the key pair you created
+        earlier. Click \textbf{Create Now} and wait for the status to change
+        to \textbf{Running}.
+
+  \badge{Important}
+
+  \begin{aviso}
+  The instance is assigned a public IP (EIP). If you need a fixed IP,
+  allocate a dedicated EIP and bind it after creation. The EIP is released
+  when the instance is deleted.
+  \end{aviso}
+\end{enumerate}
+
+\subsection{Configure the security group}
+
+If you do not already have a security group that allows SSH access:
+
+\passoapasso
+\begin{enumerate}
+  \item In the Console, go to \textbf{VPC} $\rightarrow$ \textbf{Security
+        Groups} and click \textbf{Create Security Group}.
+  \item Name it \code{sg-ssh} and add an inbound rule:
+
+  \begin{codigo}
+Protocol:    TCP
+Port:        22
+Source:      0.0.0.0/0
+Description: Allow SSH access
+  \end{codigo}
+
+  \item Associate the security group with your ECS instance.
+\end{enumerate}
+
+\begin{aviso}
+Opening SSH to \code{0.0.0.0/0} allows access from any IP. For production,
+restrict the source to your specific IP address.
+\end{aviso}
+
+\subsection{Verify the instance}
+
+On the ECS details page, copy the \textbf{EIP} field. This is the address you
+will use to connect in the next chapter.
+
+% =====================================================================
+%  Chapter 2 — Connect via SSH with Proxy
+% =====================================================================
+\section{Connect via SSH with Proxy for VS Code}
+
+\begin{objetivos}
+  \objgeral{Establish an SSH connection to the ECS instance through a proxy
+  (if required by your network) and configure VS Code Remote-SSH for
+  remote development.}
+
+  \prerequisitos
+  \begin{itemize}
+    \item Chapter 1 completed — ECS instance running with a public IP.
+    \item The private key file (\code{.pem}) corresponding to the key pair.
+    \item VS Code installed locally with the Remote-SSH extension.
+    \item If behind a corporate proxy: the proxy host, port, and credentials.
+  \end{itemize}
+\end{objetivos}
+
+\subsection{Configure SSH with a proxy}
+
+If your network requires a proxy to reach the internet, configure SSH to
+tunnel through it using \code{ProxyCommand}.
+
+\passoapasso
+\begin{enumerate}
+  \item Open or create the SSH config file:
+
+  \begin{codigo}[bash]
+nano ~/.ssh/config
+  \end{codigo}
+
+  \item Add the following configuration (adjust the proxy and EIP values):
+
+  \begin{codigo}
+Host huawei-dev
+    HostName <EIP>
+    User ubuntu
+    IdentityFile ~/.ssh/huawei_key.pem
+    ProxyCommand nc -X connect -x proxy.corp.com:8080 %h %p
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+  \end{codigo}
+
+  \begin{infobox}
+  Replace \code{proxy.corp.com:8080} with your actual proxy host and port.
+  If your proxy requires authentication, use:
+  \code{ProxyCommand nc -X connect -x user:pass@proxy.corp.com:8080 \%h \%p}
+  \end{infobox}
+
+  \item If you do \textbf{not} need a proxy, use this simpler config:
+
+  \begin{codigo}
+Host huawei-dev
+    HostName <EIP>
+    User ubuntu
+    IdentityFile ~/.ssh/huawei_key.pem
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+  \end{codigo}
+
+  \item Set the correct permissions on the key file and test the connection:
+
+  \begin{codigo}[bash]
+chmod 600 ~/.ssh/huawei_key.pem
+ssh huawei-dev
+  \end{codigo}
+\end{enumerate}
+
+\begin{dica}
+The \code{ServerAliveInterval} and \code{ServerAliveCountMax} settings keep
+the connection alive through proxies that drop idle connections.
+\end{dica}
+
+\subsection{Connect VS Code via Remote-SSH}
+
+\passoapasso
+\begin{enumerate}
+  \item Install the \textbf{Remote - SSH} extension in VS Code
+        (publisher: Microsoft).
+
+  \begin{codigo}[bash]
+code --install-extension ms-vscode-remote.remote-ssh
+  \end{codigo}
+
+  \item Press \code{F1}, type \textbf{Remote-SSH: Connect to Host...}, and
+        select \code{huawei-dev} from the list.
+
+  \item VS Code opens a new window connected to the remote instance. Click
+        \textbf{Open Folder} and select \code{/home/ubuntu} (or your working
+        directory).
+
+  \item Verify the connection by opening a terminal in VS Code
+        (\code{Ctrl+`}) and running:
+
+  \begin{codigo}[bash]
+uname -a
+df -h
+  \end{codigo}
+\end{enumerate}
+
+% =====================================================================
+%  Chapter 3 — Install OpenCode
+% =====================================================================
+\section{Install OpenCode on the ECS Instance}
+
+\begin{objetivos}
+  \objgeral{Install OpenCode on the remote ECS instance so you can create
+  and edit Huawei Cloud guide documents from VS Code's remote session.}
+
+  \prerequisitos
+  \begin{itemize}
+    \item Chapter 2 completed — VS Code connected to the ECS via Remote-SSH.
+    \item Node.js 18+ available on the instance (or permission to install it).
+  \end{itemize}
+\end{objetivos}
+
+\subsection{Install Node.js}
+
+\passoapasso
+\begin{enumerate}
+  \item In the VS Code remote terminal, install Node.js via NodeSource:
+
+  \begin{codigo}[bash]
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+  \end{codigo}
+
+  \item Verify the installation:
+
+  \begin{codigo}[bash]
+node --version    # should print v20.x.x
+npm --version     # should print 10.x.x
+  \end{codigo}
+\end{enumerate}
+
+\subsection{Install OpenCode}
+
+\passoapasso
+\begin{enumerate}
+  \item Install OpenCode globally via npm:
+
+  \begin{codigo}[bash]
+sudo npm install -g opencode
+  \end{codigo}
+
+  \item Verify the installation:
+
+  \begin{codigo}[bash]
+opencode --version
+  \end{codigo}
+
+  \item Launch OpenCode:
+
+  \begin{codigo}[bash]
+opencode
+  \end{codigo}
+\end{enumerate}
+
+\begin{dica}
+If you are behind a proxy, configure npm before installing:
+\code{npm config set proxy http://proxy.corp.com:8080} and
+\code{npm config set https-proxy http://proxy.corp.com:8080}
+\end{dica}
+
+% =====================================================================
+%  Chapter 4 — Install the Huawei Project
+% =====================================================================
+\section{Install the Huawei Document Templates Project}
+
+\begin{objetivos}
+  \objgeral{Clone the Huawei document templates repository on the ECS
+  instance, run the setup script, and verify that the LaTeX toolchain and
+  opencode skill are ready for use.}
+
+  \prerequisitos
+  \begin{itemize}
+    \item Chapter 3 completed — OpenCode installed and running.
+    \item Git installed (\code{sudo apt install git}).
+    \item The repository URL for the Huawei document templates project.
+  \end{itemize}
+\end{objetivos}
+
+\subsection{Clone and set up the project}
+
+\passoapasso
+\begin{enumerate}
+  \item Clone the repository:
+
+  \begin{codigo}[bash]
+cd ~
+git clone <repo-url> Huawei-doc-templates
+cd Huawei-doc-templates
+  \end{codigo}
+
+  \item Run the setup script (installs XeLaTeX, latexmk, fonts, the opencode
+        skill, and the VS Code LaTeX Workshop extension):
+
+  \begin{codigo}[bash]
+./install.sh
+  \end{codigo}
+
+  \begin{aviso}
+  The script runs \code{sudo apt-get install} for TeX Live packages. If you
+  do not have sudo access, ask your administrator to install the packages
+  listed in \code{install.sh}.
+  \end{aviso}
+
+  \item Verify the LaTeX toolchain:
+
+  \begin{codigo}[bash]
+xelatex --version
+latexmk --version
+  \end{codigo}
+\end{enumerate}
+
+\subsection{Compile the sample guides}
+
+\passoapasso
+\begin{enumerate}
+  \item Compile the Portuguese sample:
+
+  \begin{codigo}[bash]
+cd templates/guide/samples/pt
+latexmk main.tex
+  \end{codigo}
+
+  \item Compile the English sample:
+
+  \begin{codigo}[bash]
+cd ../en
+latexmk main.tex
+  \end{codigo}
+
+  \item Verify the PDFs were generated:
+
+  \begin{codigo}[bash]
+ls -l templates/guide/samples/pt/main.pdf
+ls -l templates/guide/samples/en/main.pdf
+  \end{codigo}
+\end{enumerate}
+
+\subsection{Create your first guide with the skill}
+
+\passoapasso
+\begin{enumerate}
+  \item In the VS Code remote terminal, launch OpenCode:
+
+  \begin{codigo}[bash]
+cd ~/Huawei-doc-templates
+opencode
+  \end{codigo}
+
+  \item Run the guide skill:
+
+  \begin{codigo}
+/skill huawei-template-guide
+  \end{codigo}
+
+  \item The skill will ask for:
+    \begin{itemize}
+      \item \textbf{Title} — e.g. ``Provisioning an OBS Bucket''
+      \item \textbf{Language} — Portuguese or English
+      \item \textbf{Filename} — e.g. \code{obs-guide.tex}
+      \item \textbf{Location} — where to create the project
+    \end{itemize}
+
+  \item The skill generates the \code{.tex} file, creates a
+        \code{.latexmkrc} with the correct \code{TEXINPUTS}, compiles the
+        document, and reports the page count.
+
+  \badge{Ready}
+\end{enumerate}
+
+\begin{infobox}
+The skill is auto-discovered via \code{opencode.json} which registers
+\code{templates/} as a skill discovery path. No manual skill installation
+is needed when working inside the repo.
+\end{infobox}
+
+\subsection{Write content using template commands}
+
+The template provides commands for common guide elements:
+
+Headings (automatic numbering, H1 starts on a new page):
+
+\begin{codigo}
+\section{Chapter Title}          % H1: giant number + title + rule
+\subsection{Section Title}        % H2
+\subsubsection{Subsection Title}  % H3
+\end{codigo}
+
+Objectives block (closes with a horizontal rule):
+
+\begin{codigo}
+\begin{objetivos}
+  \objgeral{...}
+  \prerequisitos
+  \begin{itemize}
+    \item ...
+  \end{itemize}
+\end{objetivos}
+\end{codigo}
+
+Callout boxes and inline commands:
+
+\begin{codigo}
+\begin{aviso} ... \end{aviso}     % amber warning box
+\begin{dica}  ... \end{dica}      % green tip box
+\begin{infobox} ... \end{infobox} % blue info box
+\end{codigo}
+
+\begin{codigo}
+\code{inline code}                % inline monospace
+\imagem{assets/screenshot.png}    % centered image
+\nota{Italic observation.}        % note paragraph
+\weblink{https://...}{link text}  % blue clickable link
+\badge{New}                       % inline red label
+\end{codigo}
+
+% =====================================================================
+%  Chapter 5 — Clean Up
+% =====================================================================
+\section{Clean Up}
+
+\begin{objetivos}
+  \objgeral{Remove the resources created in this guide to avoid ongoing
+  charges on your Huawei Cloud account.}
+\end{objetivos}
+
+\passoapasso
+\begin{enumerate}
+  \item In the Console, navigate to \textbf{Elastic Cloud Server}.
+  \item Select the instance \code{dev-server-01}, click \textbf{More} and
+        choose \textbf{Delete}.
+  \item Confirm deletion. Optionally release the EIP if it was dedicated.
+  \item Remove the SSH config entry from \code{\textasciitilde/.ssh/config}.
+\end{enumerate}
+
+\begin{aviso}
+If you used Terraform to provision the infrastructure, run
+\code{terraform destroy} instead to remove all resources declared in the
+configuration.
+\end{aviso}
+
+\nota{This guide was generated using the \code{guide.cls} template. For the
+full command reference, see the template's README.md or run
+\code{/skill huawei-template-guide} in OpenCode.}
+
+\end{document}

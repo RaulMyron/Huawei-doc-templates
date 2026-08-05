@@ -23,25 +23,28 @@ hard-coded to the Huawei house style.
 1. **Ask for the essentials** (if not already provided):
    - **Title** — e.g. "Provisioning an ECS Instance"
    - **Language** — Portuguese (default) or English
-   - **Filename** — e.g. `ecs-lab.tex` (defaults to `my-guide.tex`)
+   - **Project name** — used as the folder name (e.g. `ecs-provisioning`)
    - **Location** — where to create the project folder (default: current
      workspace). The skill should ask the user; do not assume `samples/`.
 
-2. **Create the project** at the chosen location:
-   - Create the `.tex` file using the document skeleton below.
-   - Create a `.latexmkrc` in the same folder with `TEXINPUTS` pointing to
-     this template directory (`templates/guide/`). Compute the relative path
-     from the project folder to `templates/guide/` and set:
-     ```perl
-     $ENV{TEXINPUTS} = "<relative_path>:" . ($ENV{TEXINPUTS} || "");
-     $pdf_mode = 5;
-     $xelatex = 'xelatex -interaction=nonstopmode %O %S';
-     ```
-     For example, if the project is in `samples/pt/`, the path is `../../`.
-     If the project is in the current workspace (outside the repo), use the
-     absolute path to `templates/guide/`.
+2. **Create a self-contained project folder** at `<location>/<project-name>/`:
+   - **Always create a folder** — never scatter files directly in the workspace.
+   - Inside the folder, create:
+     - `<filename>.tex` — the document, using the skeleton below.
+     - `.latexmkrc` — with `TEXINPUTS` pointing to this template directory
+       (`templates/guide/`). Compute the relative path from the project folder
+       to `templates/guide/` and set:
+       ```perl
+       $ENV{TEXINPUTS} = "<relative_path>:" . ($ENV{TEXINPUTS} || "");
+       $pdf_mode = 5;
+       $xelatex = 'xelatex -interaction=nonstopmode %O %S';
+       ```
+       For example, if the project is at `setup-guide/` in the repo root,
+       the path is `../templates/guide/`. If inside `samples/pt/`, use `../../`.
+   - Any project-specific assets (images, code files) also go in this folder.
 
-3. **Compile and verify** with `latexmk <filename>.tex` from the project folder.
+3. **Compile and verify** with `latexmk <filename>.tex` from inside the
+   project folder.
 
 4. **Report** the page count and any warnings to the user.
 

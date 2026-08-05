@@ -25,9 +25,11 @@ language, and content, then compiles and verifies the PDF.
 
 - **`install.sh`** installs the base: XeLaTeX, latexmk, LaTeX packages, fallback
   fonts, VS Code extensions, and copies each template's skill to the global
-  opencode path.
+  opencode path (`~/.config/opencode/skills/`).
 - **`opencode.json`** registers `templates/` as a skill discovery path, so
-  OpenCode finds each template's `SKILL.md` automatically.
+  OpenCode finds each template's `SKILL.md` automatically — **no need to run
+  `install.sh`** for project-level skill discovery. The global install is only
+  needed when working outside this repo.
 - **Each template** in `templates/<name>/` is self-contained: class file,
   samples, skill, build config, assets. Add a new template by creating a new
   directory with a `SKILL.md` — it's auto-discovered.

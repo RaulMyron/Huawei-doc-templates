@@ -24,11 +24,22 @@ hard-coded to the Huawei house style.
    - **Title** — e.g. "Provisioning an ECS Instance"
    - **Language** — Portuguese (default) or English
    - **Filename** — e.g. `ecs-lab.tex` (defaults to `my-guide.tex`)
+   - **Location** — where to create the project folder (default: current
+     workspace). The skill should ask the user; do not assume `samples/`.
 
-2. **Create the file** in `samples/<lang>/` (alongside the existing
-   `.latexmkrc`). The `.latexmkrc` there sets `TEXINPUTS=../../` so
-   `guide.cls` and `assets/` are found from the template root.
-   Use a descriptive filename, e.g. `samples/pt/ecs-provisioning.tex`.
+2. **Create the project** at the chosen location:
+   - Create the `.tex` file using the document skeleton below.
+   - Create a `.latexmkrc` in the same folder with `TEXINPUTS` pointing to
+     this template directory (`templates/guide/`). Compute the relative path
+     from the project folder to `templates/guide/` and set:
+     ```perl
+     $ENV{TEXINPUTS} = "<relative_path>:" . ($ENV{TEXINPUTS} || "");
+     $pdf_mode = 5;
+     $xelatex = 'xelatex -interaction=nonstopmode %O %S';
+     ```
+     For example, if the project is in `samples/pt/`, the path is `../../`.
+     If the project is in the current workspace (outside the repo), use the
+     absolute path to `templates/guide/`.
 
 3. **Compile and verify** with `latexmk <filename>.tex` from the project folder.
 
@@ -155,6 +166,8 @@ Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 | `\paragraph{...}` | H4: 14pt regular (`1.1.1.1`). |
 
 Starred forms (`\section*{...}`) drop the number and the TOC entry.
+**Note:** `\section*` also triggers `\clearpage` (every H1 starts on a new
+page, including unnumbered ones).
 Numbering is automatic: `1` / `1.1` / `1.1.1` / `1.1.1.1`.
 
 ### Objectives / prerequisites block
@@ -215,7 +228,7 @@ use `\code{...}` and escape LaTeX specials normally.
 |---|---|---|
 | `\begin{aviso} ... \end{aviso}` | Amber (`#FFF8E1` bg, `#F57C00` border) | Warning / caution — potential pitfalls. |
 | `\begin{dica} ... \end{dica}` | Green (`#E8F5E9` bg, `#2E7D32` border) | Tip / suggestion — best practices. |
-| `\begin{info} ... \end{info}` | Blue (`#E3F2FD` bg, `#1565C0` border) | Informational note — helpful context. |
+| `\begin{infobox} ... \end{infobox}` | Blue (`#E3F2FD` bg, `#1565C0` border) | Informational note — helpful context. |
 
 All boxes are breakable across pages and have a 3pt left border.
 
@@ -267,7 +280,7 @@ All boxes are breakable across pages and have a 3pt left border.
 
 ## Compilation
 
-From a project folder (e.g. `samples/pt/`):
+From the project folder (wherever the user chose to create it):
 
 ```bash
 latexmk main.tex             # uses .latexmkrc → xelatex, auto two-pass
@@ -280,9 +293,9 @@ xelatex main.tex && xelatex main.tex   # two passes for TOC
 
 **Never use pdflatex** — the class loads `fontspec` which requires XeLaTeX.
 
-Each `samples/<lang>/` folder has a `.latexmkrc` that sets `TEXINPUTS=../../`
-so `guide.cls` and `assets/` are found from the template root. New project
-folders should copy this `.latexmkrc`.
+The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
+`guide.cls` and `assets/` are found. The existing `samples/pt/` and
+`samples/en/` folders are pre-configured examples.
 
 ---
 

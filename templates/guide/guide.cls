@@ -352,7 +352,7 @@
 % Uso:
 %   \begin{aviso} ... \end{aviso}   — atenção / cuidado (âmbar)
 %   \begin{dica}  ... \end{dica}    — sugestão / dica (verde)
-%   \begin{info}  ... \end{info}    — informação adicional (azul)
+%   \begin{infobox}  ... \end{infobox}  — informação adicional (azul)
 \newtcolorbox{aviso}{
   colback=warningbg, colframe=warningfg,
   boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
@@ -365,7 +365,7 @@
   left=8pt, right=8pt, top=6pt, bottom=6pt,
   before skip=6pt, after skip=6pt, breakable, enhanced jigsaw
 }
-\newtcolorbox{info}{
+\newtcolorbox{infobox}{
   colback=infobg, colframe=infofg,
   boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
   left=8pt, right=8pt, top=6pt, bottom=6pt,

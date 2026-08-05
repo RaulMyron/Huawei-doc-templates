@@ -402,7 +402,7 @@ Examples:
 |---|---|---|
 | `\begin{aviso} ... \end{aviso}` | Amber | **Warning / caution** — potential pitfalls. |
 | `\begin{dica} ... \end{dica}` | Green | **Tip / suggestion** — best practices. |
-| `\begin{info} ... \end{info}` | Blue | **Informational note** — helpful context. |
+| `\begin{infobox} ... \end{infobox}` | Blue | **Informational note** — helpful context. |
 
 All boxes have a 3pt left border, light background, and break across pages.
 

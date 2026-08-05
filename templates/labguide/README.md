@@ -26,74 +26,95 @@ spacing, and fonts.
 
 ## Environment setup
 
-### 1. Install a complete LaTeX distribution
+The template needs XeLaTeX (or LuaLaTeX) and a couple of system fonts. Setup
+differs by operating system — follow the section for yours.
 
-Download and install [MiKTeX](https://miktex.org/download) or
-[TeX Live](https://www.tug.org/texlive/). MiKTeX is recommended on Windows: it
-is lighter and installs missing packages automatically during compilation.
-Download the 64-bit installer and follow the wizard with the default options.
+### Windows
 
-### 2. Configure on-demand package installation
+1. **Install MiKTeX** — download the 64-bit installer from
+   <https://miktex.org/download> and follow the wizard with the default options.
+   Keep **"Install missing packages on-the-fly"** enabled so packages like
+   `fontspec` are downloaded automatically on first compile. (TeX Live
+   <https://www.tug.org/texlive/> is an alternative; MiKTeX is lighter on
+   Windows.)
 
-During the MiKTeX installation, keep **"Install missing packages on-the-fly"**
-enabled (Yes / Ask before installing). This ensures packages like `fontspec` and
-others required by the template are downloaded automatically on the first
-compilation.
+2. **Verify `xelatex`** — open Command Prompt or PowerShell and run
+   `xelatex --version`. If you get "command not found", restart the computer
+   (the installer adjusts the PATH) or manually add the MiKTeX `bin` folder —
+   e.g. `C:\Users\YOUR_USER\AppData\Local\Programs\MiKTeX\miktex\bin\x64` — to
+   the environment variables.
 
-### 3. Verify that `xelatex` is on the PATH
+3. **Install the fonts** (optional, for full fidelity) — install **Huawei Sans**
+   and **Consolas** via the Windows Fonts control panel (right-click the
+   `.ttf` → Install). Without them the template falls back to Liberation Sans /
+   Arial and DejaVu Sans Mono and still compiles.
 
-Open a Command Prompt (cmd) or PowerShell and run:
+4. **Compile** — open a Command Prompt in the project folder and run:
+   ```
+   xelatex main.tex
+   xelatex main.tex
+   ```
+   Run **twice** so the TOC and page numbers settle. To automate, use
+   `latexmk -xelatex main.tex` (needs Perl — install
+   [Strawberry Perl](https://strawberryperl.com/) if missing).
 
-```
-xelatex --version
-```
+5. **Missing packages** — if a compile error mentions a missing package, MiKTeX
+   usually prompts to install it automatically — accept.
 
-If the XeTeX version prints, you're set. If you get a "command not found" error,
-restart the computer (the installer adjusts the PATH) or manually add the MiKTeX
-`bin` folder — something like
-`C:\Users\YOUR_USER\AppData\Local\Programs\MiKTeX\miktex\bin\x64` — to the
-environment variables.
+### Linux
 
-### 4. Install a code editor (optional, but recommended)
+1. **Install TeX Live and latexmk.**
 
-Use TeXworks (bundled with MiKTeX) or install
-[VS Code](https://code.visualstudio.com/) with the **"LaTeX Workshop"**
-extension. VS Code with that extension lets you compile with one click and
-preview the PDF side by side.
+   Debian/Ubuntu (minimal — provides `xelatex`, every package the template
+   needs, and Brazilian Portuguese babel support):
+   ```
+   sudo apt install texlive-xetex texlive-lang-portuguese latexmk
+   ```
+   Fedora (minimal):
+   ```
+   sudo dnf install texlive-collection-xetex texlive-collection-latexextra \
+                     texlive-collection-lang-portuguese latexmk
+   ```
+   Fallback that pulls in everything (~5–6 GB; simplest if a package is
+   missing): `sudo apt install texlive-full` (Debian/Ubuntu) or
+   `sudo dnf install texlive-scheme-full` (Fedora).
 
-### 5. Put the project files in a folder
+2. **Verify `xelatex`** — run `xelatex --version`. Distro packages put the
+   binary in `/usr/bin` (no PATH setup needed). If you installed upstream TeX
+   Live via `install-tl`, add its bin folder to `PATH`, e.g.
+   `export PATH="/usr/local/texlive/2024/bin/x86_64-linux:$PATH"` in `~/.bashrc`.
 
-Copy or extract all the project files (`main.tex` and the auxiliary files —
-images, `.cls`, `.sty`, `.bib`) into a single local folder, for example
-`C:\Users\YOUR_USER\Documents\my-project`.
+3. **Install the fonts** (optional, for full fidelity) — copy font files into
+   `~/.local/share/fonts/` (current user) or `/usr/local/share/fonts/` (all
+   users), then rebuild the cache:
+   ```
+   fc-cache -f
+   ```
+   - **Huawei Sans** — proprietary; obtain from Huawei and copy the
+     `.ttf`/`.otf` files in.
+   - **Consolas** — a Microsoft font, not freely redistributable and not in
+     `ttf-mscorefonts-installer`; copy it from a licensed Windows install
+     (`C:\Windows\Fonts\consola*.ttf`) if you have one.
+   - Without these, the template falls back to **DejaVu Sans Mono** (preinstalled
+     on virtually all Linux distros) and still compiles.
 
-### 6. Compile from the terminal
+4. **Compile** — in the template folder:
+   ```
+   xelatex main.tex
+   xelatex main.tex
+   ```
+   Run **twice** so the TOC and page numbers settle. Or automate with
+   `latexmk -xelatex main.tex` (Perl is preinstalled on Linux, so `latexmk`
+   works once the package above is installed).
 
-Open a Command Prompt in the project folder
-(`cd C:\Users\YOUR_USER\Documents\my-project`) and run:
+5. **Missing packages** — install the relevant `texlive-*` package via your
+   package manager, or fall back to `texlive-full` / `texlive-scheme-full`.
 
-```
-xelatex main.tex
-xelatex main.tex
-```
+### Code editor (optional, both OSes)
 
-Run it **twice** so the table of contents and the page numbers settle. To
-automate this, use `latexmk` (bundled with MiKTeX):
-
-```
-latexmk -xelatex main.tex
-```
-
-> **Note:** `latexmk` requires **Perl** to be installed on the system. Install
-> Perl (e.g. from [Strawberry Perl](https://strawberryperl.com/) on Windows)
-> before using the `latexmk` command.
-
-### 7. Resolve missing packages or fonts
-
-If an error mentions a missing package, MiKTeX usually asks whether to install
-it automatically — accept. If the error is about a missing font (common with
-`fontspec`, since it loads system fonts via `\setmainfont`), you must install
-that font manually in Windows (Fonts control panel) before compiling again.
+Use TeXworks (bundled with MiKTeX on Windows; available with TeX Live on Linux)
+or install [VS Code](https://code.visualstudio.com/) with the **LaTeX Workshop**
+extension — it compiles with one click and previews the PDF side by side.
 
 ---
 
@@ -122,7 +143,7 @@ xelatex main.tex
 latexmk -xelatex main.tex
 ```
 
-`latexmk` needs Perl installed — see step 6 above.
+`latexmk` needs Perl — see Environment setup above.
 
 ---
 

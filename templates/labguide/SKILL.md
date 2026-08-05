@@ -85,6 +85,8 @@ overrides in the document unless the user asks.
 | `\setlabtitle{...}` | Big cover title. |
 | `\setheadertitle{...}` | Centered header text on every page. |
 | `\setcovertext{...}` | Line under the cover logo (default `Huawei Technologies CO., LTD`). |
+| `\setheaderlogo{path}` | Header logo image path (default `assets/huawei-logo-header.png`). |
+| `\setcoverlogo{path}` | Cover logo image path (default `assets/huawei-logo-cover.png`). |
 
 ### Document structure
 | Command | Purpose |
@@ -191,8 +193,8 @@ use `\code{...}` and escape LaTeX specials normally.
 ---
 
 ## Customization pointers (when the user asks to change the look)
-- **Logos:** replace files in `assets/` keeping the names, or edit the
-  `\includegraphics` paths in `labguide.cls` (cover + header sections).
+- **Logos:** replace files in `assets/` keeping the names, or use
+  `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
 - **Colors:** edit the `\definecolor` block at the top of `labguide.cls`.
 - **Sizes/spacing:** each concern is in a commented section of `labguide.cls`
   (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section, edit there.

@@ -159,6 +159,8 @@ commands that, in this template, produce a specific look.
 | `\setlabtitle{...}` | Sets the large **cover** title. |
 | `\setheadertitle{...}` | Sets the centered **header** text (repeated on every page). |
 | `\setcovertext{...}` | Sets the line below the cover logo (default: `Huawei Technologies CO., LTD`). |
+| `\setheaderlogo{path}` | Sets the **header logo** image path (default: `assets/huawei-logo-header.png`). |
+| `\setcoverlogo{path}` | Sets the **cover logo** image path (default: `assets/huawei-logo-cover.png`). |
 
 Example:
 
@@ -314,9 +316,8 @@ These colors are defined in `labguide.cls` (`codebg`, `codetext`, `linkblue`,
 
 ## Customization
 
-- **Swap the logo:** replace the files in `assets/` keeping the names, or edit
-  the paths in `labguide.cls` (the `\includegraphics` commands in the cover and
-  header).
+- **Swap the logo:** replace the files in `assets/` keeping the names, or use
+  `\setheaderlogo{path}` and `\setcoverlogo{path}` in the preamble.
 - **Adjust colors:** edit the `\definecolor` block at the top of `labguide.cls`.
 - **Adjust sizes/spacing:** each concern is in a commented section of
   `labguide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section and

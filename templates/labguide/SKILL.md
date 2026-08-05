@@ -1,47 +1,63 @@
-# SKILL.md — Huawei Cloud Lab Guide Template
-
-This is a LaTeX template for Huawei Cloud lab guides
-("Guia de Laboratório"). Use it to author lab guides that match the
-Huawei house style: branded cover, header, table of contents, giant chapter
-numbers, objectives box, code blocks, colors, fonts.
-
-This file is the orientation for **AI agents**. For the human-facing README, see
-`README.md`.
-
 ---
+name: labguide
+description: Create or edit Huawei Cloud lab guide documents using the LaTeX labguide template. Use when the user wants to write, extend, or fix a lab guide, or asks to create a new document for Huawei Cloud labs. Triggers on keywords like labguide, lab guide, guia de laboratório, Huawei Cloud document.
+---
+
+# Huawei Cloud Lab Guide — Skill
+
+Create, edit, and compile Huawei Cloud lab guide documents using the
+`labguide` LaTeX class in this directory.
 
 ## When to use
 
-Use this project when the task is to **write, extend, or fix a Huawei Cloud lab
-guide**. The output is a PDF compiled from LaTeX. Content defaults to Portuguese
-("Guia de Laboratório"); pass the `english` class option for English labels.
-Do **not** use this for general LaTeX documents — the formatting is hard-coded
-to the Huawei house style.
+Use this skill when the task is to **write, extend, or fix a Huawei Cloud lab
+guide**. The output is a PDF compiled from LaTeX. Content defaults to
+Portuguese ("Guia de Laboratório"); pass the `english` class option for English
+labels. Do **not** use this for general LaTeX documents — the formatting is
+hard-coded to the Huawei house style.
 
 ---
 
-## Hard requirements (do not violate)
+## Quick start — creating a new document
+
+1. **Ask for the essentials** (if not already provided):
+   - **Title** — e.g. "Provisioning an ECS Instance"
+   - **Language** — Portuguese (default) or English
+   - **Filename** — e.g. `ecs-lab.tex` (defaults to `my-guide.tex`)
+
+2. **Create the file** in this directory using the document skeleton below.
+
+3. **Compile and verify** with `latexmk <filename>.tex`.
+
+4. **Report** the page count and any warnings to the user.
+
+---
+
+## Hard requirements
 
 - **Engine: XeLaTeX or LuaLaTeX only.** The class loads `fontspec`, so
   `pdflatex` will fail. Always compile with `xelatex` (or `lualatex`).
-- **Compile twice** on the first run so the TOC and page numbers settle:
-  `xelatex main.tex && xelatex main.tex`. (Or `latexmk -xelatex main.tex`.)
+- **Compile twice** on the first run so the TOC and page numbers settle.
+  `latexmk` handles this automatically (`.latexmkrc` is included).
 - **Fonts** are loaded from the OS, not the LaTeX tree:
-  - *Huawei Sans* (body text) — falls back to Liberation Sans → Arial with a
-    warning if missing.
-  - *Consolas* (code) — falls back to DejaVu Sans Mono if missing.
+  - *Huawei Sans* (body text) — falls back to Liberation Sans → Arial.
+  - *Consolas* (code) — falls back to DejaVu Sans Mono.
   The document always compiles; missing fonts only reduce fidelity.
 
 ---
 
-## Project layout
+## Project layout (this directory)
 
 ```
 .
 ├── labguide.cls      # the class — ALL formatting lives here
-├── main.tex          # example document / starting point
+├── main.tex          # Portuguese sample (reference)
+├── main_en.tex       # English sample (reference)
 ├── README.md         # human docs
-├── SKILL.md          # this file (agent orientation)
+├── SKILL.md          # this file (opencode skill)
+├── .latexmkrc        # latexmk config (XeLaTeX by default)
+├── .vscode/
+│   └── settings.json # VS Code + LaTeX Workshop config
 └── assets/
     ├── huawei-logo-header.png   # header logo
     ├── huawei-logo-cover.png    # cover logo
@@ -49,38 +65,66 @@ to the Huawei house style.
     └── exemplo-login.png        # sample image
 ```
 
-**Rule of thumb:** content/structure goes in `main.tex` (or a new `.tex` that
-`\input`s it); look-and-feel goes in `labguide.cls`. Do not inline formatting
-overrides in the document unless the user asks.
+**Rule of thumb:** content/structure goes in `.tex` files; look-and-feel goes
+in `labguide.cls`. Do not inline formatting overrides in the document unless
+the user asks.
 
 ---
 
-## How to author a guide
+## Document skeleton
 
-1. Copy `main.tex` as a starting point (or edit it in place).
-2. In the preamble, set the three configuration commands:
-   ```latex
-   \setlabtitle{Guia de Laboratório: <topic>}
-   \setheadertitle{Huawei Cloud -- <short title>}
-   \setcovertext{Huawei Technologies CO., LTD}
-   ```
-3. Body order is fixed:
-   ```latex
-   \begin{document}
-   \makecover        % cover page
-   \sumario          % table of contents (+ page break)
-   \startbody        % restarts page numbering at 1
-   \section{...}     % chapters start here
-   ...
-   \end{document}
-   ```
-4. Write content with the commands/environments listed below.
+### Portuguese (default)
+
+```latex
+\documentclass{labguide}
+
+\setlabtitle{Guia de Laboratório: <topic>}
+\setheadertitle{Huawei Cloud -- <short title>}
+\setcovertext{Huawei Technologies CO., LTD}
+
+\begin{document}
+\makecover
+\sumario
+\startbody
+
+\section{<chapter title>}
+
+\begin{objetivos}
+  \objgeral{<general objective>}
+  \prerequisitos
+  \begin{itemize}
+    \item <prerequisite 1>
+    \item <prerequisite 2>
+  \end{itemize}
+\end{objetivos}
+
+\subsection{<section title>}
+\objpratica{<practice objective>}
+
+\passoapasso
+\begin{enumerate}
+  \item <step 1>
+  \item <step 2>
+\end{enumerate}
+
+\end{document}
+```
+
+### English
+
+Same skeleton but with `\documentclass[english]{labguide}`. Labels switch
+automatically: *Contents*, *General Objective:*, *Practice Objective:*,
+*Prerequisites:*, *Step by step:*, *Page*.
+
+Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 
 ---
 
-## Commands & environments (the API the agent should use)
+---
 
-### Preamble config
+## Commands reference
+
+### Preamble configuration
 | Command | Purpose |
 |---|---|
 | `\setlabtitle{...}` | Big cover title. |
@@ -93,13 +137,13 @@ overrides in the document unless the user asks.
 | Command | Purpose |
 |---|---|
 | `\makecover` | Render the cover. Call right after `\begin{document}`. |
-| `\sumario` | Render the TOC ("Sumário", right-aligned, dotted leaders) and page-break. |
+| `\sumario` | Render the TOC ("Sumário" / "Contents", right-aligned, dotted leaders) and page-break. |
 | `\startbody` | Mark body start; **resets page numbering to 1**. |
 
 ### Headings — use standard section commands (template restyles them)
 | Command | Result |
 |---|---|
-| `\section{...}` | H1: giant 72pt chapter number + 22pt bold right-aligned title + bottom rule. In TOC. |
+| `\section{...}` | H1: giant 72pt chapter number + 22pt bold right-aligned title + red rule. New page. In TOC. |
 | `\subsection{...}` | H2: 18pt regular, left-aligned (`1.1`). |
 | `\subsubsection{...}` | H3: 16pt regular (`1.1.1`). |
 | `\paragraph{...}` | H4: 14pt regular (`1.1.1.1`). |
@@ -110,27 +154,23 @@ Numbering is automatic: `1` / `1.1` / `1.1.1` / `1.1.1.1`.
 ### Objectives / prerequisites block
 ```latex
 \begin{objetivos}
-  \objgeral{<general objective text>}
-  \objpratica{<practice objective text>}
+  \objgeral{<general objective>}
+  \objpratica{<practice objective>}
   \prerequisitos
   \begin{itemize}
     \item ...
   \end{itemize}
 \end{objetivos}
 ```
-The environment closes with a 1.5pt horizontal rule.
-`\objpratica` and `\passoapasso` also work outside `objetivos` (e.g. inside a
-subsection).
+Closes with a 1.5pt horizontal rule. `\objpratica` and `\passoapasso` also
+work outside `objetivos` (e.g. inside a subsection).
 
 | Command | Produces |
 |---|---|
-| `\objgeral{...}` | **"Objetivo Geral:"** (bold label) + text. |
-| `\objpratica{...}` | **"Objetivo da prática:"** + text. |
-| `\prerequisitos` | **"Pré-requisitos:"** label (put a list after). |
-| `\passoapasso` | **"Passo a passo:"** label (put a numbered list after). |
-
-With `[english]`, labels become: *General Objective:*, *Practice Objective:*,
-*Prerequisites:*, *Step by step:*.
+| `\objgeral{...}` | **"Objetivo Geral:"** / **"General Objective:"** (bold label) + text. |
+| `\objpratica{...}` | **"Objetivo da prática:"** / **"Practice Objective:"** + text. |
+| `\prerequisitos` | **"Pré-requisitos:"** / **"Prerequisites:"** label (put a list after). |
+| `\passoapasso` | **"Passo a passo:"** / **"Step by step:"** label (put a numbered list after). |
 
 ### Lists
 Use standard `itemize` / `enumerate` — indent and spacing are already set by the
@@ -171,10 +211,10 @@ use `\code{...}` and escape LaTeX specials normally.
 ```latex
 \documentclass[english,indentbody]{labguide}
 ```
-- `english` — switches all predefined labels to English (Contents, General
-  Objective:, Practice Objective:, Prerequisites:, Step by step:, Page) and
-  loads `babel` with `english`. Default off (Portuguese / `brazilian`).
-- `indentbody` — indents all running text by `\contentindent` (0.6cm). Default off (text flush to the left margin).
+- `english` — switches all predefined labels to English and loads `babel` with
+  `english`. Default off (Portuguese / `brazilian`).
+- `indentbody` — indents all running text by `\contentindent` (0.6cm). Default
+  off (text flush to the left margin).
 
 ---
 
@@ -193,9 +233,24 @@ use `\code{...}` and escape LaTeX specials normally.
 - Page: A4 · margins top/bottom 3cm, left/right 2cm.
 - Body: Huawei Sans 10.5pt, ~14pt leading, 4pt between paragraphs, no first-line
   indent, `\frenchspacing`.
-- H1: 22pt bold + 72pt chapter number + 1.5pt rule. H2/H3/H4: 18/16/14pt regular.
+- H1: 22pt bold + 72pt chapter number + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
 - Code: Consolas 10pt on `#F6F8FA`.
 - Links: `#0000FF`, no underline.
+
+---
+
+## Compilation
+
+```bash
+latexmk <filename>.tex        # uses .latexmkrc → xelatex, auto two-pass
+```
+
+Or manually:
+```bash
+xelatex <filename>.tex && xelatex <filename>.tex   # two passes for TOC
+```
+
+**Never use pdflatex** — the class loads `fontspec` which requires XeLaTeX.
 
 ---
 
@@ -203,20 +258,21 @@ use `\code{...}` and escape LaTeX specials normally.
 - **Logos:** replace files in `assets/` keeping the names, or use
   `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
 - **Colors:** edit the `\definecolor` block at the top of `labguide.cls`.
-- **Sizes/spacing:** each concern is in a commented section of `labguide.cls`
-  (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section, edit there.
+- **Sizes/spacing:** each concern is in a commented section of
+  `labguide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section,
+  edit there.
 
 ---
 
 ## Agent workflow checklist
 1. Confirm the engine: never run `pdflatex`. Use `xelatex` (twice) or
-   `latexmk -xelatex`.
-2. Edit `main.tex` for content; touch `labguide.cls` only for look-and-feel
+   `latexmk` (handles it via `.latexmkrc`).
+2. Edit `.tex` files for content; touch `labguide.cls` only for look-and-feel
    changes the user explicitly requested.
 3. Keep body order: `\makecover` → `\sumario` → `\startbody` → sections.
 4. Inside `codigo`, write literal code. In prose, use `\code{...}` with normal
    escaping.
-5. After edits, compile twice and check the PDF (TOC + page numbers need the
+5. After edits, compile and check the PDF (TOC + page numbers need the
    second pass).
 6. If a font is missing, the class warns and falls back — the build still
    succeeds; surface the warning to the user but do not block.

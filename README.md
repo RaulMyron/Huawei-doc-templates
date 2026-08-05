@@ -1,14 +1,15 @@
 # Huawei Document Templates
 
 A collection of LaTeX templates for Huawei documents. Each template is a
-self-contained directory under `templates/` — compile with XeLaTeX.
+self-contained directory under `templates/` with its own class, samples,
+skill, and build config. Compile with XeLaTeX.
 
 ## Quick start
 
 ```bash
 git clone <repo-url> Huawei-doc-templates
 cd Huawei-doc-templates
-./install.sh          # installs XeLaTeX, latexmk, fonts, opencode skill, VS Code extension
+./install.sh          # installs XeLaTeX, latexmk, fonts, opencode skills, VS Code extension
 ```
 
 Then open the project in [opencode](https://opencode.ai) and run:
@@ -20,9 +21,18 @@ Then open the project in [opencode](https://opencode.ai) and run:
 to create a new lab guide document. The skill guides you through title,
 language, and content, then compiles and verifies the PDF.
 
-## Manual usage
+## How it works
 
-If you prefer to work without opencode:
+- **`install.sh`** installs the base: XeLaTeX, latexmk, LaTeX packages, fallback
+  fonts, VS Code extensions, and copies each template's skill to the global
+  opencode path.
+- **`opencode.json`** registers `templates/` as a skill discovery path, so
+  OpenCode finds each template's `SKILL.md` automatically.
+- **Each template** in `templates/<name>/` is self-contained: class file,
+  samples, skill, build config, assets. Add a new template by creating a new
+  directory with a `SKILL.md` — it's auto-discovered.
+
+## Manual usage
 
 ```bash
 cd templates/labguide
@@ -42,9 +52,9 @@ commands, environments, and options.
 
 ## Templates
 
-| Template | Description |
-|---|---|
-| [`labguide`](templates/labguide/) | Huawei Cloud lab guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks. Supports Portuguese (default) and English via the `[english]` class option. |
+| Template | Skill | Description |
+|---|---|---|
+| [`labguide`](templates/labguide/) | `/skill labguide` | Huawei Cloud lab guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks. Portuguese (default) and English. |
 
 ## Requirements
 
@@ -54,33 +64,37 @@ commands, environments, and options.
 - **Fonts:** loaded from the operating system, not the LaTeX tree. Each
   template falls back gracefully (with a warning) if a brand font is missing —
   the document still compiles. See each template's README for its fonts.
-- **opencode** (optional): for the `/skill labguide` workflow.
+- **opencode** (optional): for the `/skill <name>` workflow.
 
 ## Project layout
 
 ```
 .
-├── install.sh               # one-command setup (Ubuntu/Debian)
+├── install.sh               # one-command setup (base deps + skills + VS Code)
+├── opencode.json            # skill discovery: scans templates/ for SKILL.md
 ├── README.md                # this file (collection index)
 ├── LICENSE                  # MIT
 ├── .vscode/
 │   └── settings.json        # VS Code + LaTeX Workshop config (XeLaTeX recipe)
-├── .opencode/
-│   └── skills/
-│       └── labguide/
-│           └── SKILL.md     # opencode skill — /skill labguide to create documents
 └── templates/
-    └── labguide/            # one self-contained template per directory
-        ├── README.md        # template-specific human docs
-        ├── SKILL.md         # template-specific agent orientation
+    └── labguide/            # self-contained template + skill
+        ├── SKILL.md         # opencode skill (/skill labguide) + agent reference
+        ├── README.md        # human docs
         ├── labguide.cls     # the class — all formatting lives here
         ├── main.tex         # sample document in Portuguese
         ├── main_en.tex      # sample document in English
         ├── .latexmkrc       # latexmk config (XeLaTeX by default)
         ├── .vscode/
-        │   └── settings.json  # same XeLaTeX config (for opening this subfolder)
+        │   └── settings.json  # XeLaTeX config (for opening this subfolder)
         └── assets/          # logos and sample images
 ```
+
+## Adding a new template
+
+1. Create `templates/<name>/` with the class file, samples, and `SKILL.md`
+   (with frontmatter: `name` and `description`).
+2. Add a row to the Templates table above.
+3. `install.sh` will auto-discover and install the skill on next run.
 
 ## License
 

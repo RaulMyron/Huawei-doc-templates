@@ -87,25 +87,28 @@ else
     warn "DejaVu Sans Mono not found — code font may not render correctly"
 fi
 
-# ---- Install opencode skill ----------------------------------------
-step "Installing opencode skill"
+# ---- Install opencode skills ---------------------------------------
+step "Installing opencode skills"
 
-SKILL_SRC="$SCRIPT_DIR/.opencode/skills/labguide/SKILL.md"
-SKILL_DST_DIR="$HOME/.config/opencode/skills/labguide"
-SKILL_DST="$SKILL_DST_DIR/SKILL.md"
+GLOBAL_SKILLS_DIR="$HOME/.config/opencode/skills"
+SKILL_COUNT=0
 
-if [[ ! -f "$SKILL_SRC" ]]; then
-    warn "Skill source not found at $SKILL_SRC — skipping"
+for skill_file in "$SCRIPT_DIR"/templates/*/SKILL.md; do
+    if [[ -f "$skill_file" ]]; then
+        skill_name=$(basename "$(dirname "$skill_file")")
+        skill_dst_dir="$GLOBAL_SKILLS_DIR/$skill_name"
+        mkdir -p "$skill_dst_dir"
+        cp "$skill_file" "$skill_dst_dir/SKILL.md"
+        info "Skill '$skill_name': installed to $skill_dst_dir/SKILL.md"
+        SKILL_COUNT=$((SKILL_COUNT + 1))
+    fi
+done
+
+if [[ $SKILL_COUNT -eq 0 ]]; then
+    warn "No skills found in templates/*/SKILL.md — skipping"
 else
-    # Project-level skill (already in repo, just verify)
-    info "Project skill: .opencode/skills/labguide/SKILL.md (in repo)"
-
-    # Global skill (so /skill labguide works from any directory)
-    mkdir -p "$SKILL_DST_DIR"
-    cp "$SKILL_SRC" "$SKILL_DST"
-    info "Global skill: $SKILL_DST"
-    echo "  /skill labguide will be available project-wide and globally"
-    echo "  (restart opencode for the global skill to be discovered)"
+    echo "  $SKILL_COUNT skill(s) installed — restart opencode to discover them"
+    echo "  Project-level discovery also works via opencode.json (skills.paths)"
 fi
 
 # ---- Install VS Code extension -------------------------------------

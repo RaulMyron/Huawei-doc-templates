@@ -1,6 +1,6 @@
 ---
-name: guide
-description: Create or edit Huawei Cloud guide documents using the LaTeX guide template. Use when the user wants to write, extend, or fix a guide, or asks to create a new document for Huawei Cloud. Triggers on keywords like guide, guia, Huawei Cloud document.
+name: huawei-template-guide
+description: Create or edit Huawei Cloud guide documents using the LaTeX guide template. Use when the user wants to write, extend, or fix a guide, or asks to create a new document for Huawei Cloud. Triggers on keywords like huawei-template-guide, guide, guia, Huawei Cloud document.
 ---
 
 # Huawei Cloud Guide — Skill

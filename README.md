@@ -15,7 +15,7 @@ cd Huawei-doc-templates
 Then open the project in [opencode](https://opencode.ai) and run:
 
 ```
-/skill guide
+/skill huawei-template-guide
 ```
 
 to create a new guide document. The skill guides you through title,
@@ -53,7 +53,7 @@ commands, environments, and options.
 
 | Template | Skill | Description |
 |---|---|---|
-| [`guide`](templates/guide/) | `/skill guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, callout boxes, badges. Portuguese (default) and English. |
+| [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, callout boxes, badges. Portuguese (default) and English. |
 
 ## Requirements
 
@@ -77,7 +77,7 @@ commands, environments, and options.
 │   └── settings.json        # VS Code + LaTeX Workshop config (latexmk recipe)
 └── templates/
     └── guide/               # self-contained template + skill
-        ├── SKILL.md          # opencode skill (/skill guide) + agent reference
+        ├── SKILL.md          # opencode skill (/skill huawei-template-guide) + agent reference
         ├── README.md         # human docs
         ├── guide.cls         # the class — all formatting lives here
         ├── .latexmkrc        # latexmk config (XeLaTeX by default)

@@ -16,9 +16,12 @@ spacing, and fonts.
 ```
 .
 ├── labguide.cls      # the class — all formatting lives here
-├── main.tex          # sample document / starting point
+├── main.tex          # sample document in Portuguese (starting point)
+├── main_en.tex       # sample document in English (uses [english] option)
 ├── README.md         # this file (human guide)
 ├── SKILL.md          # agent orientation
+├── .vscode/
+│   └── settings.json # VS Code + LaTeX Workshop config (XeLaTeX recipe)
 └── assets/
     ├── huawei-logo-header.png   # header logo
     ├── huawei-logo-cover.png    # cover logo
@@ -215,9 +218,18 @@ lightweight single-purpose tool over VS Code.
 
 ## How to compile
 
+**Portuguese** (default):
+
 ```bash
 xelatex main.tex      # run TWICE so the TOC and page numbers are correct
 xelatex main.tex
+```
+
+**English** (uses the `[english]` class option):
+
+```bash
+xelatex main_en.tex   # run TWICE so the TOC and page numbers are correct
+xelatex main_en.tex
 ```
 
 (or `lualatex main.tex`). With `latexmk`:

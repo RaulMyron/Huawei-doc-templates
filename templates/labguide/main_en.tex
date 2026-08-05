@@ -1,0 +1,206 @@
+% =====================================================================
+%  Lab Guide — English sample (verifies all template features)
+%  Compile with XeLaTeX:
+%      xelatex main_en.tex   (run 2x for the TOC)
+% =====================================================================
+\documentclass[english]{labguide}
+
+% --- Document configuration -----------------------------------------
+\setlabtitle{Lab Guide: Getting Started with Huawei Cloud ECS}
+\setheadertitle{Huawei Cloud -- ECS Quick Start Lab}
+\setcovertext{Huawei Technologies CO., LTD}
+
+\begin{document}
+
+% ---- COVER ---------------------------------------------------------
+\makecover
+
+% ---- TABLE OF CONTENTS ---------------------------------------------
+\sumario
+
+% ---- BODY (restarts page numbering at 1) ---------------------------
+\startbody
+
+% =====================================================================
+%  Chapter 1 — Provision an Elastic Cloud Server
+% =====================================================================
+\section{Provision an Elastic Cloud Server}
+
+\begin{objetivos}
+  \objgeral{This lab walks you through provisioning an Elastic Cloud Server
+    (ECS) on Huawei Cloud via the Console. By the end you will be able to
+    launch a virtual machine, connect to it over SSH, and verify that it is
+    running.}
+
+  \prerequisitos
+  \begin{itemize}
+    \item Active IAM account on Huawei Cloud (valid username and password).
+    \item A web browser (Google Chrome, Mozilla Firefox, or Microsoft Edge).
+    \item An SSH client installed locally (OpenSSH, PuTTY, etc.).
+    \item A key pair created in the Console, or permission to create one.
+  \end{itemize}
+\end{objetivos}
+
+\subsection{Launch the instance}
+
+\objpratica{Create a single ECS instance in the \code{sa-brazil-1} region
+  using the Console wizard.}
+
+\passoapasso
+\begin{enumerate}
+  \item In the Console, open the service catalog and select
+        \textbf{Elastic Cloud Server (ECS)}.
+
+  \imagemc{assets/exemplo-menu.png}{Figure 1 -- Service catalog in the Console.}
+
+  \item Click \textbf{Create ECS} and fill in the basic configuration:
+
+  \begin{codigo}
+Name:           web-server-01
+Flavor:         s6.small.1 (1 vCPU, 1 GB RAM)
+Image:          Ubuntu 22.04 Server 64bit
+Disk:           40 GB General Purpose SSD
+VPC:            vpc-default
+Subnet:         subnet-default
+Security Group: sg-ssh (allows inbound TCP 22)
+  \end{codigo}
+
+  \item Under \textbf{Login Configuration}, select the key pair you created
+        earlier. Click \textbf{Create Now} and wait for the status to change
+        to \textbf{Running}.
+
+  \imagem{assets/exemplo-login.png}
+
+  \nota{The instance is assigned a public IP (EIP). If you need a fixed IP,
+    allocate a dedicated EIP and bind it after creation.}
+\end{enumerate}
+
+\subsection{Connect over SSH}
+
+\subsubsection{Retrieve the public IP}
+
+On the ECS details page, copy the \textbf{EIP} (Elastic IP) field. This is
+the address you will use to connect.
+
+\paragraph{Using OpenSSH}
+From a terminal, connect with the private key that matches the key pair
+selected during creation:
+
+\begin{codigo}[bash]
+chmod 400 ~/.ssh/huawei_key.pem
+ssh -i ~/.ssh/huawei_key.pem ubuntu@<EIP>
+\end{codigo}
+
+\paragraph{Using PuTTY}
+Convert the key to PPK format with PuTTYgen, then open a session to the
+EIP with the converted key.
+
+\subsection{Verify the instance}
+
+Once connected, run a few checks:
+
+\begin{codigo}[bash]
+uname -a          # confirm OS version
+df -h             # check disk space
+systemctl status  # verify services are running
+\end{codigo}
+
+\nota{This lab is an English sample that exercises every command and
+  environment provided by the \code{labguide} class. Use it as a reference
+  when writing your own lab guides.}
+
+% =====================================================================
+%  Chapter 2 — Configure the Terraform Provider
+% =====================================================================
+\section{Configure the Terraform Provider}
+
+\begin{objetivos}
+  \objgeral{This chapter shows how to obtain an AK/SK pair from the Console
+    and declare the Huawei Cloud provider in a Terraform configuration file,
+    preparing the environment for Infrastructure as Code.}
+
+  \prerequisitos
+  \begin{itemize}
+    \item Chapter 1 completed (Console access working).
+    \item IAM permission to create access credentials.
+    \item \code{terraform} installed locally (version 1.0 or later).
+  \end{itemize}
+\end{objetivos}
+
+\subsection{Create an AK/SK}
+
+\objpratica{Generate an Access Key ID / Secret Access Key pair to authenticate
+  external tools with Huawei Cloud.}
+
+In the Console, click your username in the top-right corner and open
+\textbf{My Credentials}. In the \textbf{Access Keys} section, click
+\textbf{Create Access Key} and download the generated file. Store it in a
+safe location: the Secret Access Key is shown only once.
+
+\subsection{Declare the provider}
+
+\passoapasso
+\begin{enumerate}
+  \item Create a file named \param{provider.tf} in your project directory
+        with the following content:
+
+  \begin{codigo}
+terraform {
+  required_providers {
+    huaweicloud = {
+      source  = "huaweicloud/huaweicloud"
+      version = ">= 1.60.0"
+    }
+  }
+}
+
+provider "huaweicloud" {
+  region     = "sa-brazil-1"
+  access_key = "YOUR_ACCESS_KEY_HERE"
+  secret_key = "YOUR_SECRET_KEY_HERE"
+}
+  \end{codigo}
+
+  Replace the \param{access\_key} and \param{secret\_key} values with the
+  credentials obtained in the previous section.
+
+  \item In a terminal, in the project folder, initialize the Terraform
+        working directory:
+
+  \begin{codigo}[bash]
+terraform init
+terraform plan
+  \end{codigo}
+
+  \nota{Never commit the \param{provider.tf} file with real credentials.
+    Use environment variables or a state file ignored by version control.}
+\end{enumerate}
+
+\subsection{Next steps}
+
+With the provider declared, you can start defining resources in
+\code{terraform}. For the full list of available resources, see the official
+documentation at
+\weblink{https://registry.terraform.io/providers/huaweicloud/huaweicloud/latest/docs}{Huawei Cloud Provider}.
+
+% =====================================================================
+%  Chapter 3 — Clean Up
+% =====================================================================
+\section{Clean Up}
+
+\begin{objetivos}
+  \objgeral{Remove the resources created in this lab to avoid ongoing charges.}
+\end{objetivos}
+
+\passoapasso
+\begin{enumerate}
+  \item In the Console, navigate to \textbf{Elastic Cloud Server}.
+  \item Select the instance \code{web-server-01}, click \textbf{More} and
+        choose \textbf{Delete}.
+  \item Confirm deletion. Optionally release the EIP if it was dedicated.
+\end{enumerate}
+
+\nota{If you used Terraform, run \code{terraform destroy} instead to remove
+  all resources declared in the configuration.}
+
+\end{document}

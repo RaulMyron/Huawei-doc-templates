@@ -231,10 +231,21 @@
 \newcommand{\setdocversion}[1]{\renewcommand{\lg@docversion}{#1}}
 \newcommand{\lg@docdate}{\today}
 \newcommand{\setdocdate}[1]{\renewcommand{\lg@docdate}{#1}}
+% Compilation time from \time primitive (minutes since midnight, respects TZ)
+\newcount\lg@hour
+\newcount\lg@min
+\newcount\lg@tmp
+\lg@hour=\time
+\divide\lg@hour by 60
+\lg@tmp=\lg@hour
+\multiply\lg@tmp by 60
+\lg@min=\time
+\advance\lg@min by -\lg@tmp
 \newcommand{\lg@covermeta}{%
   \ifx\lg@docversion\@empty\else\textbf{v\lg@docversion}\fi
   \ifx\lg@docversion\@empty\else\ifx\lg@docdate\@empty\else\ — \fi\fi
   \ifx\lg@docdate\@empty\else\lg@docdate\fi
+  \ \two@digits{\lg@hour}:\two@digits{\lg@min}%
 }
 
 \newcommand{\makecover}{%

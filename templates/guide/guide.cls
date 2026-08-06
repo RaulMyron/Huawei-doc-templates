@@ -328,7 +328,7 @@
   breaklines=true,
   breakatwhitespace=true,
   postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
-  columns=fullflexible,
+  columns=fixed,
   keepspaces=true,
   showstringspaces=false,
   tabsize=2,

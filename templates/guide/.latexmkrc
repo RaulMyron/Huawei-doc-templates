@@ -3,4 +3,5 @@
 # Project folders (e.g. samples/pt/, samples/en/) have their own .latexmkrc
 # with TEXINPUTS pointing here. Copy this as a starting point and add TEXINPUTS.
 $pdf_mode = 5;    # 5 = xelatex
+$ENV{TZ} = "America/Sao_Paulo";  # default TZ (GMT-3); projects can override
 $xelatex = 'xelatex -interaction=nonstopmode %O %S';

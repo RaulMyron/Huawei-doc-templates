@@ -12,6 +12,8 @@
 %%                   (padrão: português brasileiro).
 %%    indentbody  -> recua todo o texto corrido em \contentindent,
 %%                   (padrão: desligado).
+%%    notime      -> oculta a hora de compilação na capa.
+%%                   (padrão: mostra hora).
 %%    <qualquer>  -> repassada para a classe article.
 %% =====================================================================
 \NeedsTeXFormat{LaTeX2e}
@@ -22,6 +24,8 @@
 \DeclareOption{indentbody}{\@indentbodytrue}
 \newif\if@english \@englishfalse
 \DeclareOption{english}{\@englishtrue}
+\newif\if@showtime \@showtimetrue
+\DeclareOption{notime}{\@showtimefalse}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 \LoadClass[a4paper,10pt]{article}
@@ -245,7 +249,7 @@
   \ifx\lg@docversion\@empty\else\textbf{v\lg@docversion}\fi
   \ifx\lg@docversion\@empty\else\ifx\lg@docdate\@empty\else\ — \fi\fi
   \ifx\lg@docdate\@empty\else\lg@docdate\fi
-  \ \two@digits{\lg@hour}:\two@digits{\lg@min}%
+  \if@showtime\ \two@digits{\lg@hour}:\two@digits{\lg@min}\fi%
 }
 
 \newcommand{\makecover}{%

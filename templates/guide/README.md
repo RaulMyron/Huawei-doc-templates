@@ -259,18 +259,16 @@ cd samples/en && latexmk main.tex    # English
 
 `latexmk` needs Perl — see Environment setup above.
 
-### Timezone (optional)
+### Timezone
 
 The cover page shows the compilation date and time via `\today` and TeX's
-`\time` primitive. By default these use the system timezone. To override it
-(e.g. when the server runs in UTC but you want local time), add one line to
-your project's `.latexmkrc`:
+`\time` primitive. The template sets a default TZ of `America/Sao_Paulo`
+(GMT-3) in its `.latexmkrc` files. To use a different timezone, override
+it in your project's `.latexmkrc`:
 
 ```perl
-$ENV{TZ} = "America/Sao_Paulo";  # your timezone (IANA name)
+$ENV{TZ} = "UTC";  # override the template default
 ```
-
-This is a project-level setting — the template itself is timezone-agnostic.
 
 ---
 
@@ -490,7 +488,7 @@ These colors are defined in `guide.cls` (`codebg`, `codetext`, `linkblue`,
 ## Class options
 
 ```latex
-\documentclass[english,indentbody]{guide}
+\documentclass[english,indentbody,notime]{guide}
 ```
 
 - `english` — switches all predefined labels to English (Contents, General
@@ -500,6 +498,8 @@ These colors are defined in `guide.cls` (`codebg`, `codetext`, `linkblue`,
 - `indentbody` — indents **all running text** by `\contentindent` (0.6 cm),
   reproducing the body indent of the original layout. Without the option
   (default), text is flush to the left margin, aligned with the heading rules.
+- `notime` — hides the compilation time (HH:MM) on the cover page. Without
+  this option (default), time is shown next to the date.
 
 ### Label translations
 

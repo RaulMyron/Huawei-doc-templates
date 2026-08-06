@@ -39,20 +39,15 @@ hard-coded to the Huawei house style.
        $pdf_mode = 5;
        $xelatex = 'xelatex -interaction=nonstopmode %O %S';
        ```
-        For example, if the project is at `setup-guide/` in the repo root,
+        For example, if the project is at `examples/my-guide/` in the repo,
         the path is `../templates/guide/`. If inside `samples/pt/`, use `../../`.
-      - **Timezone (optional, per-project):** The cover page shows the
-        compilation date and time automatically (`\today` + `\time`).
-        The template is timezone-agnostic — it does NOT set `TZ`.
-        If the system timezone is wrong (e.g. server in UTC, user in GMT-3),
-        add ONE line to the project's `.latexmkrc`:
+      - **Timezone:** The cover page shows the compilation date and time
+        automatically (`\today` + `\time`). The template sets a default
+        TZ of `America/Sao_Paulo` (GMT-3). To use a different timezone,
+        override it in the project's `.latexmkrc`:
         ```perl
-        $ENV{TZ} = "America/Sao_Paulo";  # IANA timezone name
+        $ENV{TZ} = "UTC";  # override the template default
         ```
-        This is a project-level choice. Never add `TZ` to the template's
-        own `.latexmkrc` files (`templates/guide/.latexmkrc`,
-        `samples/*/latexmkrc`) — that would make the template
-        location-specific and break reproducibility.
     - Any project-specific assets (images, code files) also go in this folder.
 
 3. **Compile and verify** with `latexmk <filename>.tex` from inside the
@@ -279,12 +274,14 @@ Example:
 ## Class options
 
 ```latex
-\documentclass[english,indentbody]{guide}
+\documentclass[english,indentbody,notime]{guide}
 ```
 - `english` — switches all predefined labels to English and loads `babel` with
   `english`. Default off (Portuguese / `brazilian`).
 - `indentbody` — indents all running text by `\contentindent` (0.6cm). Default
   off (text flush to the left margin).
+- `notime` — hides the compilation time on the cover page. Default off
+  (time is shown).
 
 ---
 

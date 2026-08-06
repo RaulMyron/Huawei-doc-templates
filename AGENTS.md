@@ -32,20 +32,18 @@ approval. Changing them breaks existing documents and reproducibility.
 - `info` was renamed to `infobox` to avoid package name collisions.
 - Never reintroduce an `info` environment.
 
-### L4. Template is timezone-agnostic
-- The template's `.latexmkrc` files (`templates/guide/.latexmkrc`,
-  `samples/pt/.latexmkrc`, `samples/en/.latexmkrc`) must NOT set `$ENV{TZ}`.
-- TZ is a per-project setting. Only the user's project folder (e.g.
-  `setup-guide/.latexmkrc`) may set it.
-- Setting TZ in the template breaks reproducibility for users in other
-  timezones.
+### L4. Template default timezone is America/Sao_Paulo (GMT-3)
+- The template's `.latexmkrc` files set `$ENV{TZ} = "America/Sao_Paulo"`.
+- Projects can override TZ in their own `.latexmkrc` (last one wins).
+- This default matches the primary user timezone; override for other regions.
 
 ### L5. Cover page shows version + date + time automatically
 - `\setdocdate` defaults to `\today` (compilation date).
 - Time comes from TeX's `\time` primitive (HH:MM, respects TZ env).
-- Both are always shown on the cover page. No option to disable.
+- Both are shown on the cover page by default. Pass `[notime]` class option
+  to hide the time.
 - `\setdocdate{...}` can override the date, but time is always compilation
-  time.
+  time (when shown).
 
 ### L6. Self-contained project folders
 - Every document lives in its own folder with its own `.latexmkrc`.
@@ -92,14 +90,15 @@ approval. Changing them breaks existing documents and reproducibility.
         +-- SKILL.md          # opencode skill + agent reference
         +-- README.md         # human-readable docs
         +-- guide.cls         # all formatting lives here
-        +-- .latexmkrc        # XeLaTeX, no TZ (template-level)
+        +-- .latexmkrc        # XeLaTeX, TZ=America/Sao_Paulo
         +-- assets/           # logos and sample images
         +-- samples/
             +-- pt/            # Portuguese sample
             +-- en/            # English sample
-+-- setup-guide/             # real project using the template
-    +-- setup-guide.tex
-    +-- .latexmkrc            # TEXINPUTS + TZ=America/Sao_Paulo
++-- examples/                 # reference projects using the template
+    +-- setup-guide/          # ECS + SSH + MaaS gateway setup guide
+        +-- setup-guide.tex
+        +-- .latexmkrc        # TEXINPUTS + TZ override
 ```
 
 ---
@@ -113,8 +112,8 @@ approval. Changing them breaks existing documents and reproducibility.
 - Clean builds: `latexmk -C` (full clean), `latexmk -c` (aux only).
 
 ### Timezone
-- Template `.latexmkrc` files: NO TZ setting (locked, see L4).
-- Project `.latexmkrc` files: optionally set `$ENV{TZ} = "IANA/Name"`.
+- Template `.latexmkrc` files: `$ENV{TZ} = "America/Sao_Paulo"` (locked, see L4).
+- Project `.latexmkrc` files: can override TZ (last one wins).
 - `\today` and `\time` respect the TZ environment variable.
 
 ---
@@ -126,6 +125,7 @@ approval. Changing them breaks existing documents and reproducibility.
 |---|---|
 | `english` | English labels (default: Portuguese) |
 | `indentbody` | Indent body text by `\contentindent` (default: off) |
+| `notime` | Hide compilation time on cover page (default: show) |
 
 ### Preamble commands
 | Command | Purpose |
@@ -283,6 +283,6 @@ at the repo root registers `templates/` as a discovery path.
 - Commit messages: imperative mood, concise first line, detail in body.
 - Never commit build artifacts (`.pdf`, `.aux`, `.log`, `.out`, `.toc`,
   `.xdv`, `.fls`, `.fdb_latexmk`, `.synctex.gz`). They are in `.gitignore`.
-- The setup guide PDF (`setup-guide/setup-guide.pdf`) is also gitignored.
+- The setup guide PDF (`examples/setup-guide/setup-guide.pdf`) is also gitignored.
 - Samples are the CI gate — a commit that breaks sample compilation must not
   be pushed to `main`.

@@ -71,26 +71,29 @@ commands, environments, and options.
 
 ```
 .
+├── AGENTS.md               # project standards and locked decisions
 ├── install.sh               # one-command setup (base deps + skills + VS Code)
 ├── opencode.json            # skill discovery: scans templates/ for SKILL.md
 ├── README.md                # this file (collection index)
 ├── LICENSE                  # MIT
 ├── .vscode/
 │   └── settings.json        # VS Code + LaTeX Workshop config (latexmk recipe)
-└── templates/
-    └── guide/               # self-contained template + skill
-        ├── SKILL.md          # opencode skill (/skill huawei-template-guide) + agent reference
-        ├── README.md         # human docs
-        ├── guide.cls         # the class — all formatting lives here
-        ├── .latexmkrc        # latexmk config (XeLaTeX by default)
-        ├── assets/           # logos and sample images
-        └── samples/          # self-contained project folders by language
-            ├── pt/
-            │   ├── .latexmkrc  # TEXINPUTS=../../ so guide.cls is found
-            │   └── main.tex    # sample document in Portuguese
-            └── en/
-                ├── .latexmkrc
-                └── main.tex    # sample document in English
+├── templates/
+│   └── guide/               # self-contained template + skill
+│       ├── SKILL.md          # opencode skill (/skill huawei-template-guide) + agent reference
+│       ├── README.md         # human docs
+│       ├── guide.cls         # the class — all formatting lives here
+│       ├── .latexmkrc        # latexmk config (XeLaTeX, TZ=America/Sao_Paulo)
+│       ├── assets/           # logos and sample images
+│       └── samples/          # self-contained project folders by language
+│           ├── pt/
+│           │   ├── .latexmkrc  # TEXINPUTS=../../ so guide.cls is found
+│           │   └── main.tex    # sample document in Portuguese
+│           └── en/
+│               ├── .latexmkrc
+│               └── main.tex    # sample document in English
+└── examples/                 # reference projects using the template
+    └── setup-guide/          # ECS + SSH + MaaS gateway setup guide
 ```
 
 ## Adding a new template

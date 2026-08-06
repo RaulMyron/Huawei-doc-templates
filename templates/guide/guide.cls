@@ -53,6 +53,9 @@
   \babelprovide[import,main]{brazilian}
 \fi
 \RequirePackage[hidelinks]{hyperref}
+\RequirePackage{caption}
+\captionsetup[figure]{font={small}, labelfont=bf, labelsep=colon}
+\captionsetup[table]{font={small}, labelfont=bf, labelsep=colon}
 
 % =====================================================================
 %  CORES
@@ -374,12 +377,12 @@
    \includegraphics[width=#1,height=0.4\textheight,keepaspectratio]{#2}\par}%
   \medskip}
 
-% \imagemc[largura]{arquivo}{legenda}  (com legenda centralizada)
+% \imagemc[largura]{arquivo}{legenda}  (com legenda numerada — Figura N)
 \newcommand{\imagemc}[3][0.65\linewidth]{%
   \par\medskip
   {\leftskip=0pt\rightskip=0pt\parindent=0pt\centering
    \includegraphics[width=#1,height=0.4\textheight,keepaspectratio]{#2}\par
-   \vspace{2pt}\footnotesize #3\par}%
+   \vspace{2pt}\captionof{figure}{#3}\par}%
   \medskip}
 
 % \imagemplaceholder{caminho}{descrição}

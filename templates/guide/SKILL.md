@@ -235,7 +235,7 @@ image when the user explicitly asks for one.
 |---|---|
 | `\imagem{file}` | Centered image, default width `0.65\linewidth`. |
 | `\imagem[0.6\linewidth]{file}` | Centered image, custom width. |
-| `\imagemc{file}{caption}` | Centered image with centered caption below. |
+| `\imagemc{file}{caption}` | Centered image with **numbered** caption ("Figure 1: ..."). |
 | `\imagemc[0.6\linewidth]{file}{caption}` | With custom width. |
 | `\imagemplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the image file is not yet available. |
 

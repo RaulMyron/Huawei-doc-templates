@@ -9,8 +9,8 @@
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
 \setheadertitle{Huawei Cloud -- ECS + SSH + MaaS Gateway Setup}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{1.0.0}
-\setdocdate{2025-08-06}
+\setdocversion{2.0.0}
+\setdocdate{2026-08-06}
 
 \begin{document}
 
@@ -495,6 +495,18 @@ full command reference, see the template's README.md or run
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{2.0.0}{2026-08-06}{
+    \item Replaced OpenCode with oh-my-coding-maas-gateway as the default
+          coding environment.
+    \item Added changelog and versioning support to the template
+          (\code{\textbackslash setdocversion}, \code{\textbackslash setdocdate},
+          \code{changelog} environment).
+    \item Renamed \code{info} environment to \code{infobox} to avoid
+          package name collisions.
+    \item Fixed \code{\textbackslash codigoarquivo} implementation for
+          external file code blocks.
+    \item Added GitHub Actions CI to compile samples on every push.
+  }
   \changelogentry{1.0.0}{2025-08-06}{
     \item Initial version.
     \item Added ECS provisioning on Huawei Cloud.

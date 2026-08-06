@@ -9,7 +9,7 @@
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
 \setheadertitle{Huawei Cloud -- ECS + SSH + MaaS Gateway Setup}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{2.0.0}
+\setdocversion{2.1.0}
 
 \begin{document}
 
@@ -39,7 +39,7 @@
   \prerequisitos
   \begin{itemize}
     \item Active Huawei Cloud account with IAM credentials.
-    \item Permission to create ECS instances, EIPs, and security groups.
+    \item Permission to create security groups, ECS instances, and EIPs.
     \item A key pair created in the Console, or permission to create one.
     \item A web browser (Chrome, Firefox, or Edge).
   \end{itemize}
@@ -50,9 +50,56 @@ This guide assumes the \code{sa-brazil-1} region. Adjust the region if your
 account is registered elsewhere.
 \end{infobox}
 
+\subsection{Create the security group (sg-xgate)}
+
+\objpratica{Create a security group that allows SSH access on port 4444 from
+specific Huawei internal IPs only.}
+
+\begin{infobox}
+We use port \code{4444} instead of the standard SSH port \code{22} because
+the Huawei corporate proxy blocks outbound connections on port 22. Port
+\code{4444} is allowed through the proxy and works reliably for SSH.
+\end{infobox}
+
+\passoapasso
+\begin{enumerate}
+  \item In the Console, go to \textbf{VPC} $\rightarrow$ \textbf{Security
+        Groups} and click \textbf{Create Security Group}.
+  \item Name it \code{sg-xgate} and add the following inbound rules:
+
+  \begin{codigo}
+Rule 1:
+  Protocol:    TCP
+  Port:        4444
+  Source:      119.8.89.193/32
+  Description: SSH for Huawei internal user 1
+
+Rule 2:
+  Protocol:    TCP
+  Port:        4444
+  Source:      119.8.89.3/32
+  Description: SSH for Huawei internal user 2
+
+Rule 3:
+  Protocol:    TCP
+  Port:        4444
+  Source:      119.8.193.3/32
+  Description: SSH for Huawei internal user 3
+  \end{codigo}
+
+  \item Click \textbf{OK} to create the security group.
+\end{enumerate}
+
+\begin{dica}
+Each \code{/32} rule restricts access to exactly one IP address. Only the
+three listed Huawei internal IPs can reach the ECS on port 4444 --- no other
+inbound traffic is allowed.
+\end{dica}
+
 \subsection{Create the ECS instance}
 
-\objpratica{Launch a single ECS instance using the Console wizard.}
+\objpratica{Launch a single ECS instance using the Console wizard, using the
+security group created above.}
 
 \passoapasso
 \begin{enumerate}
@@ -67,12 +114,12 @@ account is registered elsewhere.
 
   \begin{codigo}
 Name:           dev-server-01
-Flavor:         s6.large.1 (2 vCPU, 2 GB RAM)
-Image:          Ubuntu 22.04 Server 64bit
-Disk:           40 GB General Purpose SSD
+Flavor:         ac8.xlarge.2 (4 vCPU, 8 GB RAM) — recommended
+Image:          Ubuntu 24.04 Server 64bit
+Disk:           100 GB General Purpose SSD
 VPC:            vpc-default
 Subnet:         subnet-default
-Security Group: sg-ssh (allows inbound TCP 22)
+Security Group: sg-xgate (port 4444, Huawei internal IPs only)
   \end{codigo}
 
   \item Under \textbf{Login Configuration}, select the key pair you created
@@ -87,31 +134,6 @@ Security Group: sg-ssh (allows inbound TCP 22)
   when the instance is deleted.
   \end{aviso}
 \end{enumerate}
-
-\subsection{Configure the security group}
-
-If you do not already have a security group that allows SSH access:
-
-\passoapasso
-\begin{enumerate}
-  \item In the Console, go to \textbf{VPC} $\rightarrow$ \textbf{Security
-        Groups} and click \textbf{Create Security Group}.
-  \item Name it \code{sg-ssh} and add an inbound rule:
-
-  \begin{codigo}
-Protocol:    TCP
-Port:        22
-Source:      0.0.0.0/0
-Description: Allow SSH access
-  \end{codigo}
-
-  \item Associate the security group with your ECS instance.
-\end{enumerate}
-
-\begin{aviso}
-Opening SSH to \code{0.0.0.0/0} allows access from any IP. For production,
-restrict the source to your specific IP address.
-\end{aviso}
 
 \subsection{Verify the instance}
 
@@ -155,6 +177,7 @@ nano ~/.ssh/config
   \begin{codigo}
 Host huawei-dev
     HostName <EIP>
+    Port 4444
     User ubuntu
     IdentityFile ~/.ssh/huawei_key.pem
     ProxyCommand nc -X connect -x proxy.corp.com:8080 %h %p
@@ -173,6 +196,7 @@ Host huawei-dev
   \begin{codigo}
 Host huawei-dev
     HostName <EIP>
+    Port 4444
     User ubuntu
     IdentityFile ~/.ssh/huawei_key.pem
     ServerAliveInterval 60
@@ -324,7 +348,7 @@ data are preserved.
     \item Chapter 3 completed — MaaS gateway installed and running.
     \item Git installed (\code{sudo apt install git}).
     \item The repository URL for the Huawei document templates project.
-    \item A fresh Ubuntu 22.04/24.04 instance (no prior LaTeX installation
+    \item A fresh Ubuntu 24.04 instance (no prior LaTeX installation
           required).
   \end{itemize}
 \end{objetivos}
@@ -489,6 +513,8 @@ Callout boxes and inline commands:
   \item Select the instance \code{dev-server-01}, click \textbf{More} and
         choose \textbf{Delete}.
   \item Confirm deletion. Optionally release the EIP if it was dedicated.
+  \item Navigate to \textbf{VPC} $\rightarrow$ \textbf{Security Groups},
+        select \code{sg-xgate}, and delete it.
   \item Remove the SSH config entry from \code{\textasciitilde/.ssh/config}.
 \end{enumerate}
 
@@ -508,6 +534,17 @@ full command reference, see the template's README.md or run
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{2.1.0}{2026-08-06}{
+    \item Updated ECS flavor to \code{ac8.xlarge.2} (4 vCPU, 8 GB RAM).
+    \item Updated OS image to Ubuntu 24.04 Server 64bit.
+    \item Increased disk size to 100 GB.
+    \item Security group \code{sg-xgate} now created \textbf{before} the ECS
+          instance.
+    \item Replaced SSH port 22 with port 4444 (Huawei proxy blocks port 22).
+    \item Restricted SSH access to three specific Huawei internal IPs
+          (\code{119.8.89.193}, \code{119.8.89.3}, \code{119.8.193.3}).
+    \item Added \code{Port 4444} to SSH config examples.
+  }
   \changelogentry{2.0.0}{2026-08-05}{
     \item Replaced OpenCode with oh-my-coding-maas-gateway as the default
           coding environment.

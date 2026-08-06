@@ -113,14 +113,14 @@
 \if@english
   \newcommand{\lg@sumario}{Contents}
   \newcommand{\lg@objgerallabel}{General Objective:}
-  \newcommand{\lg@objpraticalabel}{Practice Objective:}
+  \newcommand{\lg@objpraticalabel}{Objective:}
   \newcommand{\lg@prerequisitoslabel}{Prerequisites:}
   \newcommand{\lg@passoapassolabel}{Step by step:}
   \newcommand{\lg@paginalabel}{Page}
 \else
   \newcommand{\lg@sumario}{Sumário}
   \newcommand{\lg@objgerallabel}{Objetivo Geral:}
-  \newcommand{\lg@objpraticalabel}{Objetivo da prática:}
+  \newcommand{\lg@objpraticalabel}{Objetivo:}
   \newcommand{\lg@prerequisitoslabel}{Pré-requisitos:}
   \newcommand{\lg@passoapassolabel}{Passo a passo:}
   \newcommand{\lg@paginalabel}{Página}

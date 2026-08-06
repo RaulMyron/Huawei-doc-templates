@@ -126,7 +126,7 @@ the user asks.
 \end{objetivos}
 
 \subsection{<section title>}
-\objpratica{<practice objective>}
+\objpratica{<objective>}
 
 \passoapasso
 \begin{enumerate}
@@ -140,7 +140,7 @@ the user asks.
 ### English
 
 Same skeleton but with `\documentclass[english]{guide}`. Labels switch
-automatically: *Contents*, *General Objective:*, *Practice Objective:*,
+automatically: *Contents*, *General Objective:*, *Objective:*,
 *Prerequisites:*, *Step by step:*, *Page*.
 
 Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
@@ -184,7 +184,7 @@ Numbering is automatic: `1` / `1.1` / `1.1.1` / `1.1.1.1`.
 ```latex
 \begin{objetivos}
   \objgeral{<general objective>}
-  \objpratica{<practice objective>}
+  \objpratica{<objective>}
   \prerequisitos
   \begin{itemize}
     \item ...
@@ -197,7 +197,7 @@ work outside `objetivos` (e.g. inside a subsection).
 | Command | Produces |
 |---|---|
 | `\objgeral{...}` | **"Objetivo Geral:"** / **"General Objective:"** (bold label) + text. |
-| `\objpratica{...}` | **"Objetivo da prática:"** / **"Practice Objective:"** + text. |
+| `\objpratica{...}` | **"Objetivo:"** / **"Objective:"** + text. |
 | `\prerequisitos` | **"Pré-requisitos:"** / **"Prerequisites:"** label (put a list after). |
 | `\passoapasso` | **"Passo a passo:"** / **"Step by step:"** label (put a numbered list after). |
 

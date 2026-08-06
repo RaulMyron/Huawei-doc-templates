@@ -6,7 +6,7 @@ callout boxes, badges, colors, spacing, and fonts.
 
 > **Language note:** by default the guide renders in **Portuguese** — the
 > class loads `babel` with the `brazilian` language and built-in labels such as
-> *Sumário*, *Objetivo Geral:*, *Objetivo da prática:*, *Pré-requisitos:* and
+> *Sumário*, *Objetivo Geral:*, *Objetivo:*, *Pré-requisitos:* and
 > *Passo a passo:* are in Portuguese. Pass the **`english`** class option
 > (`\documentclass[english]{guide}`) to switch all labels to English and load
 > `babel` with `english` instead. See [Class options](#class-options) below.
@@ -335,7 +335,7 @@ with a 1.5 pt horizontal rule**.
 |---|---|
 | `\begin{objetivos} ... \end{objetivos}` | Opens the block and draws the closing rule. |
 | `\objgeral{...}` | **"Objetivo Geral:"** line (bold label) + text. |
-| `\objpratica{...}` | **"Objetivo da prática:"** line + text. |
+| `\objpratica{...}` | **"Objetivo:"** / **"Objective:"** line + text. |
 | `\prerequisitos` | **"Pré-requisitos:"** label (use before a list). |
 | `\passoapasso` | **"Passo a passo:"** label (use before a numbered list). |
 
@@ -537,7 +537,7 @@ These colors are defined in `guide.cls` (`codebg`, `codetext`, `linkblue`,
 ```
 
 - `english` — switches all predefined labels to English (Contents, General
-  Objective:, Practice Objective:, Prerequisites:, Step by step:, Page) and
+  Objective:, Objective:, Prerequisites:, Step by step:, Page) and
   loads `babel` with the `english` language. Without this option (default),
   labels are in Portuguese and `babel` loads `brazilian`.
 - `indentbody` — indents **all running text** by `\contentindent` (0.6 cm),
@@ -553,7 +553,7 @@ These colors are defined in `guide.cls` (`codebg`, `codetext`, `linkblue`,
 | TOC title | Sumário | Contents |
 | Cover title default | Guia | Guide |
 | `\objgeral` label | Objetivo Geral: | General Objective: |
-| `\objpratica` label | Objetivo da prática: | Practice Objective: |
+| `\objpratica` label | Objetivo: | Objective: |
 | `\prerequisitos` label | Pré-requisitos: | Prerequisites: |
 | `\passoapasso` label | Passo a passo: | Step by step: |
 | Footer page label | Página | Page |

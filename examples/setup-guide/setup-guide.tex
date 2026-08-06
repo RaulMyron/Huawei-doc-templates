@@ -315,15 +315,25 @@ data are preserved.
 \begin{objetivos}
   \objgeral{Clone the Huawei document templates repository on the ECS
   instance, run the setup script, and verify that the LaTeX toolchain and
-  the coding agent skill are ready for use.}
+  the coding agent skill are ready for use. The script assumes a fresh
+  Ubuntu install --- it installs all dependencies from scratch and
+  configures VS Code at the user level.}
 
   \prerequisitos
   \begin{itemize}
     \item Chapter 3 completed — MaaS gateway installed and running.
     \item Git installed (\code{sudo apt install git}).
     \item The repository URL for the Huawei document templates project.
+    \item A fresh Ubuntu 22.04/24.04 instance (no prior LaTeX installation
+          required).
   \end{itemize}
 \end{objetivos}
+
+\begin{infobox}
+The \code{install.sh} script is idempotent --- it is safe to run multiple
+times. It merges VS Code settings rather than overwriting them, and
+\code{apt-get install} skips packages that are already present.
+\end{infobox}
 
 \subsection{Clone and set up the project}
 
@@ -338,7 +348,8 @@ cd Huawei-doc-templates
   \end{codigo}
 
   \item Run the setup script (installs XeLaTeX, latexmk, fonts, the coding
-        agent skill, and the VS Code LaTeX Workshop extension):
+        agent skill, and configures VS Code LaTeX Workshop at the user
+        level):
 
   \begin{codigo}[bash]
 ./install.sh

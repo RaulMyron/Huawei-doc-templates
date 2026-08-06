@@ -112,21 +112,69 @@ else
     echo "  Project-level discovery also works via opencode.json (skills.paths)"
 fi
 
-# ---- Install VS Code extension -------------------------------------
-step "Configuring VS Code"
+# ---- Configure VS Code (user-level) ---------------------------------
+step "Configuring VS Code (user-level)"
 
-VSCODE_SETTINGS=(
-    "$SCRIPT_DIR/.vscode/settings.json"
-)
+VSCODE_USER_DIR="$HOME/.config/Code/User"
+VSCODE_USER_SETTINGS="$VSCODE_USER_DIR/settings.json"
+mkdir -p "$VSCODE_USER_DIR"
 
-# Verify settings files exist
-for f in "${VSCODE_SETTINGS[@]}"; do
-    if [[ -f "$f" ]]; then
-        info "Settings: $f"
-    else
-        warn "Settings not found: $f"
-    fi
-done
+# Merge LaTeX Workshop settings into the user's settings.json idempotently
+python3 - "$VSCODE_USER_SETTINGS" <<'PYEOF'
+import json, sys, os
+
+settings_path = sys.argv[1]
+
+# Load existing settings (or empty dict)
+if os.path.exists(settings_path):
+    with open(settings_path, "r") as f:
+        try:
+            settings = json.load(f)
+        except json.JSONDecodeError:
+            settings = {}
+else:
+    settings = {}
+
+# LaTeX Workshop settings for XeLaTeX via latexmk
+latex_settings = {
+    "latex-workshop.latex.recipe.default": "latexmk",
+    "latex-workshop.latex.recipes": [
+        {"name": "latexmk", "tools": ["latexmk"]},
+        {"name": "xelatex×2", "tools": ["xelatex", "xelatex"]},
+        {"name": "xelatex", "tools": ["xelatex"]}
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": ["-cd", "-xelatex", "-interaction=nonstopmode", "%DOC%"]
+        },
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": ["-synctex=1", "-interaction=nonstopmode",
+                     "-file-line-error", "%DOC%"]
+        }
+    ],
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.latex.autoBuild.run": "onSave"
+}
+
+# Merge (only update keys that differ or are missing)
+changed = False
+for key, value in latex_settings.items():
+    if key not in settings or settings[key] != value:
+        settings[key] = value
+        changed = True
+
+if changed:
+    with open(settings_path, "w") as f:
+        json.dump(settings, f, indent=2)
+        f.write("\n")
+    print(f"  ✓ Updated {settings_path}")
+else:
+    print(f"  ✓ {settings_path} already configured")
+PYEOF
 
 # Install LaTeX Workshop extension if VS Code CLI is available
 if command -v code &>/dev/null; then
@@ -145,11 +193,11 @@ if command -v code &>/dev/null; then
         warn "Failed to install LTeX extension (optional — spell/grammar checking)"
     fi
 else
-    warn "VS Code CLI (code) not found — skipping extension installation"
-    echo "  To install manually:"
+    warn "VS Code CLI (code) not found — extensions not installed"
+    echo "  Settings were still written to $VSCODE_USER_SETTINGS"
+    echo "  To install extensions manually:"
     echo "    1. Install VS Code: https://code.visualstudio.com/"
     echo "    2. Install LaTeX Workshop extension from the marketplace"
-    echo "    3. The .vscode/settings.json files are already in the repo"
 fi
 
 # ---- Test compile --------------------------------------------------

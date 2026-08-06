@@ -293,7 +293,6 @@ proceeding to the next chapter:
     \item Chapter 2 completed — ECS configured with root password and SSH
           on port 4444.
     \item VS Code installed on your local Windows machine.
-    \item Git for Windows installed (provides \code{connect.exe}).
     \item The private key file (\code{.pem}) downloaded from Huawei Cloud.
   \end{itemize}
 \end{objetivos}
@@ -321,6 +320,34 @@ proceeding to the next chapter:
 code --install-extension ms-vscode-remote.remote-ssh
   \end{codigo}
 \end{enumerate}
+
+\subsection{Install Git for Windows}
+
+\objpratica{Install Git for Windows, which provides \code{connect.exe} ---
+the proxy tunnel tool used by SSH \code{ProxyCommand}.}
+
+\passoapasso
+\begin{enumerate}
+  \item Download the Git for Windows installer from
+        \weblink{https://git-scm.com/download/win}{git-scm.com/download/win}.
+  \item Run the installer with the default settings. Click \textbf{Next}
+        through each step --- the defaults are correct for our use case.
+  \item After installation, verify that \code{connect.exe} is available:
+
+  \begin{codigo}[bash]
+"C:\Program Files\Git\mingw64\bin\connect.exe" --help
+  \end{codigo}
+
+  \item If the command above shows help text, the installation is correct.
+        If not, check whether you installed 32-bit Git (the path would be
+        \code{mingw32} instead of \code{mingw64}).
+\end{enumerate}
+
+\begin{infobox}
+\code{connect.exe} is included with Git for Windows and supports HTTP
+proxy tunneling via the \code{-H} flag. It is a lightweight alternative to
+\code{ncat.exe} (from Nmap) and requires no separate installation.
+\end{infobox}
 
 \subsection{Configure the SSH config file}
 

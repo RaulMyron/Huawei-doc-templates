@@ -326,7 +326,8 @@
 \lstdefinestyle{lgcode}{
   basicstyle=\codefont\fontsize{10}{13}\selectfont\color{codetext},
   breaklines=true,
-  breakatwhitespace=false,
+  breakatwhitespace=true,
+  postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
   columns=fullflexible,
   keepspaces=true,
   showstringspaces=false,
@@ -338,7 +339,7 @@
 \newtcblisting{codigo}[1][]{
   listing only,
   listing style=lgcode,
-  listing options={language=#1},
+      listing options={language=#1,breaklines=true,breakatwhitespace=true},
   colback=codebg, colframe=codebg,
   boxrule=0pt, arc=0pt, outer arc=0pt,
   left=8pt, right=8pt, top=6pt, bottom=6pt,
@@ -352,7 +353,7 @@
 \newcommand{\codigoarquivo}[2][]{%
   \begin{tcolorbox}[listing style=lgcode,
       listing file={#2},
-      listing options={language=#1},
+  listing options={language=#1,breaklines=true,breakatwhitespace=true},
       colback=codebg,colframe=codebg,boxrule=0pt,arc=0pt,outer arc=0pt,
       left=8pt,right=8pt,top=6pt,bottom=6pt,
       before skip=6pt, after skip=6pt,

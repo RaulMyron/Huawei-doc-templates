@@ -64,8 +64,8 @@ hard-coded to the Huawei house style.
 - **Compile twice** on the first run so the TOC and page numbers settle.
   `latexmk` handles this automatically (`.latexmkrc` is included).
 - **Fonts** are loaded from the OS, not the LaTeX tree:
-  - *Huawei Sans* (body text) — falls back to Liberation Sans → Arial.
-  - *Consolas* (code) — falls back to DejaVu Sans Mono.
+  - *HarmonyOS Sans* (body text) — falls back to Liberation Sans → Arial.
+  - *Cascadia Code* (code) — falls back to Consolas, then DejaVu Sans Mono.
   The document always compiles; missing fonts only reduce fidelity.
 
 ---
@@ -208,7 +208,7 @@ class. Do not pass `enumitem` options unless asked.
 ### Code
 | Command | Result |
 |---|---|
-| `\begin{codigo} ... \end{codigo}` | Code block: `#F6F8FA` bg, Consolas 10pt, `#1F2328` text, left-indented, no border. **Verbatim** — `_{}^\` are literal, no escaping. |
+| `\begin{codigo} ... \end{codigo}` | Code block: `#F6F8FA` bg, Cascadia Code 10pt, `#1F2328` text, left-indented, no border. **Verbatim** — `_{}^\` are literal, no escaping. |
 | `\begin{codigo}[bash] ... \end{codigo}` | Same, with `listings` language hint (`bash`, `Python`, …). |
 | `\codigoarquivo[linguagem]{arquivo}` | Code block from an external file. |
 | `\code{...}` | Inline monospace code. **Standard LaTeX escaping rules apply** here. |
@@ -304,10 +304,10 @@ Example:
 
 ## Format reference
 - Page: A4 · margins top/bottom 3cm, left/right 2cm.
-- Body: Huawei Sans 10.5pt, ~14pt leading, 4pt between paragraphs, no first-line
+- Body: HarmonyOS Sans 10.5pt, ~14pt leading, 4pt between paragraphs, no first-line
   indent, `\frenchspacing`.
 - H1: 22pt bold + 72pt chapter number + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
-- Code: Consolas 10pt on `#F6F8FA`.
+- Code: Cascadia Code 10pt on `#F6F8FA`.
 - Links: `#0000FF`, no underline.
 
 ---

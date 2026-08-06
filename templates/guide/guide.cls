@@ -4,8 +4,8 @@
 %%  Requer XeLaTeX ou LuaLaTeX (por causa do fontspec).
 %%
 %%  Fontes usadas:
-%%    - Texto  : Huawei Sans   (fallback: Liberation Sans / Arial)
-%%    - Código : Consolas      (fallback: DejaVu Sans Mono)
+%%    - Texto : HarmonyOS Sans (fallback: Liberation Sans / Arial)
+%%    - Código : Cascadia Code (fallback: Consolas / DejaVu Sans Mono)
 %%
 %%  Opções de classe:
 %%    english     -> usa inglês nos rótulos predefinidos e no babel.
@@ -74,19 +74,22 @@
   \ClassWarning{guide}{Fonte "#1" nao encontrada; usando fallback "#2".
     Instale a fonte para fidelidade total.}}
 
-\IfFontExistsTF{Huawei Sans}
-  {\setmainfont{Huawei Sans}}
-   {\lg@warnfont{Huawei Sans}{Liberation Sans}%
+\IfFontExistsTF{HarmonyOS Sans}
+  {\setmainfont{HarmonyOS Sans}}
+   {\lg@warnfont{HarmonyOS Sans}{Liberation Sans}%
     \IfFontExistsTF{Liberation Sans}
       {\setmainfont{Liberation Sans}}
       {\IfFontExistsTF{Arial}
         {\setmainfont{Arial}}
          {\lg@warnfont{Arial}{fontspec default}}}}
 
-\IfFontExistsTF{Consolas}
-  {\newfontfamily\consolasfont{Consolas}}
-  {\lg@warnfont{Consolas}{DejaVu Sans Mono}%
-   \newfontfamily\consolasfont{DejaVu Sans Mono}}
+\IfFontExistsTF{Cascadia Code}
+  {\newfontfamily\consolasfont{Cascadia Code}}
+  {\lg@warnfont{Cascadia Code}{Consolas}%
+   \IfFontExistsTF{Consolas}
+     {\newfontfamily\consolasfont{Consolas}}
+     {\lg@warnfont{Consolas}{DejaVu Sans Mono}%
+      \newfontfamily\consolasfont{DejaVu Sans Mono}}}
 \newcommand{\codefont}{\consolasfont}
 
 % Tamanho base do corpo: 10.5pt com entrelinha ~14pt

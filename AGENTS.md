@@ -56,8 +56,8 @@ approval. Changing them breaks existing documents and reproducibility.
 - `install.sh` extracts the name from frontmatter, not from the directory.
 
 ### L8. Font fallback chain
-- Main font: Huawei Sans -> Liberation Sans -> Arial -> fontspec default.
-- Mono font: Consolas -> DejaVu Sans Mono.
+- Main font: HarmonyOS Sans -> Liberation Sans -> Arial -> fontspec default.
+- Mono font: Cascadia Code -> Consolas -> DejaVu Sans Mono.
 - All font loads use `\IfFontExistsTF` — never hard-fail on a missing font.
 - Documents must always compile, even without brand fonts installed.
 
@@ -255,8 +255,9 @@ at the repo root registers `templates/` as a discovery path.
   touches `templates/**`.
 - CI installs `texlive-xetex`, `texlive-latex-extra`,
   `texlive-lang-portuguese`, `latexmk`, `fonts-liberation`.
-- CI does NOT install brand fonts (Huawei Sans, Consolas) — the fallback
-  chain must handle this (locked, see L8).
+- CI does NOT install Consolas (proprietary) — the fallback
+  chain must handle this (locked, see L8). HarmonyOS Sans and Cascadia Code
+  ARE installed (free and open source respectively).
 - PDFs are uploaded as artifacts for inspection.
 
 ---

@@ -53,10 +53,10 @@ differs by operating system — follow the section for yours.
    e.g. `C:\Users\YOUR_USER\AppData\Local\Programs\MiKTeX\miktex\bin\x64` — to
    the environment variables.
 
-3. **Install the fonts** (optional, for full fidelity) — install **Huawei Sans**
-   and **Consolas** via the Windows Fonts control panel (right-click the
+3. **Install the fonts** (optional, for full fidelity) — install **HarmonyOS Sans**
+   and **Cascadia Code** via the Windows Fonts control panel (right-click the
    `.ttf` → Install). Without them the template falls back to Liberation Sans /
-   Arial and DejaVu Sans Mono and still compiles.
+   Arial and Consolas / DejaVu Sans Mono and still compiles.
 
 4. **Compile** — open a Command Prompt in the project folder and run:
    ```
@@ -99,13 +99,18 @@ differs by operating system — follow the section for yours.
    ```
    fc-cache -f
    ```
-   - **Huawei Sans** — proprietary; obtain from Huawei and copy the
-     `.ttf`/`.otf` files in.
-   - **Consolas** — a Microsoft font, not freely redistributable and not in
-     `ttf-mscorefonts-installer`; copy it from a licensed Windows install
-     (`C:\Windows\Fonts\consola*.ttf`) if you have one.
-   - Without these, the template falls back to **DejaVu Sans Mono** (preinstalled
-     on virtually all Linux distros) and still compiles.
+    - **HarmonyOS Sans** — free for commercial use; download from
+      \weblink{https://github.com/zhiyuan1i/fonts-harmonyos-sans-cn/releases}{GitHub}
+      (`.deb` package) or from
+      \weblink{https://developer.huawei.com/consumer/en/design/resource/}{Huawei Design}.
+    - **Cascadia Code** — open source from Microsoft, install via
+      `sudo apt install fonts-cascadia-code` (or download from
+      \weblink{https://github.com/microsoft/cascadia-code}{GitHub}).
+    - **Consolas** — optional fallback; a Microsoft font, not freely
+      redistributable. Copy from a licensed Windows install
+      (`C:\Windows\Fonts\consola*.ttf`) if you have one.
+    - Without these, the template falls back to **DejaVu Sans Mono** (preinstalled
+      on virtually all Linux distros) and still compiles.
 
 4. **Compile** — in the sample folder (e.g., `samples/pt/`):
    ```
@@ -221,9 +226,10 @@ lightweight single-purpose tool over VS Code.
 - **Engine:** XeLaTeX **or** LuaLaTeX (required — the template uses `fontspec`).
   `pdflatex` **does not** work.
 - **Fonts** (installed on the operating system, not in the LaTeX tree):
-  - **Huawei Sans** — body text. If absent, it falls back automatically to
+  - **HarmonyOS Sans** — body text. If absent, it falls back automatically to
     *Liberation Sans* / *Arial* and emits a warning.
-  - **Consolas** — code. If absent, it falls back to *DejaVu Sans Mono*.
+  - **Cascadia Code** — code. If absent, falls back to *Consolas*, then
+    *DejaVu Sans Mono*.
 
   The swap is automatic: the document always compiles, but for full fidelity
   install both fonts.
@@ -365,7 +371,7 @@ Use the **standard** `itemize` (bullets) and `enumerate` (numbered) environments
 
 | Command | Result |
 |---|---|
-| `\begin{codigo} ... \end{codigo}` | **Code block**: `#F6F8FA` background, Consolas 10 pt, `#1F2328` text, left-indented, no border. Content is literal (verbatim). |
+| `\begin{codigo} ... \end{codigo}` | **Code block**: `#F6F8FA` background, Cascadia Code 10 pt, `#1F2328` text, left-indented, no border. Content is literal (verbatim). |
 | `\begin{codigo}[language] ... \end{codigo}` | Same, passing a language to `listings` (e.g. `[bash]`, `[Python]`). |
 | `\codigoarquivo[language]{file}` | Inserts a code block from an **external file**. |
 | `\code{...}` | **Inline code** (monospaced) within text. |
@@ -468,8 +474,8 @@ Example:
 |---|---|
 | Page | A4 |
 | Margins | top/bottom 3 cm · left/right 2 cm |
-| Body font | Huawei Sans, 10.5 pt |
-| Code font | Consolas, 10 pt |
+| Body font | HarmonyOS Sans, 10.5 pt |
+| Code font | Cascadia Code, 10 pt |
 | Body leading | ~14 pt |
 | Space between paragraphs | 4 pt |
 | H1 title | 22 pt bold + 72 pt number + 1.5 pt rule |

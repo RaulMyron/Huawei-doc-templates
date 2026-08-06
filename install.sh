@@ -51,10 +51,30 @@ $SUDO apt-get install -y \
     texlive-lang-portuguese \
     latexmk \
     fonts-liberation \
+    fonts-cascadia-code \
     poppler-utils \
     2>&1 | tail -5
 
 info "TeX Live packages installed"
+
+# ---- Install HarmonyOS Sans font -----------------------------------
+step "Installing HarmonyOS Sans font"
+
+HARMONYOS_DEB_URL="https://github.com/zhiyuan1i/fonts-harmonyos-sans-cn/releases/download/v1.0.0/harmonyos_sans.deb"
+HARMONYOS_DEB="/tmp/harmonyos_sans.deb"
+
+if fc-list | grep -q "HarmonyOS Sans"; then
+    info "HarmonyOS Sans: already installed"
+else
+    if wget -q "$HARMONYOS_DEB_URL" -O "$HARMONYOS_DEB"; then
+        $SUDO apt install -y "$HARMONYOS_DEB" 2>&1 | tail -3
+        rm -f "$HARMONYOS_DEB"
+        info "HarmonyOS Sans: installed"
+    else
+        warn "Failed to download HarmonyOS Sans — using fallback fonts"
+        echo "  Download manually from: $HARMONYOS_DEB_URL"
+    fi
+fi
 
 # ---- Update font cache ---------------------------------------------
 step "Updating font cache"
@@ -76,11 +96,21 @@ verify() {
 verify xelatex
 verify latexmk
 
-# Check fallback fonts
+# Check fonts
+if fc-list | grep -q "HarmonyOS Sans"; then
+    info "HarmonyOS Sans: available (body text)"
+else
+    warn "HarmonyOS Sans not found — body text will fall back to Liberation Sans"
+fi
 if fc-list | grep -q "Liberation Sans"; then
     info "Liberation Sans: available (body text fallback)"
 else
     warn "Liberation Sans not found — body text will fall back to Arial"
+fi
+if fc-list | grep -q "Cascadia Code"; then
+    info "Cascadia Code: available (code font)"
+else
+    warn "Cascadia Code not found — code font will fall back to Consolas or DejaVu Sans Mono"
 fi
 if fc-list | grep -q "DejaVu Sans Mono"; then
     info "DejaVu Sans Mono: available (code font fallback)"
@@ -242,7 +272,9 @@ echo -e "${BOLD}What was installed:${RESET}"
 echo "  • XeLaTeX (TeX Live)    — LaTeX engine with system font support"
 echo "  • latexmk                — build automation (uses .latexmkrc → xelatex)"
 echo "  • LaTeX packages         — titlesec, tocloft, enumitem, tcolorbox, babel, etc."
-echo "  • Liberation Sans        — fallback for Huawei Sans (proprietary)"
+echo "  • HarmonyOS Sans         — Huawei brand font (free commercial use)"
+echo "  • Cascadia Code          — code font (open source, Microsoft)"
+echo "  • Liberation Sans        — fallback for HarmonyOS Sans"
 echo "  • opencode skill         — /skill huawei-template-guide (project + global)"
 echo "  • VS Code LaTeX Workshop — XeLaTeX recipes, PDF preview, SyncTeX"
 echo ""
@@ -255,6 +287,5 @@ echo "       cd templates/guide/samples/pt && latexmk main.tex   # Portuguese"
 echo "       cd templates/guide/samples/en && latexmk main.tex   # English"
 echo ""
 echo -e "${BOLD}Optional (for full font fidelity):${RESET}"
-echo "  • Install Huawei Sans (proprietary — obtain from Huawei)"
-echo "  • Install Consolas (Microsoft font — copy from a licensed Windows install)"
+echo "  • Consolas is optional — Cascadia Code is the default code font"
 echo ""

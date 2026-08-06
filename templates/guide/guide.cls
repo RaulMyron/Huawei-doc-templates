@@ -396,10 +396,10 @@
 % =====================================================================
 % Uso:
 %   \setdocversion{1.0.0}       % mostra "v1.0.0" na capa
-%   \setdocdate{2025-08-06}     % mostra a data na capa
+%   \setdocdate{2026-08-06}     % mostra a data na capa
 %
 %   \begin{changelog}
-%     \changelogentry{1.0.0}{2025-08-06}{
+%     \changelogentry{1.0.0}{2026-08-06}{
 %       \item Initial version
 %       \item Added ECS provisioning
 %     }

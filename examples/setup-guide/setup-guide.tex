@@ -279,98 +279,98 @@ proceeding to the next chapter:
 \end{table}
 
 % =====================================================================
-%  Chapter 2 — Connect via SSH with Proxy
+%  Chapter 3 — Connect via SSH with Proxy for VS Code
 % =====================================================================
 \section{Connect via SSH with Proxy for VS Code}
 
 \begin{objetivos}
-  \objgeral{Establish an SSH connection to the ECS instance through a proxy
-  (if required by your network) and configure VS Code Remote-SSH for
-  remote development.}
+  \objgeral{Configure VS Code Remote-SSH to connect to the ECS instance
+  through the Huawei corporate proxy (xgate) using \code{connect.exe} from
+  Git for Windows.}
 
   \prerequisitos
   \begin{itemize}
     \item Chapter 2 completed — ECS configured with root password and SSH
           on port 4444.
-    \item The private key file (\code{.pem}) corresponding to the key pair.
-    \item VS Code installed locally with the Remote-SSH extension.
-    \item If behind a corporate proxy: the proxy host, port, and credentials.
+    \item VS Code installed on your local Windows machine.
+    \item Git for Windows installed (provides \code{connect.exe}).
+    \item The private key file (\code{.pem}) downloaded from Huawei Cloud.
   \end{itemize}
 \end{objetivos}
 
-\subsection{Configure SSH with a proxy}
+\begin{infobox}
+\textbf{Premises:}
+\begin{itemize}
+  \item The proxy is \textbf{xgate} (Huawei corporate proxy) at
+        \code{proxy.huawei.com:8080}.
+  \item SSH runs on port \code{4444} (configured in Chapter 2).
+  \item Login as \code{root} using the key pair from Chapter 1.
+  \item \code{connect.exe} is used instead of \code{ncat.exe} --- it ships
+        with Git for Windows, so no extra installation is needed.
+\end{itemize}
+\end{infobox}
 
-If your network requires a proxy to reach the internet, configure SSH to
-tunnel through it using \code{ProxyCommand}.
+\subsection{Install the Remote-SSH extension}
 
 \passoapasso
 \begin{enumerate}
-  \item Open or create the SSH config file:
+  \item Open VS Code on your local Windows machine.
+  \item Install the \textbf{Remote - SSH} extension (publisher: Microsoft):
 
   \begin{codigo}[bash]
-nano ~/.ssh/config
+code --install-extension ms-vscode-remote.remote-ssh
   \end{codigo}
+\end{enumerate}
 
-  \item Add the following configuration (adjust the proxy and EIP values):
+\subsection{Configure the SSH config file}
+
+\objpratica{Create an SSH config entry that tunnels through the Huawei proxy
+using \code{connect.exe} from Git.}
+
+\passoapasso
+\begin{enumerate}
+  \item Open or create the SSH config file on your Windows machine:
 
   \begin{codigo}
-Host huawei-dev
+notepad %USERPROFILE%\.ssh\config
+  \end{codigo}
+
+  \item Add the following configuration (replace \code{<EIP>} with the
+        ECS public IP and \code{<host-name>} with a name of your choice):
+
+  \begin{codigo}
+Host <host-name>
     HostName <EIP>
+    User root
     Port 4444
-    User ubuntu
-    IdentityFile ~/.ssh/huawei_key.pem
-    ProxyCommand nc -X connect -x proxy.corp.com:8080 %h %p
+    IdentityFile "C:\Users\user\.ssh\KeyPair-opencode.pem"
+    ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -H proxy.huawei.com:8080 %h %p
     ServerAliveInterval 60
     ServerAliveCountMax 3
   \end{codigo}
 
   \begin{infobox}
-  Replace \code{proxy.corp.com:8080} with your actual proxy host and port.
-  If your proxy requires authentication, use:
-  \code{ProxyCommand nc -X connect -x user:pass@proxy.corp.com:8080 \%h \%p}
+  Adjust the \code{IdentityFile} path to match the location where you saved
+  the \code{.pem} key file. The \code{connect.exe} path assumes a 64-bit Git
+  installation --- if you use 32-bit Git, change \code{mingw64} to
+  \code{mingw32}.
   \end{infobox}
-
-  \item If you do \textbf{not} need a proxy, use this simpler config:
-
-  \begin{codigo}
-Host huawei-dev
-    HostName <EIP>
-    Port 4444
-    User ubuntu
-    IdentityFile ~/.ssh/huawei_key.pem
-    ServerAliveInterval 60
-    ServerAliveCountMax 3
-  \end{codigo}
-
-  \item Set the correct permissions on the key file and test the connection:
-
-  \begin{codigo}[bash]
-chmod 600 ~/.ssh/huawei_key.pem
-ssh huawei-dev
-  \end{codigo}
 \end{enumerate}
 
 \begin{dica}
 The \code{ServerAliveInterval} and \code{ServerAliveCountMax} settings keep
-the connection alive through proxies that drop idle connections.
+the connection alive through the proxy, which may drop idle connections.
 \end{dica}
 
-\subsection{Connect VS Code via Remote-SSH}
+\subsection{Connect to the ECS via VS Code}
 
 \passoapasso
 \begin{enumerate}
-  \item Install the \textbf{Remote - SSH} extension in VS Code
-        (publisher: Microsoft).
-
-  \begin{codigo}[bash]
-code --install-extension ms-vscode-remote.remote-ssh
-  \end{codigo}
-
   \item Press \code{F1}, type \textbf{Remote-SSH: Connect to Host...}, and
-        select \code{huawei-dev} from the list.
+        select your host name from the list.
 
   \item VS Code opens a new window connected to the remote instance. Click
-        \textbf{Open Folder} and select \code{/home/ubuntu} (or your working
+        \textbf{Open Folder} and select \code{/root} (or your working
         directory).
 
   \item Verify the connection by opening a terminal in VS Code
@@ -383,7 +383,7 @@ df -h
 \end{enumerate}
 
 % =====================================================================
-%  Chapter 3 — Install oh-my-coding-maas-gateway
+%  Chapter 4 — Install oh-my-coding-maas-gateway
 % =====================================================================
 \section{Install the MaaS Coding Gateway}
 
@@ -395,7 +395,7 @@ df -h
 
   \prerequisitos
   \begin{itemize}
-    \item Chapter 2 completed — VS Code connected to the ECS via Remote-SSH.
+    \item Chapter 3 completed — VS Code connected to the ECS via Remote-SSH.
     \item Docker and Docker Compose available (the installer handles this).
     \item A Huawei ModelArts MaaS API key.
   \end{itemize}

@@ -39,9 +39,13 @@ hard-coded to the Huawei house style.
        $pdf_mode = 5;
        $xelatex = 'xelatex -interaction=nonstopmode %O %S';
        ```
-       For example, if the project is at `setup-guide/` in the repo root,
-       the path is `../templates/guide/`. If inside `samples/pt/`, use `../../`.
-   - Any project-specific assets (images, code files) also go in this folder.
+        For example, if the project is at `setup-guide/` in the repo root,
+        the path is `../templates/guide/`. If inside `samples/pt/`, use `../../`.
+        To pin a timezone for `\today`/`\time` on the cover page, also add:
+        ```perl
+        $ENV{TZ} = "America/Sao_Paulo";  # optional, IANA timezone name
+        ```
+    - Any project-specific assets (images, code files) also go in this folder.
 
 3. **Compile and verify** with `latexmk <filename>.tex` from inside the
    project folder.

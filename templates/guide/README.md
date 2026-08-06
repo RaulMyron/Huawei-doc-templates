@@ -259,6 +259,19 @@ cd samples/en && latexmk main.tex    # English
 
 `latexmk` needs Perl — see Environment setup above.
 
+### Timezone (optional)
+
+The cover page shows the compilation date and time via `\today` and TeX's
+`\time` primitive. By default these use the system timezone. To override it
+(e.g. when the server runs in UTC but you want local time), add one line to
+your project's `.latexmkrc`:
+
+```perl
+$ENV{TZ} = "America/Sao_Paulo";  # your timezone (IANA name)
+```
+
+This is a project-level setting — the template itself is timezone-agnostic.
+
 ---
 
 ## Commands and environments

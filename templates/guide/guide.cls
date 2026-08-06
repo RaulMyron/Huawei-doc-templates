@@ -89,12 +89,12 @@
          {\lg@warnfont{Arial}{fontspec default}}}}
 
 \IfFontExistsTF{Cascadia Code}
-  {\newfontfamily\consolasfont{Cascadia Code}}
+  {\newfontfamily\consolasfont{Cascadia Code}[Ligatures=NoCommon]}
   {\lg@warnfont{Cascadia Code}{Consolas}%
    \IfFontExistsTF{Consolas}
-     {\newfontfamily\consolasfont{Consolas}}
+     {\newfontfamily\consolasfont{Consolas}[Ligatures=NoCommon]}
      {\lg@warnfont{Consolas}{DejaVu Sans Mono}%
-      \newfontfamily\consolasfont{DejaVu Sans Mono}}}
+      \newfontfamily\consolasfont{DejaVu Sans Mono}[Ligatures=NoCommon]}}
 \newcommand{\codefont}{\consolasfont}
 
 % Tamanho base do corpo: 10.5pt com entrelinha ~14pt
@@ -327,7 +327,6 @@
   basicstyle=\codefont\fontsize{10}{13}\selectfont\color{codetext},
   breaklines=true,
   breakatwhitespace=true,
-  postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
   columns=fixed,
   keepspaces=true,
   showstringspaces=false,

@@ -122,16 +122,43 @@ Subnet:         subnet-default
 Security Group: sg-xgate (port 4444, Huawei internal IPs only)
   \end{codigo}
 
-  \item Under \textbf{Login Configuration}, select the key pair you created
-        earlier. Click \textbf{Create Now} and wait for the status to change
-        to \textbf{Running}.
+  \item Under \textbf{Billing Mode}, select \textbf{Pay-per-use}.
+
+  \begin{dica}
+  Pay-per-use bills by the hour with no long-term commitment. You only pay
+  for the time the instance is running. This is ideal for development and
+  testing --- stop the instance when not in use to reduce costs.
+  \end{dica}
+
+  \item Under \textbf{EIP} settings, configure the public IP:
+
+  \begin{codigo}
+EIP:            Auto-assign
+Billing:        Pay by traffic
+Bandwidth:      1000 Mbit/s
+Release:        Yes — release EIP when ECS is deleted
+  \end{codigo}
+
+  \item Under \textbf{Login Configuration}, select \textbf{Key pair} as the
+        authentication method. If you do not yet have a key pair, click
+        \textbf{Create Key Pair} to generate one inside Huawei Cloud and
+        download the \code{.pem} file.
+
+  \begin{infobox}
+  The key pair is the primary access method. Later, you can set a root
+  password on the ECS (via the Console or after first login with the key)
+  to have a second way to access the instance.
+  \end{infobox}
+
+  \item Click \textbf{Create Now} and wait for the status to change to
+        \textbf{Running}.
 
   \badge{Important}
 
   \begin{aviso}
-  The instance is assigned a public IP (EIP). If you need a fixed IP,
-  allocate a dedicated EIP and bind it after creation. The EIP is released
-  when the instance is deleted.
+  The EIP is auto-assigned and configured to be released when the ECS is
+  deleted. If you need a fixed IP that persists across stop/start cycles,
+  allocate a dedicated EIP and bind it manually after creation.
   \end{aviso}
 \end{enumerate}
 
@@ -538,6 +565,10 @@ full command reference, see the template's README.md or run
     \item Updated ECS flavor to \code{ac8.xlarge.2} (4 vCPU, 8 GB RAM).
     \item Updated OS image to Ubuntu 24.04 Server 64bit.
     \item Increased disk size to 100 GB.
+    \item Recommended pay-per-use billing mode.
+    \item EIP auto-assigned: pay by traffic, 1000 Mbit/s, release with ECS.
+    \item Key pair authentication (created in Huawei Cloud); root password
+          can be set later as a second access method.
     \item Security group \code{sg-xgate} now created \textbf{before} the ECS
           instance.
     \item Replaced SSH port 22 with port 4444 (Huawei proxy blocks port 22).

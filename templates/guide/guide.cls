@@ -365,17 +365,20 @@
 %  IMAGENS  — sempre centralizadas horizontalmente
 % =====================================================================
 % \imagem[largura]{arquivo}   (sem legenda)
+% Limita por largura E altura, mantendo proporção (keepaspectratio).
+% Imagens horizontais: limitadas pela largura (0.65\linewidth).
+% Imagens verticais: limitadas pela altura (0.4\textheight).
 \newcommand{\imagem}[2][0.65\linewidth]{%
   \par\medskip
   {\leftskip=0pt\rightskip=0pt\parindent=0pt\centering
-   \includegraphics[width=#1]{#2}\par}%
+   \includegraphics[width=#1,height=0.4\textheight,keepaspectratio]{#2}\par}%
   \medskip}
 
 % \imagemc[largura]{arquivo}{legenda}  (com legenda centralizada)
 \newcommand{\imagemc}[3][0.65\linewidth]{%
   \par\medskip
   {\leftskip=0pt\rightskip=0pt\parindent=0pt\centering
-   \includegraphics[width=#1]{#2}\par
+   \includegraphics[width=#1,height=0.4\textheight,keepaspectratio]{#2}\par
    \vspace{2pt}\footnotesize #3\par}%
   \medskip}
 

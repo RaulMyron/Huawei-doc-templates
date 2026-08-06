@@ -41,10 +41,18 @@ hard-coded to the Huawei house style.
        ```
         For example, if the project is at `setup-guide/` in the repo root,
         the path is `../templates/guide/`. If inside `samples/pt/`, use `../../`.
-        To pin a timezone for `\today`/`\time` on the cover page, also add:
+      - **Timezone (optional, per-project):** The cover page shows the
+        compilation date and time automatically (`\today` + `\time`).
+        The template is timezone-agnostic — it does NOT set `TZ`.
+        If the system timezone is wrong (e.g. server in UTC, user in GMT-3),
+        add ONE line to the project's `.latexmkrc`:
         ```perl
-        $ENV{TZ} = "America/Sao_Paulo";  # optional, IANA timezone name
+        $ENV{TZ} = "America/Sao_Paulo";  # IANA timezone name
         ```
+        This is a project-level choice. Never add `TZ` to the template's
+        own `.latexmkrc` files (`templates/guide/.latexmkrc`,
+        `samples/*/latexmkrc`) — that would make the template
+        location-specific and break reproducibility.
     - Any project-specific assets (images, code files) also go in this folder.
 
 3. **Compile and verify** with `latexmk <filename>.tex` from inside the

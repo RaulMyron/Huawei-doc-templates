@@ -152,11 +152,20 @@
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
-% Coluna esquerda: logo | centro: título | direita: "Página N"
+% Header: logo (left) + title (center)
+% Footer: "Página N" (center)
 \fancyhead[L]{\raisebox{-0.35cm}[0pt][0pt]{%
     \includegraphics[height=1.05cm]{\lg@headerlogo}}}
 \fancyhead[C]{\normalfont\fontsize{10}{12}\selectfont \lg@headertitle}
-\fancyhead[R]{\normalfont\fontsize{10}{12}\selectfont \lg@paginalabel~\thepage}
+\fancyfoot[C]{\normalfont\fontsize{10}{12}\selectfont \lg@paginalabel~\thepage}
+
+% Plain style: no header, page number in footer (for TOC, changelog)
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+  \fancyfoot[C]{\normalfont\fontsize{10}{12}\selectfont \lg@paginalabel~\thepage}
+}
 
 % =====================================================================
 %  TÍTULOS (headings)
@@ -220,7 +229,7 @@
 \setcounter{tocdepth}{3}
 
 % Comando de conveniência para o sumário (reseta leftskip)
-\newcommand{\sumario}{{\leftskip=0pt\relax\tableofcontents}\clearpage}
+\newcommand{\sumario}{{\leftskip=0pt\relax\pagestyle{plain}\thispagestyle{plain}\tableofcontents}\clearpage}
 
 % =====================================================================
 %  CAPA
@@ -260,7 +269,7 @@
 \newcommand{\makecover}{%
   \begingroup
   \leftskip=0pt\relax
-  \thispagestyle{fancy}%
+  \thispagestyle{empty}%
   \vspace*{2.2cm}%
   {\centering
    \fontsize{36}{42}\selectfont \lg@guidetitle\par}%
@@ -279,7 +288,7 @@
 % =====================================================================
 %  CORPO — reinicia numeração de páginas
 % =====================================================================
-\newcommand{\startbody}{\clearpage\setcounter{page}{1}}
+\newcommand{\startbody}{\clearpage\pagestyle{fancy}\thispagestyle{fancy}\setcounter{page}{1}}
 
 % =====================================================================
 %  BLOCO DE OBJETIVOS / PRÉ-REQUISITOS  (encerrado por regra 1.5pt)
@@ -454,12 +463,14 @@
 %   \end{changelog}
 \newenvironment{changelog}{%
   \par\medskip
+  \thispagestyle{plain}\pagestyle{plain}%
   \noindent{\color{ruleblack}\rule{\linewidth}{0.5pt}}\par
   \vspace{6pt}
 }{%
   \par\medskip
   \noindent{\color{ruleblack}\rule{\linewidth}{0.5pt}}\par
   \medskip
+  \pagestyle{fancy}%
 }
 \newcommand{\changelogentry}[3]{%
   \par\smallskip

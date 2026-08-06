@@ -288,7 +288,7 @@ commands that, in this template, produce a specific look.
 | Command | What it does |
 |---|---|
 | `\setguidetitle{...}` | Sets the large **cover** title. |
-| `\setheadertitle{...}` | Sets the centered **header** text (repeated on every page). |
+| `\setheadertitle{...}` | Sets the centered **header** text (shown on body pages; cover, TOC, and changelog have no header). |
 | `\setcovertext{...}` | Sets the line below the cover logo (default: `Huawei Technologies CO., LTD`). |
 | `\setheaderlogo{path}` | Sets the **header logo** image path (default: `assets/huawei-logo-header.png`). |
 | `\setcoverlogo{path}` | Sets the **cover logo** image path (default: `assets/huawei-logo-cover.png`). |
@@ -309,7 +309,7 @@ Example:
 |---|---|
 | `\makecover` | Generates the **cover** (title + centered logo + text). Call right after `\begin{document}`. |
 | `\sumario` | Generates the **table of contents** ("Sumário" on the right, with a rule and dotted leaders) and page-breaks. |
-| `\startbody` | Marks the start of the body and **restarts page numbering at 1**. |
+| `\startbody` | Marks the start of the body and **restarts page numbering at 1** and restores the header (logo + title). |
 
 ### 3. Headings (automatic numbering 1 / 1.1 / 1.1.1 / 1.1.1.1)
 
@@ -556,7 +556,7 @@ These colors are defined in `guide.cls` (`codebg`, `codetext`, `linkblue`,
 | `\objpratica` label | Objetivo da prática: | Practice Objective: |
 | `\prerequisitos` label | Pré-requisitos: | Prerequisites: |
 | `\passoapasso` label | Passo a passo: | Step by step: |
-| Header page label | Página | Page |
+| Footer page label | Página | Page |
 
 ## Customization
 

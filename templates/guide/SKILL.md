@@ -155,7 +155,7 @@ Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 | Command | Purpose |
 |---|---|
 | `\setguidetitle{...}` | Big cover title. |
-| `\setheadertitle{...}` | Centered header text on every page. |
+| `\setheadertitle{...}` | Centered header text on body pages (cover, TOC, and changelog have no header). |
 | `\setcovertext{...}` | Line under the cover logo (default `Huawei Technologies CO., LTD`). |
 | `\setheaderlogo{path}` | Header logo image path (default `assets/huawei-logo-header.png`). |
 | `\setcoverlogo{path}` | Cover logo image path (default `assets/huawei-logo-cover.png`). |
@@ -165,7 +165,7 @@ Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 |---|---|
 | `\makecover` | Render the cover. Call right after `\begin{document}`. |
 | `\sumario` | Render the TOC ("Sumário" / "Contents", right-aligned, dotted leaders) and page-break. |
-| `\startbody` | Mark body start; **resets page numbering to 1**. |
+| `\startbody` | Mark body start; **resets page numbering to 1** and restores header (logo + title). |
 
 ### Headings — use standard section commands (template restyles them)
 | Command | Result |

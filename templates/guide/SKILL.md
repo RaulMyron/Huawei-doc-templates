@@ -233,7 +233,7 @@ image when the user explicitly asks for one.
 
 | Command | Result |
 |---|---|
-| `\imagem{file}` | Centered image, default width `0.85\linewidth`. |
+| `\imagem{file}` | Centered image, default width `0.65\linewidth`. |
 | `\imagem[0.6\linewidth]{file}` | Centered image, custom width. |
 | `\imagemc{file}{caption}` | Centered image with centered caption below. |
 | `\imagemc[0.6\linewidth]{file}{caption}` | With custom width. |

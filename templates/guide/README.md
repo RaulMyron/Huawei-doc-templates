@@ -405,7 +405,7 @@ image when the user explicitly asks for one.
 
 | Command | Result |
 |---|---|
-| `\imagem[width]{file}` | Inserts the image **centered**. `width` is optional (default `0.85\linewidth`). |
+| `\imagem[width]{file}` | Inserts the image **centered**. `width` is optional (default `0.65\linewidth`). |
 | `\imagemc[width]{file}{caption}` | Same, with a **caption** centered below. |
 | `\imagemplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the file is not yet available. |
 

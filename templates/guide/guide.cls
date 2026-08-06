@@ -365,14 +365,14 @@
 %  IMAGENS  — sempre centralizadas horizontalmente
 % =====================================================================
 % \imagem[largura]{arquivo}   (sem legenda)
-\newcommand{\imagem}[2][0.85\linewidth]{%
+\newcommand{\imagem}[2][0.65\linewidth]{%
   \par\medskip
   {\leftskip=0pt\rightskip=0pt\parindent=0pt\centering
    \includegraphics[width=#1]{#2}\par}%
   \medskip}
 
 % \imagemc[largura]{arquivo}{legenda}  (com legenda centralizada)
-\newcommand{\imagemc}[3][0.85\linewidth]{%
+\newcommand{\imagemc}[3][0.65\linewidth]{%
   \par\medskip
   {\leftskip=0pt\rightskip=0pt\parindent=0pt\centering
    \includegraphics[width=#1]{#2}\par

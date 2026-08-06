@@ -227,6 +227,15 @@
 \newcommand{\setcovertext}[1]{\renewcommand{\lg@covertext}{#1}}
 \newcommand{\lg@coverlogo}{assets/huawei-logo-cover.png}
 \newcommand{\setcoverlogo}[1]{\renewcommand{\lg@coverlogo}{#1}}
+\newcommand{\lg@docversion}{}
+\newcommand{\setdocversion}[1]{\renewcommand{\lg@docversion}{#1}}
+\newcommand{\lg@docdate}{}
+\newcommand{\setdocdate}[1]{\renewcommand{\lg@docdate}{#1}}
+\newcommand{\lg@covermeta}{%
+  \ifx\lg@docversion\@empty\else\textbf{v\lg@docversion}\fi
+  \ifx\lg@docversion\@empty\else\ifx\lg@docdate\@empty\else\ — \fi\fi
+  \ifx\lg@docdate\@empty\else\lg@docdate\fi
+}
 
 \newcommand{\makecover}{%
   \begingroup
@@ -239,9 +248,12 @@
   {\centering
    \includegraphics[width=3.6cm]{\lg@coverlogo}\par}%
   \vspace{0.9cm}%
-  {\centering
-   \fontsize{16}{20}\selectfont \lg@covertext\par}%
-  \endgroup
+   {\centering
+    \fontsize{16}{20}\selectfont \lg@covertext\par}%
+   \vspace{0.5cm}%
+   {\centering
+    \fontsize{12}{14}\selectfont \lg@covermeta\par}%
+   \endgroup
   \clearpage}
 
 % =====================================================================
@@ -378,5 +390,40 @@
 % Uso: \badge{Novo}  -> rótulo vermelho com texto branco
 \newcommand{\badge}[1]{%
   \colorbox{huaweired}{\textcolor{white}{\footnotesize\bfseries\strut~#1~}}}
+
+% =====================================================================
+%  CHANGELOG / VERSIONAMENTO
+% =====================================================================
+% Uso:
+%   \setdocversion{1.0.0}       % mostra "v1.0.0" na capa
+%   \setdocdate{2025-08-06}     % mostra a data na capa
+%
+%   \begin{changelog}
+%     \changelogentry{1.0.0}{2025-08-06}{
+%       \item Initial version
+%       \item Added ECS provisioning
+%     }
+%     \changelogentry{0.9.0}{2025-07-15}{
+%       \item Draft
+%     }
+%   \end{changelog}
+\newenvironment{changelog}{%
+  \par\medskip
+  \noindent{\color{ruleblack}\rule{\linewidth}{0.5pt}}\par
+  \vspace{6pt}
+}{%
+  \par\medskip
+  \noindent{\color{ruleblack}\rule{\linewidth}{0.5pt}}\par
+  \medskip
+}
+\newcommand{\changelogentry}[3]{%
+  \par\smallskip
+  \noindent\textbf{#1}\hfill\textit{#2}\par\nobreak\vspace{2pt}
+  \begingroup\leftskip=1.2cm\relax
+  \begin{itemize}[leftmargin=1.2em,topsep=0pt,itemsep=1pt,parsep=0pt]
+    #3
+  \end{itemize}
+  \endgroup
+}
 
 \endinput

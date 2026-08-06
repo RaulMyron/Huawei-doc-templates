@@ -1,5 +1,5 @@
 % =====================================================================
-%  Guide — Environment Setup: ECS + SSH Proxy + OpenCode + Huawei Project
+%  Guide — Environment Setup: ECS + SSH Proxy + MaaS Gateway + Huawei Project
 %  Compile with XeLaTeX:
 %      xelatex setup-guide.tex   (run 2x for the TOC)
 % =====================================================================
@@ -7,8 +7,10 @@
 
 % --- Document configuration -----------------------------------------
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
-\setheadertitle{Huawei Cloud -- ECS + SSH + OpenCode Setup}
+\setheadertitle{Huawei Cloud -- ECS + SSH + MaaS Gateway Setup}
 \setcovertext{Huawei Technologies CO., LTD}
+\setdocversion{1.0.0}
+\setdocdate{2025-08-06}
 
 \begin{document}
 
@@ -216,67 +218,91 @@ df -h
 \end{enumerate}
 
 % =====================================================================
-%  Chapter 3 — Install OpenCode
+%  Chapter 3 — Install oh-my-coding-maas-gateway
 % =====================================================================
-\section{Install OpenCode on the ECS Instance}
+\section{Install the MaaS Coding Gateway}
 
 \begin{objetivos}
-  \objgeral{Install OpenCode on the remote ECS instance so you can create
-  and edit Huawei Cloud guide documents from VS Code's remote session.}
+  \objgeral{Install the oh-my-coding-maas-gateway on the ECS instance.
+  This is a self-hosted LiteLLM proxy that routes Huawei ModelArts MaaS
+  models to coding tools (opencode, Codex CLI, Claude Code, Pi agent) with
+  load balancing, virtual keys, and Prometheus + Grafana observability.}
 
   \prerequisitos
   \begin{itemize}
     \item Chapter 2 completed — VS Code connected to the ECS via Remote-SSH.
-    \item Node.js 18+ available on the instance (or permission to install it).
+    \item Docker and Docker Compose available (the installer handles this).
+    \item A Huawei ModelArts MaaS API key.
   \end{itemize}
 \end{objetivos}
 
-\subsection{Install Node.js}
+\begin{infobox}
+The gateway repository is at
+\weblink{https://github.com/wallacelw/oh-my-coding-maas-gateway}{wallacelw/oh-my-coding-maas-gateway}.
+It supports 4 models: \code{glm-5.2}, \code{glm-5.1},
+\code{deepseek-v4-pro}, and \code{deepseek-v4-flash}.
+\end{infobox}
+
+\subsection{Run the bootstrap installer}
+
+\objpratica{Install the gateway using the one-command bootstrap script.}
 
 \passoapasso
 \begin{enumerate}
-  \item In the VS Code remote terminal, install Node.js via NodeSource:
+  \item In the VS Code remote terminal, run the bootstrap script:
 
   \begin{codigo}[bash]
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
+curl -fsSL https://raw.githubusercontent.com/wallacelw/oh-my-coding-maas-gateway/main/scripts/bootstrap.sh | bash
   \end{codigo}
 
-  \item Verify the installation:
+  \item The installer will:
+    \begin{itemize}
+      \item Prompt for your Huawei MaaS API key.
+      \item Show an interactive menu to select which coding tools to install
+            (opencode, Codex CLI, Claude Code, Pi agent).
+      \item Auto-install prerequisites (Docker, Node.js, etc.).
+      \item Deploy the proxy + observability stack (LiteLLM, PostgreSQL,
+            Prometheus, Grafana).
+      \item Configure each tool with its own virtual key.
+      \item Run validation and offer to install the companion skill.
+    \end{itemize}
 
-  \begin{codigo}[bash]
-node --version    # should print v20.x.x
-npm --version     # should print 10.x.x
-  \end{codigo}
+  \badge{Important}
+
+  \begin{aviso}
+  Estimated time: \textasciitilde5 min for a fresh install, \textasciitilde2 min
+  for an upgrade. If you are behind a proxy, ensure \code{http\_proxy} and
+  \code{https\_proxy} environment variables are set before running the script.
+  \end{aviso}
 \end{enumerate}
 
-\subsection{Install OpenCode}
+\subsection{Verify the installation}
 
 \passoapasso
 \begin{enumerate}
-  \item Install OpenCode globally via npm:
+  \item Check that the proxy is running:
 
   \begin{codigo}[bash]
-sudo npm install -g opencode
+curl http://localhost:4000/health
   \end{codigo}
 
-  \item Verify the installation:
+  \item Open the Grafana dashboard at \code{http://localhost:3000} to
+        monitor usage and metrics.
+
+  \item Open the LiteLLM Admin UI at \code{http://localhost:4000/ui} to
+        manage virtual keys and model routing.
+
+  \item Launch your coding tool:
 
   \begin{codigo}[bash]
-opencode --version
-  \end{codigo}
-
-  \item Launch OpenCode:
-
-  \begin{codigo}[bash]
-opencode
+opencode          # or:  codex  or:  claude --bare  or:  pi
   \end{codigo}
 \end{enumerate}
 
 \begin{dica}
-If you are behind a proxy, configure npm before installing:
-\code{npm config set proxy http://proxy.corp.com:8080} and
-\code{npm config set https-proxy http://proxy.corp.com:8080}
+To upgrade the gateway later, re-run the same bootstrap command. It detects
+existing installs, compares versions, and pulls updates — all secrets and
+data are preserved.
 \end{dica}
 
 % =====================================================================
@@ -287,11 +313,11 @@ If you are behind a proxy, configure npm before installing:
 \begin{objetivos}
   \objgeral{Clone the Huawei document templates repository on the ECS
   instance, run the setup script, and verify that the LaTeX toolchain and
-  opencode skill are ready for use.}
+  the coding agent skill are ready for use.}
 
   \prerequisitos
   \begin{itemize}
-    \item Chapter 3 completed — OpenCode installed and running.
+    \item Chapter 3 completed — MaaS gateway installed and running.
     \item Git installed (\code{sudo apt install git}).
     \item The repository URL for the Huawei document templates project.
   \end{itemize}
@@ -309,8 +335,8 @@ git clone <repo-url> Huawei-doc-templates
 cd Huawei-doc-templates
   \end{codigo}
 
-  \item Run the setup script (installs XeLaTeX, latexmk, fonts, the opencode
-        skill, and the VS Code LaTeX Workshop extension):
+  \item Run the setup script (installs XeLaTeX, latexmk, fonts, the coding
+        agent skill, and the VS Code LaTeX Workshop extension):
 
   \begin{codigo}[bash]
 ./install.sh
@@ -360,11 +386,11 @@ ls -l templates/guide/samples/en/main.pdf
 
 \passoapasso
 \begin{enumerate}
-  \item In the VS Code remote terminal, launch OpenCode:
+  \item In the VS Code remote terminal, launch your coding agent:
 
   \begin{codigo}[bash]
 cd ~/Huawei-doc-templates
-opencode
+opencode          # or: codex, claude --bare, pi
   \end{codigo}
 
   \item Run the guide skill:
@@ -377,8 +403,8 @@ opencode
     \begin{itemize}
       \item \textbf{Title} — e.g. ``Provisioning an OBS Bucket''
       \item \textbf{Language} — Portuguese or English
-      \item \textbf{Filename} — e.g. \code{obs-guide.tex}
-      \item \textbf{Location} — where to create the project
+      \item \textbf{Project name} — used as the folder name
+      \item \textbf{Location} — where to create the project folder
     \end{itemize}
 
   \item The skill generates the \code{.tex} file, creates a
@@ -461,6 +487,23 @@ configuration.
 
 \nota{This guide was generated using the \code{guide.cls} template. For the
 full command reference, see the template's README.md or run
-\code{/skill huawei-template-guide} in OpenCode.}
+\code{/skill huawei-template-guide} in your coding agent.}
+
+% =====================================================================
+%  Changelog
+% =====================================================================
+\section{Changelog}
+
+\begin{changelog}
+  \changelogentry{1.0.0}{2025-08-06}{
+    \item Initial version.
+    \item Added ECS provisioning on Huawei Cloud.
+    \item Added SSH with proxy configuration for VS Code Remote-SSH.
+    \item Replaced OpenCode with oh-my-coding-maas-gateway (LiteLLM proxy
+          with load balancing, virtual keys, and Grafana observability).
+    \item Added Huawei document templates project setup.
+    \item Added changelog and versioning support to the template.
+  }
+\end{changelog}
 
 \end{document}

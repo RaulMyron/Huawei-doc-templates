@@ -152,8 +152,8 @@ Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 | `\setcovertext{...}` | Line under the cover logo (default `Huawei Technologies CO., LTD`). |
 | `\setheaderlogo{path}` | Header logo image path (default `assets/huawei-logo-header.png`). |
 | `\setcoverlogo{path}` | Cover logo image path (default `assets/huawei-logo-cover.png`). |
-
-### Document structure
+| `\setdocversion{1.0.0}` | Document version, shown on the cover page (e.g. "v1.0.0"). |
+| `\setdocdate{2025-08-06}` | Document date, shown on the cover page next to the version. |+| ### Document structure
 | Command | Purpose |
 |---|---|
 | `\makecover` | Render the cover. Call right after `\begin{document}`. |
@@ -239,6 +239,28 @@ All boxes are breakable across pages and have a 3pt left border.
 | Command | Result |
 |---|---|
 | `\badge{...}` | Inline red label with white text (e.g. `\badge{Novo}`). |
+
+### Changelog / Versioning
+| Command | Purpose |
+|---|---|
+| `\setdocversion{1.0.0}` | Sets the version shown on the cover page. |
+| `\setdocdate{2025-08-06}` | Sets the date shown on the cover page. |
+| `\begin{changelog} ... \end{changelog}` | Version history block (framed with horizontal rules). |
+| `\changelogentry{version}{date}{items}` | One entry inside `changelog`. `items` is an `itemize` body. |
+
+Example:
+
+```latex
+\begin{changelog}
+  \changelogentry{1.0.0}{2025-08-06}{
+    \item Initial version.
+    \item Added ECS provisioning.
+  }
+  \changelogentry{0.9.0}{2025-07-15}{
+    \item Draft.
+  }
+\end{changelog}
+```
 
 ---
 

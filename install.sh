@@ -51,7 +51,7 @@ log_dim "• XeLaTeX + latexmk + LaTeX packages"
 log_dim "• HarmonyOS Sans (body font, free commercial use)"
 log_dim "• Cascadia Code (code font, open source)"
 log_dim "• opencode skill (/skill huawei-template-guide)"
-log_dim "• VS Code LaTeX Workshop (user-level config)"
+log_dim "• VS Code LaTeX Workshop (local + remote config)"
 echo ""
 echo -e "  ${C_BOLD}Prerequisites:${C_RESET}"
 log_dim "• Ubuntu 22.04+ (WSL or native)     (required)"
@@ -175,15 +175,32 @@ else
     log_dim "Project-level discovery also works via opencode.json (skills.paths)"
 fi
 
-# ── Configure VS Code (user-level) ──
-log_step "Configuring VS Code (user-level)"
+# ── Fix system-wide latexmk default ──
+log_step "Fixing system-wide latexmk default (/etc/LatexMk)"
 
-VSCODE_USER_DIR="$HOME/.config/Code/User"
-VSCODE_USER_SETTINGS="$VSCODE_USER_DIR/settings.json"
-mkdir -p "$VSCODE_USER_DIR"
+if [[ -f /etc/LatexMk ]]; then
+    if grep -q '^\$pdf_mode\s*=\s*[14];' /etc/LatexMk; then
+        $SUDO sed -i 's/^\$pdf_mode\s*=\s*[14];/$pdf_mode = 5;  # xelatex — required by fontspec/' /etc/LatexMk
+        log_ok "/etc/LatexMk: fixed \$pdf_mode → 5 (xelatex)"
+    else
+        log_ok "/etc/LatexMk: already xelatex or custom"
+    fi
+else
+    echo '$pdf_mode = 5;  # xelatex — required by fontspec' | $SUDO tee /etc/LatexMk >/dev/null
+    log_ok "/etc/LatexMk: created with \$pdf_mode = 5 (xelatex)"
+fi
 
-# Merge LaTeX Workshop settings into the user's settings.json idempotently
-python3 - "$VSCODE_USER_SETTINGS" <<'PYEOF'
+# ── Configure VS Code (local + remote) ──
+log_step "Configuring VS Code"
+
+# LaTeX Workshop settings for XeLaTeX via latexmk
+merge_vscode_settings() {
+    local settings_path="$1"
+    local settings_dir
+    settings_dir="$(dirname "$settings_path")"
+    mkdir -p "$settings_dir"
+
+    python3 - "$settings_path" <<'PYEOF'
 import json, sys, os
 
 settings_path = sys.argv[1]
@@ -238,6 +255,21 @@ if changed:
 else:
     print(f"  \033[32m✓\033[0m {settings_path} already configured")
 PYEOF
+}
+
+# Local VS Code (desktop)
+VSCODE_LOCAL="$HOME/.config/Code/User/settings.json"
+merge_vscode_settings "$VSCODE_LOCAL"
+log_dim "Local: $VSCODE_LOCAL"
+
+# VS Code Remote (vscode-server) — machine-level settings
+VSCODE_REMOTE="$HOME/.vscode-server/data/Machine/settings.json"
+if [[ -d "$HOME/.vscode-server" ]]; then
+    merge_vscode_settings "$VSCODE_REMOTE"
+    log_dim "Remote: $VSCODE_REMOTE"
+else
+    log_dim "Remote: not detected (no ~/.vscode-server)"
+fi
 
 # Install LaTeX Workshop extension if VS Code CLI is available
 if command -v code &>/dev/null; then
@@ -257,7 +289,7 @@ if command -v code &>/dev/null; then
     fi
 else
     log_warn "VS Code CLI (code) not found — extensions not installed"
-    log_dim "Settings were still written to $VSCODE_USER_SETTINGS"
+    log_dim "Settings were still written to the paths above"
     log_dim "To install manually: https://code.visualstudio.com/ → LaTeX Workshop"
 fi
 
@@ -296,7 +328,7 @@ printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Build tool:"         "latexmk (.latexmk
 printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Body font:"          "HarmonyOS Sans → Liberation Sans → Arial"
 printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Code font:"          "Cascadia Code → Consolas → DejaVu Sans Mono"
 printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Skill:"              "/skill huawei-template-guide"
-printf "  ${C_DIM}%-24s${C_RESET} %s\n" "VS Code:"            "LaTeX Workshop (user-level, -cd -xelatex)"
+printf "  ${C_DIM}%-24s${C_RESET} %s\n" "VS Code:"            "LaTeX Workshop (local + remote, -cd -xelatex)"
 printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Timezone:"           "America/Sao_Paulo (GMT-3, overridable)"
 echo ""
 echo -e "  ${C_BOLD}Next steps:${C_RESET}"

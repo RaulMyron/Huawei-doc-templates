@@ -165,7 +165,115 @@ Release:        Yes — release EIP when ECS is deleted
 \subsection{Verify the instance}
 
 On the ECS details page, copy the \textbf{EIP} field. This is the address you
-will use to connect in the next chapter.
+will use to connect in the next chapters.
+
+% =====================================================================
+%  Chapter 2 — Configure ECS for Remote Access
+% =====================================================================
+\section{Configure ECS for Remote Access}
+
+\begin{objetivos}
+  \objgeral{Prepare the ECS instance for remote access by setting a root
+  password via the Console and changing the SSH port from 22 to 4444. This
+  is required because the Huawei corporate proxy blocks outbound connections
+  on port 22.}
+
+  \prerequisitos
+  \begin{itemize}
+    \item Chapter 1 completed — ECS instance running with a public IP.
+    \item Access to the Huawei Cloud Console.
+  \end{itemize}
+\end{objetivos}
+
+\subsection{Set the root password}
+
+\objpratica{Use the Console to reset the root password of the ECS instance.}
+
+\passoapasso
+\begin{enumerate}
+  \item In the Console, navigate to \textbf{Elastic Cloud Server} and click
+        on the instance \code{dev-server-01}.
+  \item In the ECS details page, click \textbf{More} $\rightarrow$
+        \textbf{Reset Password}.
+
+  \imagemplaceholder{assets/ecs-reset-password.png}{Screenshot showing the
+    Reset Password option in the ECS details page}
+
+  \item Enter a strong root password and confirm. Click \textbf{OK}.
+  \item The ECS will restart automatically. Wait for the status to return
+        to \textbf{Running}.
+\end{enumerate}
+
+\begin{aviso}
+Choose a strong password (12+ characters, mixed case, digits, symbols).
+This password enables remote login directly from the Console and serves as
+a second access method alongside the SSH key pair.
+\end{aviso}
+
+\subsection{Change the SSH port to 4444}
+
+\objpratica{Log in via the Console remote login, edit \code{sshd\_config},
+and change the SSH port from 22 to 4444.}
+
+\passoapasso
+\begin{enumerate}
+  \item In the ECS details page, click \textbf{Remote Login} (top-right
+        corner). A browser-based terminal opens.
+  \item Log in as \code{root} using the password set in the previous
+        subsection.
+  \item Open the SSH daemon configuration file:
+
+  \begin{codigo}[bash]
+sudo vim /etc/ssh/sshd_config
+  \end{codigo}
+
+  \item Find the line \code{Port 22} (or \code{\#Port 22}) and change it
+        to:
+
+  \begin{codigo}
+Port 4444
+  \end{codigo}
+
+  \item Save and exit vim (\code{:wq}).
+  \item Restart the SSH daemon (or reboot the ECS):
+
+  \begin{codigo}[bash]
+sudo systemctl restart sshd
+  \end{codigo}
+
+  \begin{dica}
+  Alternatively, restart the ECS from the Console. The SSH daemon will
+  start automatically on port 4444 after reboot.
+  \end{dica}
+\end{enumerate}
+
+\begin{infobox}
+After this change, SSH connections must use \code{Port 4444} explicitly.
+The security group \code{sg-xgate} (created in Chapter 1) already allows
+inbound TCP 4444 from the authorized Huawei internal IPs.
+\end{infobox}
+
+\subsection{Verify the configuration}
+
+Use the table below to confirm all steps were completed successfully before
+proceeding to the next chapter:
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Step} & \textbf{What to check} & \textbf{Expected result} \\
+    \midrule
+    Security group & \code{sg-xgate} exists with TCP 4444 rules & 3 inbound rules \\
+    ECS running    & Instance \code{dev-server-01} status       & \textbf{Running} \\
+    Root password  & Remote Login works with password            & Shell prompt \\
+    SSH port       & \code{sshd\_config} has \code{Port 4444}    & Config saved \\
+    SSH restart    & \code{sshd} restarted or ECS rebooted       & Service active \\
+    \bottomrule
+  \end{tabular}
+  \caption{Pre-SSH verification checklist.}
+\end{table}
 
 % =====================================================================
 %  Chapter 2 — Connect via SSH with Proxy
@@ -179,7 +287,8 @@ will use to connect in the next chapter.
 
   \prerequisitos
   \begin{itemize}
-    \item Chapter 1 completed — ECS instance running with a public IP.
+    \item Chapter 2 completed — ECS configured with root password and SSH
+          on port 4444.
     \item The private key file (\code{.pem}) corresponding to the key pair.
     \item VS Code installed locally with the Remote-SSH extension.
     \item If behind a corporate proxy: the proxy host, port, and credentials.

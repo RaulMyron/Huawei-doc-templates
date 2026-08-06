@@ -276,7 +276,7 @@ commands that, in this template, produce a specific look.
 | `\setheaderlogo{path}` | Sets the **header logo** image path (default: `assets/huawei-logo-header.png`). |
 | `\setcoverlogo{path}` | Sets the **cover logo** image path (default: `assets/huawei-logo-cover.png`). |
 | `\setdocversion{1.0.0}` | Sets the **version** shown on the cover page (e.g. "v1.0.0"). |
-| `\setdocdate{2026-08-06}` | Sets the **date** shown on the cover page next to the version. |
+| `\setdocdate{2026-08-05}` | Sets the **date** shown on the cover page next to the version. **Optional** — defaults to `\today` (compilation date) if omitted. |
 
 Example:
 
@@ -427,7 +427,7 @@ The EIP is released when the instance is deleted.
 | Command | Result |
 |---|---|
 | `\setdocversion{1.0.0}` | Shows **v1.0.0** on the cover page. |
-| `\setdocdate{2026-08-06}` | Shows the date on the cover page next to the version. |
+| `\setdocdate{2026-08-05}` | Shows the date on the cover page next to the version. **Optional** — defaults to `\today` if omitted. |
 | `\begin{changelog} ... \end{changelog}` | Version history block, framed with horizontal rules. |
 | `\changelogentry{ver}{date}{items}` | One entry: bold version, italic date, bulleted changes. |
 
@@ -435,11 +435,11 @@ Example:
 
 ```latex
 \setdocversion{1.0.0}
-\setdocdate{2026-08-06}
+\setdocdate{2026-08-05}
 
 % ... in the document body (typically the last chapter):
 \begin{changelog}
-  \changelogentry{1.0.0}{2026-08-06}{
+  \changelogentry{1.0.0}{2026-08-05}{
     \item Initial version.
     \item Added ECS provisioning.
   }

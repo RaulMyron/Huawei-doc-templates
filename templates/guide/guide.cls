@@ -229,7 +229,7 @@
 \newcommand{\setcoverlogo}[1]{\renewcommand{\lg@coverlogo}{#1}}
 \newcommand{\lg@docversion}{}
 \newcommand{\setdocversion}[1]{\renewcommand{\lg@docversion}{#1}}
-\newcommand{\lg@docdate}{}
+\newcommand{\lg@docdate}{\today}
 \newcommand{\setdocdate}[1]{\renewcommand{\lg@docdate}{#1}}
 \newcommand{\lg@covermeta}{%
   \ifx\lg@docversion\@empty\else\textbf{v\lg@docversion}\fi
@@ -396,10 +396,10 @@
 % =====================================================================
 % Uso:
 %   \setdocversion{1.0.0}       % mostra "v1.0.0" na capa
-%   \setdocdate{2026-08-06}     % mostra a data na capa
+%   \setdocdate{2026-08-05}     % opcional; padrão = \today
 %
 %   \begin{changelog}
-%     \changelogentry{1.0.0}{2026-08-06}{
+%     \changelogentry{1.0.0}{2026-08-05}{
 %       \item Initial version
 %       \item Added ECS provisioning
 %     }

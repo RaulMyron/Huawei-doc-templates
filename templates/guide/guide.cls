@@ -272,7 +272,7 @@
   \thispagestyle{empty}%
   \vspace*{2.2cm}%
   {\centering
-   \fontsize{36}{42}\selectfont \lg@guidetitle\par}%
+   \fontsize{36}{42}\selectfont\bfseries \lg@guidetitle\par}%
   \vspace{4.5cm}%
   {\centering
    \includegraphics[width=3.6cm]{\lg@coverlogo}\par}%

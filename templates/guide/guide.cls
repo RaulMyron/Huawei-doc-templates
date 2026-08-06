@@ -44,6 +44,8 @@
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{ragged2e}
 \RequirePackage{needspace}
+\RequirePackage{booktabs}
+\RequirePackage{array}
 \RequirePackage{babel}
 \if@english
   \babelprovide[import,main]{english}
@@ -367,6 +369,31 @@
    \includegraphics[width=#1]{#2}\par
    \vspace{2pt}\footnotesize #3\par}%
   \medskip}
+
+% \imagemplaceholder{caminho}{descrição}
+% Mostra um box tracejado indicando onde o usuário deve colocar a imagem.
+% O usuário adiciona o arquivo manualmente no caminho indicado.
+\newcommand{\imagemplaceholder}[2]{%
+  \par\medskip
+  \begin{tcolorbox}[
+    colback=codebg, colframe=warningfg,
+    boxrule=1pt, arc=4pt, outer arc=4pt,
+    left=12pt, right=12pt, top=10pt, bottom=10pt,
+    before skip=8pt, after skip=8pt,
+    breakable, enhanced jigsaw]
+    \centering
+    {\codefont\color{codetext}\fontsize{11}{13}\selectfont
+     [ Image placeholder ]}\\[6pt]
+    {\footnotesize\color{codetext}
+     \textbf{File:} \code{#1}}\\[4pt]
+    {\footnotesize\color{codetext}
+     \textbf{Description:} #2}\\[6pt]
+    {\footnotesize\itshape\color{warningfg}
+     Place the image file at the path above, then replace this command with
+     \code{\textbackslash imagem\{#1\}} or
+     \code{\textbackslash imagemc\{#1\}\{caption\}}.}
+  \end{tcolorbox}
+  \par\medskip}
 
 % =====================================================================
 %  NOTA / OBSERVAÇÃO  (texto em itálico)

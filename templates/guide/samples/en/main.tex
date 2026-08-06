@@ -116,6 +116,27 @@ df -h             # check disk space
 systemctl status  # verify services are running
 \end{codigo}
 
+\subsubsection{Recommended flavors}
+
+The table below lists recommended ECS flavors for development workloads:
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Flavor} & \textbf{vCPU / RAM} & \textbf{Use case} \\
+    \midrule
+    ac8.large.2  & 2 vCPU / 4 GB  & Light development \\
+    ac8.xlarge.2 & 4 vCPU / 8 GB  & Recommended --- full coding stack \\
+    ac8.2xlarge.2 & 8 vCPU / 16 GB & Heavy workloads + multiple agents \\
+    \bottomrule
+  \end{tabular}
+  \caption{Recommended ECS flavors for development.}
+\end{table}
+
+\imagemplaceholder{assets/ecs-flavors.png}{Screenshot of the ECS flavor selection page in the Console}
+
 \nota{This is an English sample that exercises every command and
   environment provided by the \code{guide} class. Use it as a reference
   when writing your own guides.}

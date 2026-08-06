@@ -393,10 +393,21 @@ terraform {
 
 ### 7. Images (always horizontally centered)
 
+**Policy: avoid images by default.** Guides should be text-driven. Only add an
+image when the user explicitly asks for one.
+
+**Workflow when a user requests an image:**
+1. The AI inserts `\imagemplaceholder{assets/filename.png}{description}` at the
+   desired location.
+2. The AI creates the `assets/` folder and tells the user the exact path.
+3. The user manually adds the image file at that path.
+4. The AI replaces `\imagemplaceholder` with `\imagem` or `\imagemc`.
+
 | Command | Result |
 |---|---|
 | `\imagem[width]{file}` | Inserts the image **centered**. `width` is optional (default `0.85\linewidth`). |
 | `\imagemc[width]{file}{caption}` | Same, with a **caption** centered below. |
+| `\imagemplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the file is not yet available. |
 
 Examples:
 
@@ -404,9 +415,37 @@ Examples:
 \imagem{assets/tela1.png}
 \imagem[0.6\linewidth]{assets/tela2.png}
 \imagemc{assets/tela3.png}{Figura 1 -- Tela de login.}
+\imagemplaceholder{assets/diagram.png}{Architecture diagram of the proxy stack}
 ```
 
-### 8. Notes and links
+### 8. Tables
+
+Tables are generated directly by the AI. The class loads `booktabs` and
+`array` for professional-looking tables.
+
+**Rules:**
+- Use `\toprule`, `\midrule`, `\bottomrule` (never `\hline`).
+- Use `\centering` + `tabular` inside a `table` float, or just `\centering`
+  + `tabular` for inline placement.
+- Use `\small` or `\footnotesize` for wide tables.
+
+```latex
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Column A} & \textbf{Column B} & \textbf{Column C} \\
+    \midrule
+    Row 1 & Value & Value \\
+    Row 2 & Value & Value \\
+    \bottomrule
+  \end{tabular}
+  \caption{Table caption.}
+\end{table}
+```
+
+### 9. Notes and links
 
 | Command | Result |
 |---|---|
@@ -415,7 +454,7 @@ Examples:
 | `\href{url}{text}` | Standard `hyperref` link (also blue via `urlcolor`). |
 | `\textbf{...}` | Bold — used to highlight interface terms (e.g. **Console**). |
 
-### 9. Callout boxes
+### 10. Callout boxes
 
 | Environment | Color | Use |
 |---|---|---|
@@ -433,13 +472,13 @@ The EIP is released when the instance is deleted.
 \end{aviso}
 ```
 
-### 10. Badge
+### 11. Badge
 
 | Command | Result |
 |---|---|
 | `\badge{...}` | Inline **red label** with white text (e.g. `\badge{Novo}`). |
 
-### 11. Changelog / Versioning
+### 12. Changelog / Versioning
 
 | Command | Result |
 |---|---|

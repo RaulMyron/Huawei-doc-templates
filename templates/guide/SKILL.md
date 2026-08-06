@@ -218,12 +218,53 @@ class. Do not pass `enumitem` options unless asked.
 use `\code{...}` and escape LaTeX specials normally.
 
 ### Images (always horizontally centered)
+
+**Policy: avoid images by default.** Guides should be text-driven. Only add an
+image when the user explicitly asks for one.
+
+**Workflow when a user requests an image:**
+1. The AI inserts `\imagemplaceholder{assets/filename.png}{description}` at the
+   desired location in the `.tex` file.
+2. The AI creates the `assets/` folder in the project directory (if needed) and
+   tells the user the exact path to place the file.
+3. The user manually adds the image file at that path.
+4. The AI replaces `\imagemplaceholder` with `\imagem` or `\imagemc` once the
+   file is in place.
+
 | Command | Result |
 |---|---|
 | `\imagem{file}` | Centered image, default width `0.85\linewidth`. |
 | `\imagem[0.6\linewidth]{file}` | Centered image, custom width. |
 | `\imagemc{file}{caption}` | Centered image with centered caption below. |
 | `\imagemc[0.6\linewidth]{file}{caption}` | With custom width. |
+| `\imagemplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the image file is not yet available. |
+
+### Tables
+
+Tables are generated directly by the AI — no manual steps needed. The class
+loads `booktabs` and `array` for professional-looking tables.
+
+**Rules:**
+- Use `\toprule`, `\midrule`, `\bottomrule` (never `\hline`).
+- Use `\centering` + `tabular` inside a `table` float, or just `\centering`
+  + `tabular` for inline placement.
+- Keep tables compact — small font (`\small` or `\footnotesize`) if wide.
+
+```latex
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Column A} & \textbf{Column B} & \textbf{Column C} \\
+    \midrule
+    Row 1 & Value & Value \\
+    Row 2 & Value & Value \\
+    \bottomrule
+  \end{tabular}
+  \caption{Table caption.}
+\end{table}
+```
 
 ### Notes & links
 | Command | Result |

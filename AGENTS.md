@@ -289,3 +289,7 @@ at the repo root registers `templates/` as a discovery path.
 - The setup guide PDF (`examples/setup-guide/setup-guide.pdf`) is also gitignored.
 - Samples are the CI gate — a commit that breaks sample compilation must not
   be pushed to `main`.
+- **One change, commit, push.** Make one logical change, commit it, and push
+  immediately. Do not accumulate multiple unpushed commits. This keeps the
+  remote in sync, makes each change individually revertable, and avoids losing
+  work to a local-only working tree.

@@ -251,6 +251,7 @@
 \newcommand{\lg@docdate}{\today}
 \newcommand{\setdocdate}[1]{\renewcommand{\lg@docdate}{#1}}
 % Compilation time from \time primitive (minutes since midnight, respects TZ)
+\providecommand{\two@digits}[1]{\ifnum#1<10 0\fi\number#1}
 \newcount\lg@hour
 \newcount\lg@min
 \newcount\lg@tmp

@@ -326,21 +326,8 @@
 % =====================================================================
 % No-op keys for language hints ([bash], [python], etc.) — ignored,
 % kept for backward compatibility with existing documents.
-\define@key{FV}{bash}[unused]{}
-\define@key{FV}{sh}[unused]{}
-\define@key{FV}{shell}[unused]{}
-\define@key{FV}{python}[unused]{}
-\define@key{FV}{Python}[unused]{}
-\define@key{FV}{json}[unused]{}
-\define@key{FV}{yaml}[unused]{}
-\define@key{FV}{xml}[unused]{}
-\define@key{FV}{html}[unused]{}
-\define@key{FV}{javascript}[unused]{}
-\define@key{FV}{js}[unused]{}
-\define@key{FV}{sql}[unused]{}
-\define@key{FV}{text}[unused]{}
-\define@key{FV}{ini}[unused]{}
-\define@key{FV}{conf}[unused]{}
+\newcommand{\lg@deflangkey}[1]{\define@key{FV}{#1}[unused]{}}
+\forcsvlist{\lg@deflangkey}{bash,sh,shell,python,Python,json,yaml,xml,html,javascript,js,sql,text,ini,conf}
 
 % Bloco de código: fundo #F6F8FA, sem borda, recuo à esquerda
 % Usa fancyvrb (não listings) para copy-paste limpo no PDF.

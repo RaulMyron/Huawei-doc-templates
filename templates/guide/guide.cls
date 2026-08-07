@@ -40,7 +40,8 @@
 \RequirePackage{titlesec}
 \RequirePackage[titles]{tocloft}
 \RequirePackage{enumitem}
-\RequirePackage{listings}
+\RequirePackage{fancyvrb}
+\RequirePackage{fvextra}
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{ragged2e}
 \RequirePackage{needspace}
@@ -321,43 +322,50 @@
 \setlist[enumerate]{leftmargin=1.8em,topsep=2pt,itemsep=2pt,parsep=0pt}
 
 % =====================================================================
-%  CÓDIGO
+%  CÓDIGO  (fancyvrb + fvextra — clean PDF copy-paste)
 % =====================================================================
-\lstdefinestyle{lgcode}{
-  basicstyle=\codefont\fontsize{10}{13}\selectfont\color{codetext},
-  breaklines=true,
-  breakatwhitespace=true,
-  columns=fixed,
-  keepspaces=true,
-  showstringspaces=false,
-  tabsize=2,
-  upquote=true,
-}
+% No-op keys for language hints ([bash], [python], etc.) — ignored,
+% kept for backward compatibility with existing documents.
+\define@key{FV}{bash}[unused]{}
+\define@key{FV}{sh}[unused]{}
+\define@key{FV}{shell}[unused]{}
+\define@key{FV}{python}[unused]{}
+\define@key{FV}{Python}[unused]{}
+\define@key{FV}{json}[unused]{}
+\define@key{FV}{yaml}[unused]{}
+\define@key{FV}{xml}[unused]{}
+\define@key{FV}{html}[unused]{}
+\define@key{FV}{javascript}[unused]{}
+\define@key{FV}{js}[unused]{}
+\define@key{FV}{sql}[unused]{}
+\define@key{FV}{text}[unused]{}
+\define@key{FV}{ini}[unused]{}
+\define@key{FV}{conf}[unused]{}
 
 % Bloco de código: fundo #F6F8FA, sem borda, recuo à esquerda
-\newtcblisting{codigo}[1][]{
-  listing only,
-  listing style=lgcode,
-      listing options={language=#1,breaklines=true,breakatwhitespace=true},
-  colback=codebg, colframe=codebg,
-  boxrule=0pt, arc=0pt, outer arc=0pt,
-  left=8pt, right=8pt, top=6pt, bottom=6pt,
-  before skip=6pt, after skip=6pt,
-  breakable,
-  enhanced jigsaw,
-  left skip=0.7cm,   % recuo do bloco (0,7 cm a partir da margem)
+% Usa fancyvrb (não listings) para copy-paste limpo no PDF.
+% listings processa caractere por caractere → xdvipdfmx escreve cada
+% um como operação de texto separada → leitores de PDF inserem espaços.
+% fancyvrb typeseta linha por linha → texto contíguo no PDF → copy limpo.
+\DefineVerbatimEnvironment{codigo}{Verbatim}
+{fontsize=\fontsize{10}{13}\selectfont, formatcom=\codefont\color{codetext},
+ frame=single, framerule=0pt, framesep=8pt, fillcolor=\color{codebg},
+ xleftmargin=0.7cm, xrightmargin=0.5cm,
+ breaklines=true, breakanywhere=true,
+ breaksymbolleft={}, breaksymbolright={},
+ breakanywheresymbolpre={}, breakanywheresymbolpost={},
 }
 
 % Bloco de código a partir de arquivo externo
 \newcommand{\codigoarquivo}[2][]{%
-  \begin{tcolorbox}[listing style=lgcode,
-      listing file={#2},
-  listing options={language=#1,breaklines=true,breakatwhitespace=true},
-      colback=codebg,colframe=codebg,boxrule=0pt,arc=0pt,outer arc=0pt,
-      left=8pt,right=8pt,top=6pt,bottom=6pt,
-      before skip=6pt, after skip=6pt,
-      breakable, enhanced jigsaw, left skip=0.7cm]
-  \end{tcolorbox}}
+  \VerbatimInput[fontsize=\fontsize{10}{13}\selectfont,
+   formatcom=\codefont\color{codetext},
+   frame=single, framerule=0pt, framesep=8pt, fillcolor=\color{codebg},
+   xleftmargin=0.7cm, xrightmargin=0.5cm,
+   breaklines=true, breakanywhere=true,
+   breaksymbolleft={}, breaksymbolright={},
+   breakanywheresymbolpre={}, breakanywheresymbolpost={}]{#2}%
+}
 
 % Código inline: \code{...}
 \newcommand{\code}[1]{{\codefont\fontsize{10}{12}\selectfont\color{codetext}#1}}

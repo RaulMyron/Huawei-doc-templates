@@ -208,8 +208,8 @@ class. Do not pass `enumitem` options unless asked.
 ### Code
 | Command | Result |
 |---|---|
-| `\begin{codigo} ... \end{codigo}` | Code block: `#F6F8FA` bg, Cascadia Code 10pt, `#1F2328` text, left-indented, no border. **Verbatim** — `_{}^\` are literal, no escaping. |
-| `\begin{codigo}[bash] ... \end{codigo}` | Same, with `listings` language hint (`bash`, `Python`, …). |
+| `\begin{codigo} ... \end{codigo}` | Code block: `#F6F8FA` bg, Cascadia Code 10pt, `#1F2328` text, left-indented, no border. **Verbatim** — `_{}^\` are literal, no escaping. Clean copy-paste from PDF. |
+| `\begin{codigo}[bash] ... \end{codigo}` | Same; the `[bash]` hint is accepted for backward compatibility but ignored (no syntax highlighting). |
 | `\codigoarquivo[linguagem]{arquivo}` | Code block from an external file. |
 | `\code{...}` | Inline monospace code. **Standard LaTeX escaping rules apply** here. |
 | `\param{...}` | Filename/parameter in italic (e.g. `\param{provider.tf}`). |
@@ -372,11 +372,11 @@ The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
 `guide.cls` and `assets/` are found. The existing `samples/pt/` and
 `samples/en/` folders are pre-configured examples.
 
-## Companion HTML (copy-paste commands)
+## Companion HTML (optional)
 
-PDF text extraction from code blocks is unreliable (extra spaces, smart
-quotes). The `extract-code.py` script generates an HTML companion page with
-copy-to-clipboard buttons for every code block in the document.
+Code blocks use `fancyvrb` (not `listings`) so **PDF copy-paste is clean**
+— no extra spaces, no garbled characters. An HTML companion with
+copy-to-clipboard buttons is available as an optional convenience:
 
 ```bash
 python3 templates/guide/extract-code.py my-guide.tex

@@ -265,10 +265,10 @@ cd samples/en && latexmk main.tex    # English
 
 `latexmk` needs Perl — see Environment setup above.
 
-### Companion HTML (copy-paste commands)
+### Companion HTML (optional)
 
-PDF text extraction from code blocks is unreliable. The `extract-code.py`
-script generates a self-contained HTML page with copy-to-clipboard buttons:
+Code blocks use `fancyvrb` so **PDF copy-paste is clean**. An HTML
+companion with copy-to-clipboard buttons is available as optional convenience:
 
 ```bash
 python3 templates/guide/extract-code.py my-guide.tex
@@ -381,8 +381,8 @@ Use the **standard** `itemize` (bullets) and `enumerate` (numbered) environments
 
 | Command | Result |
 |---|---|
-| `\begin{codigo} ... \end{codigo}` | **Code block**: `#F6F8FA` background, Cascadia Code 10 pt, `#1F2328` text, left-indented, no border. Content is literal (verbatim). |
-| `\begin{codigo}[language] ... \end{codigo}` | Same, passing a language to `listings` (e.g. `[bash]`, `[Python]`). |
+| `\begin{codigo} ... \end{codigo}` | **Code block**: `#F6F8FA` background, Cascadia Code 10 pt, `#1F2328` text, left-indented, no border. Content is literal (verbatim). Clean copy-paste from PDF. |
+| `\begin{codigo}[language] ... \end{codigo}` | Same; `[language]` is accepted for backward compatibility but ignored. |
 | `\codigoarquivo[language]{file}` | Inserts a code block from an **external file**. |
 | `\code{...}` | **Inline code** (monospaced) within text. |
 | `\param{...}` | File/parameter name in **italic** within text (e.g. `\param{provider.tf}`). |

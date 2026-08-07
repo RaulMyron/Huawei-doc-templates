@@ -165,8 +165,9 @@ approval. Changing them breaks existing documents and reproducibility.
 | `\code{...}` | Inline monospace code |
 | `\param{...}` | Filename/parameter in italic |
 | `\codigoarquivo[lang]{file}` | Code block from external file |
-| `\imagem{file}` | Centered image (default `0.85\linewidth`) |
+| `\imagem{file}` | Centered image (default `0.65\linewidth`) |
 | `\imagemc{file}{caption}` | Centered image with caption |
+| `\imagemplaceholder{path}{desc}` | Dashed placeholder box for a missing image |
 | `\nota{...}` | Italic observation |
 | `\weblink{url}{text}` | Blue clickable link, no underline |
 | `\badge{...}` | Inline red label with white text |
@@ -254,7 +255,8 @@ at the repo root registers `templates/` as a discovery path.
 - `.github/workflows/build.yml` compiles both samples on every push/PR that
   touches `templates/**`.
 - CI installs `texlive-xetex`, `texlive-latex-extra`,
-  `texlive-lang-portuguese`, `latexmk`, `fonts-liberation`.
+  `texlive-lang-portuguese`, `latexmk`, `fonts-liberation`,
+  `fonts-cascadia-code`.
 - CI does NOT install Consolas (proprietary) — the fallback
   chain must handle this (locked, see L8). HarmonyOS Sans and Cascadia Code
   ARE installed (free and open source respectively).

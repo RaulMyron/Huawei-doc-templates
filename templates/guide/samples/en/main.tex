@@ -2,6 +2,11 @@
 %  Guide — English sample (verifies all template features)
 %  Compile with XeLaTeX:
 %      xelatex main.tex   (run 2x for the TOC)
+%
+%  Class options:
+%    english     — English labels (default: Portuguese)
+%    indentbody  — indent body text by \contentindent (off by default)
+%    notime      — hide compilation time on cover page
 % =====================================================================
 \documentclass[english]{guide}
 
@@ -10,6 +15,9 @@
 \setheadertitle{Huawei Cloud -- ECS Quick Start Guide}
 \setcovertext{Huawei Technologies CO., LTD}
 \setdocversion{1.0.0}
+\setdocdate{2026-08-05}
+\setheaderlogo{assets/huawei-logo-header.png}
+\setcoverlogo{assets/huawei-logo-cover.png}
 
 \begin{document}
 
@@ -115,6 +123,9 @@ uname -a          # confirm OS version
 df -h             # check disk space
 systemctl status  # verify services are running
 \end{codigo}
+
+Alternatively, save the checks to a script and run it with
+\codigoarquivo[bash]{assets/example-script.sh}
 
 \subsubsection{Recommended flavors}
 

@@ -77,8 +77,8 @@
 %  FONTES  (com fallback automático se as proprietárias faltarem)
 % =====================================================================
 \newcommand{\lg@warnfont}[2]{%
-  \ClassWarning{guide}{Fonte "#1" nao encontrada; usando fallback "#2".
-    Instale a fonte para fidelidade total.}}
+  \ClassWarning{guide}{Font "#1" not found; using fallback "#2".
+    Install the font for full fidelity.}}
 
 \IfFontExistsTF{HarmonyOS Sans}
   {\setmainfont{HarmonyOS Sans}}

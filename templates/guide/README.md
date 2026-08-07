@@ -265,16 +265,6 @@ cd samples/en && latexmk main.tex    # English
 
 `latexmk` needs Perl — see Environment setup above.
 
-### Companion HTML (optional)
-
-Code blocks use `fancyvrb` so **PDF copy-paste is clean**. An HTML
-companion with copy-to-clipboard buttons is available as optional convenience:
-
-```bash
-python3 templates/guide/extract-code.py my-guide.tex
-# → my-guide-commands.html
-```
-
 ### Timezone
 
 The cover page shows the compilation date and time via `\today` and TeX's

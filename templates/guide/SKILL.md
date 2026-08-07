@@ -374,23 +374,6 @@ The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
 `guide.cls` and `assets/` are found. The existing `samples/pt/` and
 `samples/en/` folders are pre-configured examples.
 
-## Companion HTML (optional)
-
-Code blocks use `fancyvrb` (not `listings`) so **PDF copy-paste is clean**
-— no extra spaces, no garbled characters. An HTML companion with
-copy-to-clipboard buttons is available as an optional convenience:
-
-```bash
-python3 templates/guide/extract-code.py my-guide.tex
-# → my-guide-commands.html (open in any browser)
-```
-
-The HTML page includes:
-- Section/subsection context for each command
-- One-click **Copy** button per code block
-- Huawei-branded styling
-- No external dependencies (self-contained HTML)
-
 ---
 
 ## Customization pointers (when the user asks to change the look)

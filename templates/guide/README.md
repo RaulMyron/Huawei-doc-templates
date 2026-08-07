@@ -70,6 +70,12 @@ differs by operating system — follow the section for yours.
 5. **Missing packages** — if a compile error mentions a missing package, MiKTeX
    usually prompts to install it automatically — accept.
 
+6. **Timezone note** — the `.latexmkrc` sets `TZ=America/Sao_Paulo` for the
+   cover page timestamp. On Windows, `TZ` may not be respected by Perl/TeX.
+   If the cover time is wrong, set it manually in your environment before
+   compiling: `set TZ=America/Sao_Paulo` (Command Prompt) or
+   `$env:TZ="America/Sao_Paulo"` (PowerShell).
+
 ### Linux
 
 1. **Install TeX Live and latexmk.**

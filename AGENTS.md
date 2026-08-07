@@ -117,60 +117,12 @@ approval. Changing them breaks existing documents and reproducibility.
 
 ---
 
-## Template features (reference)
+## Template features
 
-### Class options
-| Option | Effect |
-|---|---|
-| `english` | English labels (default: Portuguese) |
-| `indentbody` | Indent body text by `\contentindent` (default: off) |
-| `notime` | Hide compilation time on cover page (default: show) |
-
-### Preamble commands
-| Command | Purpose |
-|---|---|
-| `\setguidetitle{...}` | Cover title |
-| `\setheadertitle{...}` | Header text on body pages (cover/TOC/changelog have no header) |
-| `\setcovertext{...}` | Line under cover logo |
-| `\setheaderlogo{path}` | Header logo (default: `assets/huawei-logo-header.png`) |
-| `\setcoverlogo{path}` | Cover logo (default: `assets/huawei-logo-cover.png`) |
-| `\setdocversion{1.0.0}` | Version on cover page |
-| `\setdocdate{...}` | Date on cover page (optional, defaults to `\today`) |
-
-### Document structure commands
-| Command | Purpose |
-|---|---|
-| `\makecover` | Render cover (call right after `\begin{document}`) |
-| `\sumario` | Render TOC + page break |
-| `\startbody` | Mark body start, reset page numbering to 1 |
-
-### Environments
-| Environment | Use |
-|---|---|
-| `objetivos` | Objectives + prerequisites block |
-| `codigo` | Verbatim code block (optional language hint: `[bash]`) |
-| `aviso` | Warning callout (amber) |
-| `dica` | Tip callout (green) |
-| `infobox` | Info callout (blue) |
-| `changelog` | Version history block |
-
-### Commands
-| Command | Produces |
-|---|---|
-| `\objgeral{...}` | General objective label + text |
-| `\objpratica{...}` | Practice objective label + text |
-| `\prerequisitos` | Prerequisites label |
-| `\passoapasso` | Step-by-step label |
-| `\code{...}` | Inline monospace code |
-| `\param{...}` | Filename/parameter in italic |
-| `\codigoarquivo[lang]{file}` | Code block from external file |
-| `\imagem[width]{file}` | Centered image (default `0.65\linewidth`) |
-| `\imagemc[width]{file}{caption}` | Centered image with caption |
-| `\imagemplaceholder{path}{desc}` | Dashed placeholder box for a missing image |
-| `\nota{...}` | Italic observation |
-| `\weblink{url}{text}` | Blue clickable link, no underline |
-| `\badge{...}` | Inline red label with white text |
-| `\changelogentry{ver}{date}{items}` | One changelog entry |
+See `templates/guide/SKILL.md` for the full command and environment reference
+(class options, preamble commands, document structure commands, environments,
+and content commands). SKILL.md is the canonical source; `templates/guide/README.md`
+has the human-readable version with examples.
 
 ---
 

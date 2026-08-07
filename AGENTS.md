@@ -130,7 +130,7 @@ approval. Changing them breaks existing documents and reproducibility.
 | Command | Purpose |
 |---|---|
 | `\setguidetitle{...}` | Cover title |
-| `\setheadertitle{...}` | Header text on every page |
+| `\setheadertitle{...}` | Header text on body pages (cover/TOC/changelog have no header) |
 | `\setcovertext{...}` | Line under cover logo |
 | `\setheaderlogo{path}` | Header logo (default: `assets/huawei-logo-header.png`) |
 | `\setcoverlogo{path}` | Cover logo (default: `assets/huawei-logo-cover.png`) |

@@ -84,7 +84,6 @@ approval. Changing them breaks existing documents and reproducibility.
 +-- README.md                # collection index
 +-- LICENSE                  # MIT
 +-- .vscode/settings.json    # latexmk as default recipe
-+-- .github/workflows/build.yml  # CI: compile samples on push/PR
 +-- templates/
     +-- guide/               # the guide template
         +-- SKILL.md          # opencode skill + agent reference
@@ -217,9 +216,6 @@ at the repo root registers `templates/` as a discovery path.
 
 5. **Add to root `README.md`** — add a row to the Templates table.
 
-6. **Add to CI** (`.github/workflows/build.yml`) — add a compile step for the
-   new template's samples.
-
 ### Skill naming rules
 - Prefix: `huawei-template-` (locked, see L7)
 - Examples: `huawei-template-guide`, `huawei-template-report`
@@ -250,20 +246,6 @@ at the repo root registers `templates/` as a discovery path.
 
 ---
 
-## CI/CD
-
-- `.github/workflows/build.yml` compiles both samples on every push/PR that
-  touches `templates/**`.
-- CI installs `texlive-xetex`, `texlive-latex-extra`,
-  `texlive-lang-portuguese`, `latexmk`, `fonts-liberation`,
-  `fonts-cascadia-code`.
-- CI does NOT install Consolas (proprietary) — the fallback
-  chain must handle this (locked, see L8). HarmonyOS Sans and Cascadia Code
-  ARE installed (free and open source respectively).
-- PDFs are uploaded as artifacts for inspection.
-
----
-
 ## File editing rules
 
 - **`guide.cls`** — the single source of truth for all formatting. Changes
@@ -274,8 +256,8 @@ at the repo root registers `templates/` as a discovery path.
   command tables in sync.
 - **`AGENTS.md`** (this file) — update when standards change or new locked
   decisions are made.
-- **Samples** — must always compile. They are the CI gate and the user's
-  reference. Any new feature must be demonstrated in both samples.
+- **Samples** — must always compile. They are the user's reference. Any new
+  feature must be demonstrated in both samples.
 - **`install.sh`** — reads skill name from SKILL.md frontmatter. Do not
   hardcode skill names in the script.
 
@@ -287,8 +269,7 @@ at the repo root registers `templates/` as a discovery path.
 - Never commit build artifacts (`.pdf`, `.aux`, `.log`, `.out`, `.toc`,
   `.xdv`, `.fls`, `.fdb_latexmk`, `.synctex.gz`). They are in `.gitignore`.
 - The setup guide PDF (`examples/setup-guide/setup-guide.pdf`) is also gitignored.
-- Samples are the CI gate — a commit that breaks sample compilation must not
-  be pushed to `main`.
+- A commit that breaks sample compilation must not be pushed to `main`.
 - **One change, commit, push.** Make one logical change, commit it, and push
   immediately. Do not accumulate multiple unpushed commits. This keeps the
   remote in sync, makes each change individually revertable, and avoids losing

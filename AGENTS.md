@@ -164,8 +164,8 @@ approval. Changing them breaks existing documents and reproducibility.
 | `\code{...}` | Inline monospace code |
 | `\param{...}` | Filename/parameter in italic |
 | `\codigoarquivo[lang]{file}` | Code block from external file |
-| `\imagem{file}` | Centered image (default `0.65\linewidth`) |
-| `\imagemc{file}{caption}` | Centered image with caption |
+| `\imagem[width]{file}` | Centered image (default `0.65\linewidth`) |
+| `\imagemc[width]{file}{caption}` | Centered image with caption |
 | `\imagemplaceholder{path}{desc}` | Dashed placeholder box for a missing image |
 | `\nota{...}` | Italic observation |
 | `\weblink{url}{text}` | Blue clickable link, no underline |

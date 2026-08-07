@@ -108,6 +108,7 @@ the user asks.
 \setguidetitle{Guia: <topic>}
 \setheadertitle{Huawei Cloud -- <short title>}
 \setcovertext{Huawei Technologies CO., LTD}
+\setdocversion{1.0.0}
 
 \begin{document}
 \makecover

@@ -160,7 +160,9 @@ Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 | `\setheaderlogo{path}` | Header logo image path (default `assets/huawei-logo-header.png`). |
 | `\setcoverlogo{path}` | Cover logo image path (default `assets/huawei-logo-cover.png`). |
 | `\setdocversion{1.0.0}` | Document version, shown on the cover page (e.g. "v1.0.0"). |
-| `\setdocdate{2026-08-05}` | Document date, shown on the cover page next to the version. |+| ### Document structure
+| `\setdocdate{2026-08-05}` | Document date, shown on the cover page next to the version. |
+
+### Document structure
 | Command | Purpose |
 |---|---|
 | `\makecover` | Render the cover. Call right after `\begin{document}`. |

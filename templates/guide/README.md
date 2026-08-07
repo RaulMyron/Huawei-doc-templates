@@ -405,8 +405,8 @@ image when the user explicitly asks for one.
 
 | Command | Result |
 |---|---|
-| `\imagem[width]{file}` | Inserts the image **centered**. `width` is optional (default `0.65\linewidth`). |
-| `\imagemc[width]{file}{caption}` | Same, with a **numbered** caption ("Figure 1: ...") centered below. |
+| `\imagem[width]{file}` | Inserts the image **centered**. `width` is optional (default `0.65\linewidth`). Max height `0.4\textheight` with `keepaspectratio`. |
+| `\imagemc[width]{file}{caption}` | Same, with a **numbered** caption ("Figure 1: ...") centered below. Same size limits. |
 | `\imagemplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the file is not yet available. |
 
 Examples:

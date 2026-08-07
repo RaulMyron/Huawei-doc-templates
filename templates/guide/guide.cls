@@ -428,6 +428,21 @@
 % Link textual azul (sem sublinhado), preservando destino clicável
 \newcommand{\weblink}[2]{\href{#1}{\textcolor{linkblue}{#2}}}
 
+% Menu path: \menu{VPC, Security Groups} -> **VPC** → **Security Groups**
+\newif\if@lg@menufirst
+\newtoks\lg@menutoks
+\newcommand{\menu}[1]{%
+  \@lg@menufirsttrue
+  \lg@menutoks={}%
+  \@for\lg@menuitem:=#1\do{%
+    \if@lg@menufirst\else
+      \lg@menutoks=\expandafter{\the\lg@menutoks\ $\rightarrow$\ }%
+    \fi
+    \@lg@menufirstfalse
+    \lg@menutoks=\expandafter{\the\lg@menutoks\textbf{\lg@menuitem}}%
+  }%
+  \the\lg@menutoks}
+
 % =====================================================================
 %  CAIXAS DE AVISO  (callout boxes: aviso, dica, info)
 % =====================================================================

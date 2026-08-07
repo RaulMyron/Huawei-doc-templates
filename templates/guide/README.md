@@ -451,6 +451,7 @@ Tables are generated directly by the AI. The class loads `booktabs` and
 |---|---|
 | `\nota{...}` | **Observation paragraph in italic**. |
 | `\weblink{url}{text}` | Clickable link, **blue, no underline** (`#0000FF`). |
+| `\menu{A, B, C}` | Menu path: **A** → **B** → **C** (bold items joined by arrows). |
 | `\href{url}{text}` | Standard `hyperref` link (also blue via `urlcolor`). |
 | `\textbf{...}` | Bold — used to highlight interface terms (e.g. **Console**). |
 

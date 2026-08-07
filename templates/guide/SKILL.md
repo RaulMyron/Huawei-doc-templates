@@ -273,6 +273,7 @@ loads `booktabs` and `array` for professional-looking tables.
 |---|---|
 | `\nota{...}` | Italic observation paragraph. |
 | `\weblink{url}{text}` | Blue (`#0000FF`), no underline, clickable. |
+| `\menu{A, B, C}` | Menu path: **A** → **B** → **C** (bold items joined by arrows). |
 | `\href{url}{text}` | Standard `hyperref` link (also blue via `urlcolor`). |
 | `\textbf{...}` | Bold — use for UI terms (e.g. **Console**). |
 

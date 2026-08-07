@@ -63,8 +63,8 @@ the Huawei corporate proxy blocks outbound connections on port 22. Port
 
 \passoapasso
 \begin{enumerate}
-  \item In the Console, go to \textbf{VPC} $\rightarrow$ \textbf{Security
-        Groups} and click \textbf{Create Security Group}.
+  \item In the Console, go to \menu{VPC, Security Groups}
+        and click \textbf{Create Security Group}.
   \item Name it \code{sg-xgate} and add the following inbound rules:
 
   \begin{codigo}
@@ -193,8 +193,7 @@ will use to connect in the next chapters.
 \begin{enumerate}
   \item In the Console, navigate to \textbf{Elastic Cloud Server} and click
         on the instance \code{dev-server-01}.
-  \item In the ECS details page, click \textbf{More} $\rightarrow$
-        \textbf{Reset Password}.
+  \item In the ECS details page, click \menu{More, Reset Password}.
 
   \imagemc{assets/ecs-reset-password.png}{Reset Password option in the ECS
     details page.}
@@ -679,7 +678,7 @@ Callout boxes and inline commands:
   \item Select the instance \code{dev-server-01}, click \textbf{More} and
         choose \textbf{Delete}.
   \item Confirm deletion. Optionally release the EIP if it was dedicated.
-  \item Navigate to \textbf{VPC} $\rightarrow$ \textbf{Security Groups},
+  \item Navigate to \menu{VPC, Security Groups},
         select \code{sg-xgate}, and delete it.
   \item Remove the SSH config entry from \code{\textasciitilde/.ssh/config}.
 \end{enumerate}

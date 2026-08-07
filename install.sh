@@ -97,6 +97,37 @@ $SUDO apt-get install -y \
 
 log_done "TeX Live packages installed"
 
+# ── Update fvextra for backgroundcolor support ──
+log_step "Updating fvextra (backgroundcolor support)"
+
+FVEXTRA_STY=$(kpsewhich fvextra.sty 2>/dev/null)
+if [[ -n "$FVEXTRA_STY" ]] && grep -q 'backgroundcolor' "$FVEXTRA_STY" 2>/dev/null; then
+    log_ok "fvextra: already has backgroundcolor support"
+else
+    log_desc "Downloading and building latest fvextra from CTAN..."
+    FVEXTRA_ZIP="/tmp/fvextra.zip"
+    FVEXTRA_BUILD="/tmp/fvextra-build"
+    if wget -q "https://mirrors.ctan.org/macros/latex/contrib/fvextra.zip" -O "$FVEXTRA_ZIP"; then
+        rm -rf "$FVEXTRA_BUILD"
+        unzip -q "$FVEXTRA_ZIP" -d "$FVEXTRA_BUILD"
+        cd "$FVEXTRA_BUILD/fvextra"
+        latex fvextra.ins 2>/dev/null
+        if [[ -f fvextra.sty ]] && grep -q 'backgroundcolor' fvextra.sty; then
+            FVEXTRA_TARGET="${FVEXTRA_STY:-/usr/share/texlive/texmf-dist/tex/latex/fvextra/fvextra.sty}"
+            $SUDO cp fvextra.sty "$FVEXTRA_TARGET"
+            $SUDO texhash 2>/dev/null
+            log_done "fvextra: updated with backgroundcolor support"
+        else
+            log_warn "fvextra build failed — code block backgrounds may show two colors"
+        fi
+        rm -rf "$FVEXTRA_ZIP" "$FVEXTRA_BUILD"
+        cd "$SCRIPT_DIR"
+    else
+        log_warn "Failed to download fvextra — code block backgrounds may show two colors"
+        log_dim "Download manually from: https://ctan.org/pkg/fvextra"
+    fi
+fi
+
 # ── Install HarmonyOS Sans font ──
 log_step "Installing HarmonyOS Sans font"
 

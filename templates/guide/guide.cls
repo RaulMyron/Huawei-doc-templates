@@ -121,13 +121,15 @@
   \newcommand{\lg@prerequisitoslabel}{Prerequisites:}
   \newcommand{\lg@passoapassolabel}{Step by step:}
   \newcommand{\lg@paginalabel}{Page}
+  \newcommand{\lg@guidetitle}{Guide}
 \else
   \newcommand{\lg@sumario}{Sumário}
   \newcommand{\lg@objgerallabel}{Objetivo Geral:}
   \newcommand{\lg@objpraticalabel}{Objetivo:}
   \newcommand{\lg@prerequisitoslabel}{Pré-requisitos:}
-  \newcommand{\lg@passoapassolabel}{Passo a passo:}
+  \newcommand{\lg@passoapassolabel}{Passo a passo}
   \newcommand{\lg@paginalabel}{Página}
+  \newcommand{\lg@guidetitle}{Guia}
 \fi
 
 % =====================================================================
@@ -239,11 +241,6 @@
 %  CAPA
 % =====================================================================
 % \setguidetitle{...}  -> título grande da capa (e default do header)
-\if@english
-  \newcommand{\lg@guidetitle}{Guide}
-\else
-  \newcommand{\lg@guidetitle}{Guia}
-\fi
 \newcommand{\setguidetitle}[1]{\renewcommand{\lg@guidetitle}{#1}}
 \newcommand{\lg@covertext}{Huawei Technologies CO., LTD}
 \newcommand{\setcovertext}[1]{\renewcommand{\lg@covertext}{#1}}

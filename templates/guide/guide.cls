@@ -435,24 +435,14 @@
 %   \begin{aviso} ... \end{aviso}   — atenção / cuidado (âmbar)
 %   \begin{dica}  ... \end{dica}    — sugestão / dica (verde)
 %   \begin{infobox}  ... \end{infobox}  — informação adicional (azul)
-\newtcolorbox{aviso}{
-  colback=warningbg, colframe=warningfg,
-  boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
-  left=8pt, right=8pt, top=6pt, bottom=6pt,
-  before skip=6pt, after skip=6pt, breakable, enhanced jigsaw
-}
-\newtcolorbox{dica}{
-  colback=tipbg, colframe=tipfg,
-  boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
-  left=8pt, right=8pt, top=6pt, bottom=6pt,
-  before skip=6pt, after skip=6pt, breakable, enhanced jigsaw
-}
-\newtcolorbox{infobox}{
-  colback=infobg, colframe=infofg,
-  boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
-  left=8pt, right=8pt, top=6pt, bottom=6pt,
-  before skip=6pt, after skip=6pt, breakable, enhanced jigsaw
-}
+\newcommand{\lg@callout}[3]{%
+  \newtcolorbox{#1}{colback=#2, colframe=#3,
+    boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
+    left=8pt, right=8pt, top=6pt, bottom=6pt,
+    before skip=6pt, after skip=6pt, breakable, enhanced jigsaw}}
+\lg@callout{aviso}{warningbg}{warningfg}
+\lg@callout{dica}{tipbg}{tipfg}
+\lg@callout{infobox}{infobg}{infofg}
 
 % =====================================================================
 %  ETIQUETA / BADGE  (rótulo colorido inline)

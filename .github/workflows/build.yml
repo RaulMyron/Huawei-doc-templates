@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - 'templates/**'
+      - 'examples/**'
       - '.github/workflows/build.yml'
   pull_request:
     paths:
       - 'templates/**'
+      - 'examples/**'
 
 jobs:
   compile:
@@ -42,6 +44,11 @@ jobs:
           cd templates/guide/samples/en
           latexmk main.tex
 
+      - name: Compile setup guide
+        run: |
+          cd examples/setup-guide
+          latexmk setup-guide.tex
+
       - name: Upload PDFs
         if: always()
         uses: actions/upload-artifact@v4
@@ -50,3 +57,4 @@ jobs:
           path: |
             templates/guide/samples/pt/main.pdf
             templates/guide/samples/en/main.pdf
+            examples/setup-guide/setup-guide.pdf

@@ -336,26 +336,29 @@ log_step "Test compilation"
 
 PT_DIR="$SCRIPT_DIR/templates/guide/samples/pt"
 EN_DIR="$SCRIPT_DIR/templates/guide/samples/en"
+SG_DIR="$SCRIPT_DIR/examples/setup-guide"
 
 compile_sample() {
-    local dir="$1" label="$2"
-    if [[ -f "$dir/main.tex" ]]; then
+    local dir="$1" label="$2" file="${3:-main.tex}"
+    if [[ -f "$dir/$file" ]]; then
         cd "$dir"
-        latexmk -C main.tex 2>/dev/null
-        if latexmk main.tex 2>/dev/null; then
-            local pages=$(pdfinfo main.pdf 2>/dev/null | grep "^Pages:" | awk '{print $2}')
-            log_ok "$label sample: ${pages:-?} pages"
-            latexmk -C main.tex 2>/dev/null
+        latexmk -C "$file" 2>/dev/null
+        if latexmk "$file" 2>/dev/null; then
+            local pdf="${file%.tex}.pdf"
+            local pages=$(pdfinfo "$pdf" 2>/dev/null | grep "^Pages:" | awk '{print $2}')
+            log_ok "$label: ${pages:-?} pages"
+            latexmk -C "$file" 2>/dev/null
         else
-            log_warn "$label sample compile failed — check $dir/main.log"
+            log_warn "$label compile failed — check $dir/${file%.tex}.log"
         fi
     else
-        log_warn "$label sample not found at $dir — skipping"
+        log_warn "$label not found at $dir — skipping"
     fi
 }
 
-compile_sample "$PT_DIR" "Portuguese"
-compile_sample "$EN_DIR" "English"
+compile_sample "$PT_DIR" "Portuguese sample"
+compile_sample "$EN_DIR" "English sample"
+compile_sample "$SG_DIR" "Setup guide" "setup-guide.tex"
 
 # ── Summary ──
 echo ""

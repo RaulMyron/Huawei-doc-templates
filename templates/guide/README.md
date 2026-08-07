@@ -265,6 +265,16 @@ cd samples/en && latexmk main.tex    # English
 
 `latexmk` needs Perl — see Environment setup above.
 
+### Companion HTML (copy-paste commands)
+
+PDF text extraction from code blocks is unreliable. The `extract-code.py`
+script generates a self-contained HTML page with copy-to-clipboard buttons:
+
+```bash
+python3 templates/guide/extract-code.py my-guide.tex
+# → my-guide-commands.html
+```
+
 ### Timezone
 
 The cover page shows the compilation date and time via `\today` and TeX's

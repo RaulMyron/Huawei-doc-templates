@@ -25,6 +25,8 @@
 *.listing
 # compiled output
 *.pdf
+# generated HTML companion (extract-code.py)
+*-commands.html
 # editor / os cruft
 .DS_Store
 *.swp

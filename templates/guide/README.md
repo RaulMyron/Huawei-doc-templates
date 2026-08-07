@@ -100,12 +100,12 @@ differs by operating system — follow the section for yours.
    fc-cache -f
    ```
     - **HarmonyOS Sans** — free for commercial use; download from
-      \weblink{https://github.com/zhiyuan1i/fonts-harmonyos-sans-cn/releases}{GitHub}
-      (`.deb` package) or from
-      \weblink{https://developer.huawei.com/consumer/en/design/resource/}{Huawei Design}.
+       [GitHub](https://github.com/zhiyuan1i/fonts-harmonyos-sans-cn/releases)
+       (`.deb` package) or from
+       [Huawei Design](https://developer.huawei.com/consumer/en/design/resource/).
     - **Cascadia Code** — open source from Microsoft, install via
       `sudo apt install fonts-cascadia-code` (or download from
-      \weblink{https://github.com/microsoft/cascadia-code}{GitHub}).
+       [GitHub](https://github.com/microsoft/cascadia-code)).
     - **Consolas** — optional fallback; a Microsoft font, not freely
       redistributable. Copy from a licensed Windows install
       (`C:\Windows\Fonts\consola*.ttf`) if you have one.

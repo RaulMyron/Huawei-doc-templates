@@ -349,7 +349,8 @@
 % fancyvrb typeseta linha por linha → texto contíguo no PDF → copy limpo.
 \DefineVerbatimEnvironment{codigo}{Verbatim}
 {fontsize=\fontsize{10}{13}\selectfont, formatcom=\codefont\color{codetext},
- frame=single, framerule=0pt, framesep=8pt, fillcolor=\color{codebg},
+ frame=none,
+ backgroundcolor=codebg,
  xleftmargin=0.7cm, xrightmargin=0.5cm,
  breaklines=true, breakanywhere=true,
  breaksymbolleft={}, breaksymbolright={},
@@ -360,7 +361,8 @@
 \newcommand{\codigoarquivo}[2][]{%
   \VerbatimInput[fontsize=\fontsize{10}{13}\selectfont,
    formatcom=\codefont\color{codetext},
-   frame=single, framerule=0pt, framesep=8pt, fillcolor=\color{codebg},
+   frame=none,
+   backgroundcolor=codebg,
    xleftmargin=0.7cm, xrightmargin=0.5cm,
    breaklines=true, breakanywhere=true,
    breaksymbolleft={}, breaksymbolright={},

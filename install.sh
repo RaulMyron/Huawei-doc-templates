@@ -134,15 +134,21 @@ log_step "Installing HarmonyOS Sans font"
 
 HARMONYOS_DEB_URL="https://github.com/zhiyuan1i/fonts-harmonyos-sans-cn/releases/download/v1.0.0/harmonyos_sans.deb"
 HARMONYOS_DEB="/tmp/harmonyos_sans.deb"
+HARMONYOS_DEB_SHA256="d1fdaccd6d8f7a8918db366430c586503480d6e0d44ace33715fb7d999537123"
 
 if fc-list | grep -q "HarmonyOS Sans"; then
     log_ok "HarmonyOS Sans: already installed"
 else
     log_desc "Downloading from GitHub releases..."
     if wget -q "$HARMONYOS_DEB_URL" -O "$HARMONYOS_DEB"; then
-        $SUDO apt install -y "$HARMONYOS_DEB" 2>&1 | tail -2
-        rm -f "$HARMONYOS_DEB"
-        log_done "HarmonyOS Sans: installed"
+        if echo "$HARMONYOS_DEB_SHA256  $HARMONYOS_DEB" | sha256sum -c - 2>/dev/null; then
+            $SUDO apt install -y "$HARMONYOS_DEB" 2>&1 | tail -2
+            rm -f "$HARMONYOS_DEB"
+            log_done "HarmonyOS Sans: installed"
+        else
+            log_error "HarmonyOS Sans: checksum mismatch — possible tampered download"
+            rm -f "$HARMONYOS_DEB"
+        fi
     else
         log_warn "Failed to download HarmonyOS Sans — using fallback fonts"
         log_dim "Download manually from: $HARMONYOS_DEB_URL"

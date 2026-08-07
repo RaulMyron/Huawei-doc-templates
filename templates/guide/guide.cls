@@ -433,19 +433,20 @@
 \newcommand{\weblink}[2]{\href{#1}{\textcolor{linkblue}{#2}}}
 
 % Menu path: \menu{VPC, Security Groups} -> **VPC** → **Security Groups**
-\newif\if@lg@menufirst
+% Uses etoolbox's \forcsvlist (loaded by tcolorbox[most])
 \newtoks\lg@menutoks
+\newif\iflg@menufirst
 \newcommand{\menu}[1]{%
-  \@lg@menufirsttrue
+  \lg@menufirsttrue
   \lg@menutoks={}%
-  \@for\lg@menuitem:=#1\do{%
-    \if@lg@menufirst\else
-      \lg@menutoks=\expandafter{\the\lg@menutoks\ $\rightarrow$\ }%
-    \fi
-    \@lg@menufirstfalse
-    \lg@menutoks=\expandafter{\the\lg@menutoks\textbf{\lg@menuitem}}%
-  }%
+  \forcsvlist{\lg@menuitem}{#1}%
   \the\lg@menutoks}
+\newcommand{\lg@menuitem}[1]{%
+  \iflg@menufirst\else
+    \lg@menutoks=\expandafter{\the\lg@menutoks\ $\rightarrow$\ }%
+  \fi
+  \lg@menufirstfalse
+  \lg@menutoks=\expandafter{\the\lg@menutoks\textbf{#1}}}
 
 % =====================================================================
 %  CAIXAS DE AVISO  (callout boxes: aviso, dica, info)

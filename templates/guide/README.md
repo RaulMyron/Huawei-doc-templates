@@ -182,7 +182,7 @@ just open the repo root and start editing.
     {
       "name": "latexmk",
       "command": "latexmk",
-      "args": ["%DOC%"]
+      "args": ["-cd", "-xelatex", "-interaction=nonstopmode", "%DOC%"]
     },
     {
       "name": "xelatex",

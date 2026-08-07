@@ -157,7 +157,7 @@ fi
 
 # ── Update font cache ──
 log_step "Updating font cache"
-! fc-cache -f
+fc-cache -f || log_warn "fc-cache failed — font discovery may be incomplete"
 log_ok "Font cache updated"
 
 # ── Verify toolchain ──

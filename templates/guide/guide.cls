@@ -382,6 +382,8 @@
 % Imagens horizontais: limitadas pela largura (0.65\linewidth).
 % Imagens verticais: limitadas pela altura (0.4\textheight).
 \newcommand{\imagem}[2][0.65\linewidth]{%
+  \IfFileExists{#2}{}{\ClassWarning{guide}{Image "#2" not found.
+    Check the path (relative to TEXINPUTS) and that the file exists.}}%
   \par\medskip
   {\leftskip=0pt\rightskip=0pt\parindent=0pt\centering
    \includegraphics[width=#1,height=0.4\textheight,keepaspectratio]{#2}\par}%
@@ -389,6 +391,8 @@
 
 % \imagemc[largura]{arquivo}{legenda}  (com legenda numerada — Figura N)
 \newcommand{\imagemc}[3][0.65\linewidth]{%
+  \IfFileExists{#2}{}{\ClassWarning{guide}{Image "#2" not found.
+    Check the path (relative to TEXINPUTS) and that the file exists.}}%
   \par\medskip
   {\leftskip=0pt\rightskip=0pt\parindent=0pt\centering
    \includegraphics[width=#1,height=0.4\textheight,keepaspectratio]{#2}\par

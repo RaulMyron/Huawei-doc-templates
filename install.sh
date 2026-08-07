@@ -98,6 +98,8 @@ $SUDO apt-get install -y \
 log_done "TeX Live packages installed"
 
 # ── Update fvextra for backgroundcolor support ──
+# fvextra >= 1.5 introduced the backgroundcolor option (TeX Live 2024+).
+# TeX Live 2023 ships an older version without it, so we download from CTAN.
 log_step "Updating fvextra (backgroundcolor support)"
 
 FVEXTRA_STY=$(kpsewhich fvextra.sty 2>/dev/null)

@@ -38,6 +38,7 @@
 \RequirePackage[a4paper,top=3cm,bottom=3cm,left=2cm,right=2cm,%
                 headheight=1.4cm,headsep=0.7cm]{geometry}
 \RequirePackage{fontspec}
+\PassOptionsToPackage{table}{xcolor}
 \RequirePackage{xcolor}
 \RequirePackage{graphicx}
 \RequirePackage{fancyhdr}
@@ -59,8 +60,8 @@
 \fi
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage{caption}
-\captionsetup[figure]{font={small}, labelfont=bf, labelsep=colon}
-\captionsetup[table]{font={small}, labelfont=bf, labelsep=colon}
+\captionsetup[figure]{font={small}, labelfont={bf,color=huaweired}, labelsep=colon}
+\captionsetup[table]{font={small}, labelfont={bf,color=huaweired}, labelsep=colon}
 
 % =====================================================================
 %  COLORS
@@ -76,6 +77,13 @@
 \definecolor{tipfg}{HTML}{2E7D32}     % tip box border (green)
 \definecolor{infobg}{HTML}{E3F2FD}    % info box background (light blue)
 \definecolor{infofg}{HTML}{1565C0}    % info box border (blue)
+
+% Table rules in Huawei red
+\arrayrulecolor{huaweired}
+% Table header cell: white bold text (for use with \rowcolor{huaweired})
+\newcommand{\thd}[1]{\textcolor{white}{\textbf{#1}}}
+% Table body: start alternating row colors (white / light gray)
+\newcommand{\tbody}{\rowcolors{2}{white}{codebg}}
 
 % =====================================================================
 %  FONTS  (with automatic fallback if brand fonts are missing)

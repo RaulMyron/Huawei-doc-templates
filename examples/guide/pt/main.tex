@@ -10,7 +10,7 @@
 % --- Configuração do documento --------------------------------------
 \setguidetitle{Guia: Acessar o Console da Huawei Cloud}
 \setheadertitle{Huawei Cloud -- Guia de acesso ao Console}
-\setdocversion{1.0.0}
+\setdocversion{1.1.0}
 \setdocdate{2026-08-05}
 \setcovertext{Huawei Technologies CO., LTD}
 
@@ -117,10 +117,11 @@ A tabela abaixo lista as regiões suportadas para o Brasil e América Latina:
 \begin{table}[h]
   \centering
   \small
-  \begin{tabular}{lll}
-    \toprule
-    \textbf{Região} & \textbf{Localidade} & \textbf{Código} \\
+  \begin{tabular}{|l|l|l|}
+    \rowcolor{huaweired}
+    \thd{Região} & \thd{Localidade} & \thd{Código} \\
     \midrule
+    \tbody
     São Paulo & Brasil & \inlinecode{sa-brazil-1} \\
     Santiago  & Chile & \inlinecode{la-south-2} \\
     \bottomrule
@@ -223,6 +224,10 @@ as alterações.
 \section{Histórico de versões}
 
 \begin{changelog}
+  \changelogentry{1.1.0}{2026-08-08}{
+    \item Adicionada formatação de tabelas estilo Huawei: cabeçalho vermelho,
+          cores alternadas e bordas.
+  }
   \changelogentry{1.0.0}{2026-08-05}{
     \item Versão inicial.
     \item Adicionados callout boxes e badge.

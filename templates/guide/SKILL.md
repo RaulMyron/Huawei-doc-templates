@@ -270,23 +270,29 @@ screen.}` produces "Figure 1: Console login screen.".
 
 ### Tables
 
-Tables are generated directly by the AI — no manual steps needed. The class
-loads `booktabs` and `array` for professional-looking tables.
+Tables use a Huawei-branded style with a red header bar. The class loads
+`booktabs`, `array`, and `colortbl` (via `xcolor[table]`). Table rules are
+colored in Huawei red and caption labels ("Table N:") are red.
 
 **Rules:**
-- Use `\toprule`, `\midrule`, `\bottomrule` (never `\hline`).
-- Use `\centering` + `tabular` inside a `table` float, or just `\centering`
-  + `tabular` for inline placement.
-- Keep tables compact — small font (`\small` or `\footnotesize`) if wide.
+- Header row: `\rowcolor{huaweired}` + `\thd{...}` for each cell (white bold on red).
+- Use `\midrule` after the header, `\bottomrule` at the bottom (both red).
+- Add `\tbody` after `\midrule` to enable alternating row colors (white / light gray).
+- No `\toprule` — the red header bar is the top border.
+- No `\hline` — use `booktabs` rules only.
+- Column spec uses `|` for vertical borders, e.g. `{|l|l|l|}`.
+- Use `\centering` + `\small` inside a `table` float.
+- Do not include "Table N" in the caption text — the class adds it.
 
 ```latex
 \begin{table}[h]
   \centering
   \small
-  \begin{tabular}{lll}
-    \toprule
-    \textbf{Column A} & \textbf{Column B} & \textbf{Column C} \\
+  \begin{tabular}{|l|l|l|}
+    \rowcolor{huaweired}
+    \thd{Column A} & \thd{Column B} & \thd{Column C} \\
     \midrule
+    \tbody
     Row 1 & Value & Value \\
     Row 2 & Value & Value \\
     \bottomrule

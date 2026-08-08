@@ -9,7 +9,7 @@
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
 \setheadertitle{Huawei Cloud -- ECS + SSH + MaaS Gateway Setup}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{2.1.0}
+\setdocversion{2.2.0}
 
 \begin{document}
 
@@ -261,10 +261,11 @@ proceeding to the next chapter:
 \begin{table}[h]
   \centering
   \small
-  \begin{tabular}{lll}
-    \toprule
-    \textbf{Step} & \textbf{What to check} & \textbf{Expected result} \\
+  \begin{tabular}{|l|l|l|}
+    \rowcolor{huaweired}
+    \thd{Step} & \thd{What to check} & \thd{Expected result} \\
     \midrule
+    \tbody
     Security group & \inlinecode{sg-xgate} exists with TCP 4444 rules & 3 inbound rules \\
     ECS running    & Instance \inlinecode{dev-server-01} status       & \textbf{Running} \\
     Root password  & Remote Login works with password            & Shell prompt \\
@@ -695,6 +696,10 @@ full command reference, see the template's README.md or run
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{2.2.0}{2026-08-08}{
+    \item Added Huawei-branded table styling: red header bar, alternating row
+          colors, and bordered cells.
+  }
   \changelogentry{2.1.0}{2026-08-06}{
     \item Updated ECS flavor to \inlinecode{ac8.xlarge.2} (4 vCPU, 8 GB RAM).
     \item Updated OS image to Ubuntu 24.04 Server 64bit.

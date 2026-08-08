@@ -14,7 +14,7 @@
 \setguidetitle{Guide: Getting Started with Huawei Cloud ECS}
 \setheadertitle{Huawei Cloud -- ECS Quick Start Guide}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{1.0.0}
+\setdocversion{1.1.0}
 \setdocdate{2026-08-05}
 \setheaderlogo{common-assets/huawei-logo-header.png}
 \setcoverlogo{common-assets/huawei-logo-cover.png}
@@ -141,10 +141,11 @@ The table below lists recommended ECS flavors for development workloads:
 \begin{table}[h]
   \centering
   \small
-  \begin{tabular}{lll}
-    \toprule
-    \textbf{Flavor} & \textbf{vCPU / RAM} & \textbf{Use case} \\
+  \begin{tabular}{|l|l|l|}
+    \rowcolor{huaweired}
+    \thd{Flavor} & \thd{vCPU / RAM} & \thd{Use case} \\
     \midrule
+    \tbody
     ac8.large.2  & 2 vCPU / 4 GB  & Light development \\
     ac8.xlarge.2 & 4 vCPU / 8 GB  & Recommended --- full coding stack \\
     ac8.2xlarge.2 & 8 vCPU / 16 GB & Heavy workloads + multiple agents \\
@@ -262,6 +263,10 @@ Use \inlinecode{terraform validate} to check syntax before applying changes.
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{1.1.0}{2026-08-08}{
+    \item Added Huawei-branded table styling: red header bar, alternating row
+          colors, and bordered cells.
+  }
   \changelogentry{1.0.0}{2026-08-05}{
     \item Initial version.
     \item Added callout boxes, badge, and changelog support.

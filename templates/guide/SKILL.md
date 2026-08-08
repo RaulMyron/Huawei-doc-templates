@@ -16,6 +16,26 @@ English; pass the `portuguese` class option for Portuguese labels
 ("Guia"). Do **not** use this for general LaTeX documents — the formatting is
 hard-coded to the Huawei house style.
 
+## Context loading (do this first)
+
+Before creating or editing any document, read these files to load the full
+project context:
+
+1. **`templates/guide/guide.cls`** — the class file. This is the single source
+   of truth for all formatting: commands, environments, colors, fonts, page
+   layout, callout boxes, table styling, and cover page. Every command and
+   environment available to documents is defined here.
+2. **`README.md`** (repo root) — project setup, compilation instructions,
+   install steps, and project layout. Needed to understand the toolchain and
+   folder conventions.
+3. **`AGENTS.md`** (repo root) — locked decisions (L1–L13), file editing
+   rules, versioning workflow, and project standards. These are mandatory
+   constraints that must not be violated.
+
+Read all three files before proceeding to the Quick start below. Do not
+guess command names, class options, or formatting conventions — look them
+up in the class file and this SKILL.md.
+
 ---
 
 ## Quick start — creating a new document

@@ -114,15 +114,17 @@ and environment reference.
 │       ├── README.md         # template-specific details (brief)
 │       ├── guide.cls         # the class — all formatting lives here
 │       ├── .latexmkrc        # latexmk config (XeLaTeX, TZ=America/Sao_Paulo)
-│       └── assets/           # logos, sample images, example scripts
+│       └── common-assets/      # logos, sample images, example scripts
 └── examples/                 # all example documents and samples
     ├── guide/               # samples for the guide template
     │   ├── pt/               # Portuguese sample
     │   │   ├── .latexmkrc    # TEXINPUTS → templates/guide/
-    │   │   └── main.tex
+    │   │   ├── main.tex
+    │   │   └── assets/       # project-specific images
     │   └── en/               # English sample
     │       ├── .latexmkrc
-    │       └── main.tex
+    │       ├── main.tex
+    │       └── assets/       # project-specific images
     └── setup-guide/          # real-world ECS + SSH + MaaS gateway guide
         ├── setup-guide.tex
         ├── .latexmkrc
@@ -137,7 +139,7 @@ and environment reference.
      `description: ...`)
    - `README.md` — brief template-specific docs
    - `.latexmkrc` — latexmk config (XeLaTeX)
-   - `assets/` — logos, sample images
+   - `common-assets/` — logos, sample images
 2. Add samples in `examples/<name>/pt/` and `examples/<name>/en/`.
 3. Add a row to the Templates table above.
 4. `install.sh` will auto-discover and install the skill on next run.

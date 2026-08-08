@@ -91,7 +91,7 @@ Colors are defined in `guide.cls` and reusable via `\textcolor{name}{...}`.
 
 ## Customization
 
-- **Logos:** replace files in `assets/` keeping the names, or use
+- **Logos:** replace files in `common-assets/` keeping the names, or use
   `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
 - **Colors:** edit the `\definecolor` block at the top of `guide.cls`.
 - **Sizes/spacing:** each concern is in a commented section of `guide.cls`

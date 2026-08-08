@@ -107,14 +107,17 @@ approval. Changing them breaks existing documents and reproducibility.
         +-- README.md         # human-readable docs
         +-- guide.cls         # all formatting lives here
         +-- .latexmkrc        # XeLaTeX, TZ=America/Sao_Paulo
-        +-- assets/           # logos, sample images, example scripts
+        +-- common-assets/      # logos, sample images, example scripts
 +-- examples/                 # all example documents and samples
     +-- guide/               # samples for the guide template
         +-- pt/               # Portuguese sample
+        │   +-- assets/       # project-specific images
         +-- en/               # English sample
+        │   +-- assets/       # project-specific images
     +-- setup-guide/          # ECS + SSH + MaaS gateway setup guide
         +-- setup-guide.tex
         +-- .latexmkrc        # TEXINPUTS + TZ override
+        +-- assets/           # project-specific images
 ```
 
 ---
@@ -139,6 +142,11 @@ approval. Changing them breaks existing documents and reproducibility.
 - **Two samples per template**: each template `<name>` has exactly two samples
   in `examples/<name>/pt/` and `examples/<name>/en/` (Portuguese and English).
   Samples demonstrate all available commands and environments.
+- **Assets folders**: template shared assets (logos, sample images) live in
+  `templates/<name>/common-assets/`. Each document has its own `assets/`
+  folder for project-specific images and files. LaTeX resolves `assets/` to
+  the project folder first, then falls back to `common-assets/` via TEXINPUTS.
+  Logos default to `common-assets/` (template-level).
 - **Template explanation**: each sample includes an `\begin{infobox}` on the
   first page explaining which template it uses and what it demonstrates.
 - **Setup guide is additional**: `examples/setup-guide/` is not a sample — it
@@ -178,7 +186,7 @@ at the repo root registers `templates/` as a discovery path.
    - `SKILL.md` — the skill definition (see format below)
    - `README.md` — human-readable documentation
    - `.latexmkrc` — latexmk config (XeLaTeX, no TZ)
-   - `assets/` — logos, sample images
+   - `common-assets/` — logos, sample images
    - Samples live in `examples/<name>/pt/` and `examples/<name>/en/` (see below)
 
 2. **SKILL.md format** — must start with YAML frontmatter:

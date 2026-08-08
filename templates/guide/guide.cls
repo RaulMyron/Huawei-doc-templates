@@ -147,7 +147,7 @@
 % Configurable header title: \setheadertitle{...}
 \newcommand{\lg@headertitle}{Huawei Cloud}
 \newcommand{\setheadertitle}[1]{\renewcommand{\lg@headertitle}{#1}}
-\newcommand{\lg@headerlogo}{assets/huawei-logo-header.png}
+\newcommand{\lg@headerlogo}{common-assets/huawei-logo-header.png}
 \newcommand{\setheaderlogo}[1]{\renewcommand{\lg@headerlogo}{#1}}
 
 \pagestyle{fancy}
@@ -240,7 +240,7 @@
 \newcommand{\setguidetitle}[1]{\renewcommand{\lg@guidetitle}{#1}}
 \newcommand{\lg@covertext}{Huawei Technologies CO., LTD}
 \newcommand{\setcovertext}[1]{\renewcommand{\lg@covertext}{#1}}
-\newcommand{\lg@coverlogo}{assets/huawei-logo-cover.png}
+\newcommand{\lg@coverlogo}{common-assets/huawei-logo-cover.png}
 \newcommand{\setcoverlogo}[1]{\renewcommand{\lg@coverlogo}{#1}}
 \newcommand{\lg@docversion}{}
 \newcommand{\setdocversion}[1]{\renewcommand{\lg@docversion}{#1}}

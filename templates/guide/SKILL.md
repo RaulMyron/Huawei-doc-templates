@@ -82,22 +82,29 @@ templates/guide/
 ├── README.md           # human docs (brief — see root README for setup)
 ├── SKILL.md            # this file (opencode skill)
 ├── .latexmkrc          # latexmk config (XeLaTeX by default)
-└── assets/
+└── common-assets/      # shared template assets (logos, sample images)
     ├── huawei-logo-header.png   # header logo
     ├── huawei-logo-cover.png    # cover logo
     ├── exemplo-menu.png         # sample image
     ├── exemplo-login.png        # sample image
     └── example-script.sh        # example code file for \codefile
 
-# Samples live in examples/guide/ (not here):
+# Each document has its own assets/ folder for project-specific files:
 examples/guide/
 ├── pt/
 │   ├── .latexmkrc  # TEXINPUTS → ../../../templates/guide/
-│   └── main.tex    # Portuguese sample (reference)
+│   ├── main.tex    # Portuguese sample (reference)
+│   └── assets/     # project-specific images and files
 └── en/
     ├── .latexmkrc
-    └── main.tex    # English sample (reference)
+    ├── main.tex    # English sample (reference)
+    └── assets/     # project-specific images and files
 ```
+
+**Asset resolution:** when a `.tex` file references `assets/foo.png`, LaTeX
+looks in the project's own `assets/` folder first, then falls back to
+`common-assets/` in the template directory (via TEXINPUTS). Logos default to
+`common-assets/` since they are template-level shared assets.
 
 **Rule of thumb:** content/structure goes in `.tex` files; look-and-feel goes
 in `guide.cls`. Do not inline formatting overrides in the document unless
@@ -172,8 +179,8 @@ Body order is fixed: `\makecover` → `\maketoc` → `\startbody` → sections.
 | `\setguidetitle{...}` | Big cover title. |
 | `\setheadertitle{...}` | Centered header text on body pages (cover, TOC, and changelog have no header). |
 | `\setcovertext{...}` | Line under the cover logo (default `Huawei Technologies CO., LTD`). |
-| `\setheaderlogo{path}` | Header logo image path (default `assets/huawei-logo-header.png`). |
-| `\setcoverlogo{path}` | Cover logo image path (default `assets/huawei-logo-cover.png`). |
+| `\setheaderlogo{path}` | Header logo image path (default `common-assets/huawei-logo-header.png`). |
+| `\setcoverlogo{path}` | Cover logo image path (default `common-assets/huawei-logo-cover.png`). |
 | `\setdocversion{1.0.0}` | Document version, shown on the cover page (e.g. "v1.0.0"). |
 | `\setdocdate{2026-08-05}` | Document date, shown on the cover page next to the version. |
 
@@ -255,6 +262,11 @@ image when the user explicitly asks for one.
 | `\imagecap{file}{caption}` | Centered image with **numbered** caption ("Figure 1: ..."). Same size limits. |
 | `\imagecap[0.6\linewidth]{file}{caption}` | With custom width. |
 | `\imageplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the image file is not yet available. |
+
+**Caption best practice:** do **not** include "Figure N" or "Table N" in the
+caption text — the class adds the prefix automatically ("Figure 1: ...",
+"Table 1: ..."). Write only the description: `\imagecap{file}{Console login
+screen.}` produces "Figure 1: Console login screen.".
 
 ### Tables
 
@@ -435,7 +447,7 @@ The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
 ---
 
 ## Customization pointers (when the user asks to change the look)
-- **Logos:** replace files in `assets/` keeping the names, or use
+- **Logos:** replace files in `common-assets/` keeping the names, or use
   `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
 - **Colors:** edit the `\definecolor` block at the top of `guide.cls`.
 - **Sizes/spacing:** each concern is in a commented section of

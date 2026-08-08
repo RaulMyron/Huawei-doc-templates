@@ -60,8 +60,8 @@
 \fi
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage{caption}
-\captionsetup[figure]{font={small}, labelfont={bf,color=huaweired}, labelsep=colon}
-\captionsetup[table]{font={small}, labelfont={bf,color=huaweired}, labelsep=colon}
+\captionsetup[figure]{font={small}, labelfont=bf, labelsep=colon}
+\captionsetup[table]{font={small}, labelfont=bf, labelsep=colon}
 
 % =====================================================================
 %  COLORS

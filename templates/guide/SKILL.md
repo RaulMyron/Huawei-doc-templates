@@ -116,6 +116,13 @@ examples/guide/
     ├── .latexmkrc
     ├── main.tex    # English sample (reference)
     └── assets/     # project-specific images and files
+
+# User-created documents go in documents/ (see Quick start):
+documents/
+└── my-guide/
+    ├── .latexmkrc  # TEXINPUTS → ../../templates/guide/
+    ├── main.tex
+    └── assets/
 ```
 
 **Asset resolution:** when a `.tex` file references `assets/foo.png`, LaTeX
@@ -167,6 +174,7 @@ the user asks.
 \end{enumerate}
 
 % --- Changelog (after all sections, before \end{document}) ---
+\section{Changelog}
 \begin{changelog}
   \changelogentry{1.0.0}{2026-08-08}{
     \item Initial version.

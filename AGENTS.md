@@ -244,11 +244,11 @@ at the repo root registers `templates/` as a discovery path.
 
 ### Adding a new environment
 - Same steps as above, but use `\newenvironment` or `tcolorbox`.
-- If using `tcolorbox`, add colors to the CORES section with `\definecolor`.
+- If using `tcolorbox`, add colors to the COLORS section with `\definecolor`.
 - Document the environment's color, border, and breakability.
 
 ### Adding a new color
-- Define in the CORES section of `guide.cls` with `\definecolor`.
+- Define in the COLORS section of `guide.cls` with `\definecolor`.
 - Use HTML hex values: `\definecolor{name}{HTML}{RRGGBB}`.
 - Do not change existing color values (locked, see L9).
 

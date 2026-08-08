@@ -4,9 +4,10 @@
 %      xelatex main.tex   (run 2x for the TOC)
 %
 %  Class options:
-%    english     — English labels (default: Portuguese)
+%    portuguese  — Portuguese labels (default: English)
 %    indentbody  — indent body text by \contentindent (off by default)
 %    notime      — hide compilation time on cover page
+%    nochangelog — disable changelog rendering
 % =====================================================================
 \documentclass{guide}
 
@@ -14,7 +15,7 @@
 \setguidetitle{Guide: Getting Started with Huawei Cloud ECS}
 \setheadertitle{Huawei Cloud -- ECS Quick Start Guide}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{1.1.1}
+\setdocversion{1.1.2}
 \setdocdate{2026-08-05}
 \setheaderlogo{common-assets/huawei-logo-header.png}
 \setcoverlogo{common-assets/huawei-logo-cover.png}
@@ -263,6 +264,9 @@ Use \inlinecode{terraform validate} to check syntax before applying changes.
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{1.1.2}{2026-08-08}{
+    \item Fixed stale class options comment in file header.
+  }
   \changelogentry{1.1.1}{2026-08-08}{
     \item Changed table and figure caption labels to black (was Huawei red).
   }

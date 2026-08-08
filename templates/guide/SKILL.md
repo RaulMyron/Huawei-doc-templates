@@ -24,31 +24,28 @@ hard-coded to the Huawei house style.
    - **Title** — e.g. "Provisioning an ECS Instance"
    - **Language** — English (default) or Portuguese
    - **Project name** — used as the folder name (e.g. `ecs-provisioning`)
-   - **Location** — where to create the project folder (default: current
-     workspace). The skill should ask the user; do not assume `samples/`.
 
-2. **Create a self-contained project folder** at `<location>/<project-name>/`:
-   - **Always create a folder** — never scatter files directly in the workspace.
+2. **Create a self-contained project folder** at `documents/<project-name>/`:
+   - **Always create a subfolder inside `documents/`** — never scatter files
+     directly in the workspace root or `documents/` itself.
    - Inside the folder, create:
      - `<filename>.tex` — the document, using the skeleton below.
-     - `.latexmkrc` — with `TEXINPUTS` pointing to this template directory
-       (`templates/guide/`). Compute the relative path from the project folder
-       to `templates/guide/` and set:
+     - `.latexmkrc` — with `TEXINPUTS` pointing to this template directory.
+       From `documents/<project-name>/`, the relative path to
+       `templates/guide/` is `../../templates/guide/`:
        ```perl
-       $ENV{TEXINPUTS} = "<relative_path>:" . ($ENV{TEXINPUTS} || "");
+       $ENV{TEXINPUTS} = "../../templates/guide/:" . ($ENV{TEXINPUTS} || "");
        $pdf_mode = 5;
        $xelatex = 'xelatex -interaction=nonstopmode %O %S';
        ```
-        For example, if the project is at `examples/my-guide/` in the repo,
-        the path is `../templates/guide/`. If inside `examples/guide/pt/`, use `../../../templates/guide/`.
-      - **Timezone:** The cover page shows the compilation date and time
-        automatically (`\today` + `\time`). The template sets a default
-        TZ of `America/Sao_Paulo` (GMT-3). To use a different timezone,
-        override it in the project's `.latexmkrc`:
-        ```perl
-        $ENV{TZ} = "UTC";  # override the template default
-        ```
-    - Any project-specific assets (images, code files) also go in this folder.
+       - **Timezone:** The cover page shows the compilation date and time
+         automatically (`\today` + `\time`). The template sets a default
+         TZ of `America/Sao_Paulo` (GMT-3). To use a different timezone,
+         override it in the project's `.latexmkrc`:
+         ```perl
+         $ENV{TZ} = "UTC";  # override the template default
+         ```
+     - `assets/` subfolder for project-specific images and code files.
 
 3. **Compile and verify** with `latexmk <filename>.tex` from inside the
    project folder.
@@ -272,7 +269,7 @@ screen.}` produces "Figure 1: Console login screen.".
 
 Tables use a Huawei-branded style with a red header bar. The class loads
 `booktabs`, `array`, and `colortbl` (via `xcolor[table]`). Table rules are
-colored in Huawei red and caption labels ("Table N:") are red.
+colored in Huawei red and caption labels ("Table N:") are bold black.
 
 **Rules:**
 - Header row: `\rowcolor{huaweired}` + `\thd{...}` for each cell (white bold on red).

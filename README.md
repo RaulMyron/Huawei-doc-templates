@@ -91,7 +91,7 @@ extension, open the repo root, and save any `.tex` file to auto-compile.
 
 | Template | Skill | Description |
 |---|---|---|
-| [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, callout boxes, badges, changelog. Portuguese (default) and English. |
+| [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, callout boxes, badges, changelog. English (default) and Portuguese. |
 
 See [`templates/guide/SKILL.md`](templates/guide/SKILL.md) for the full command
 and environment reference.
@@ -115,6 +115,11 @@ and environment reference.
 │       ├── guide.cls         # the class — all formatting lives here
 │       ├── .latexmkrc        # latexmk config (XeLaTeX, TZ=America/Sao_Paulo)
 │       └── common-assets/      # logos, sample images, example scripts
+├── documents/               # user-created documents (one subfolder per doc)
+│   └── my-guide/            # example: a new document project
+│       ├── main.tex
+│       ├── .latexmkrc        # TEXINPUTS → ../../templates/guide/
+│       └── assets/           # project-specific images
 └── examples/                 # all example documents and samples
     ├── guide/               # samples for the guide template
     │   ├── pt/               # Portuguese sample

@@ -88,6 +88,13 @@ approval. Changing them breaks existing documents and reproducibility.
 - Use when the changelog grows too large for the PDF.
 - Default: changelog is shown.
 
+### L13. New documents go in `documents/`
+- All user-created documents live in `documents/<doc-name>/` subfolders.
+- The `documents/` folder at the repo root is the default location.
+- Each document is self-contained: `.tex`, `.latexmkrc`, `assets/`.
+- Skills create new document folders inside `documents/` by default.
+- Samples and examples stay in `examples/`; `documents/` is for user work.
+
 ---
 
 ## Project structure
@@ -108,6 +115,7 @@ approval. Changing them breaks existing documents and reproducibility.
         +-- guide.cls         # all formatting lives here
         +-- .latexmkrc        # XeLaTeX, TZ=America/Sao_Paulo
         +-- common-assets/      # logos, sample images, example scripts
++-- documents/               # user-created documents (one subfolder per doc)
 +-- examples/                 # all example documents and samples
     +-- guide/               # samples for the guide template
         +-- pt/               # Portuguese sample
@@ -185,7 +193,7 @@ at the repo root registers `templates/` as a discovery path.
    - `<name>.cls` — the LaTeX class file
    - `SKILL.md` — the skill definition (see format below)
    - `README.md` — human-readable documentation
-   - `.latexmkrc` — latexmk config (XeLaTeX, no TZ)
+   - `.latexmkrc` — latexmk config (XeLaTeX, TZ=America/Sao_Paulo default)
    - `common-assets/` — logos, sample images
    - Samples live in `examples/<name>/pt/` and `examples/<name>/en/` (see below)
 

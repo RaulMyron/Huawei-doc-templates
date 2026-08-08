@@ -31,10 +31,11 @@ language, and content, then compiles and verifies the PDF.
   updates it automatically; on older TeX Live (2023), see
   [Manual setup](#linux) below.
 - **Fonts** (loaded from the OS, not the LaTeX tree):
-  - **HarmonyOS Sans** — body text. Falls back to Liberation Sans → Arial.
-  - **Cascadia Code** — code. Falls back to Consolas → DejaVu Sans Mono.
-  - Documents **always compile** even without brand fonts; missing fonts
-    only reduce visual fidelity.
+  - **HarmonyOS Sans** — body text (required). Fallback: Liberation Sans.
+  - **Cascadia Code** — code (required). Fallback: DejaVu Sans Mono.
+  - `install.sh` installs both brand fonts. Missing fonts trigger a class
+    warning and use the fallback; visual fidelity is reduced but the
+    document still compiles.
 - **OS:** Ubuntu/Debian (WSL or native) for `install.sh`. Manual setup
   available for Fedora and Windows.
 - **opencode** (optional): for the `/skill <name>` workflow.

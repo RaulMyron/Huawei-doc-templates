@@ -80,22 +80,17 @@
   \ClassWarning{guide}{Font "#1" not found; using fallback "#2".
     Install the font for full fidelity.}}
 
+% Main font: HarmonyOS Sans (required) → Liberation Sans (sole fallback)
 \IfFontExistsTF{HarmonyOS Sans}
   {\setmainfont{HarmonyOS Sans}}
    {\lg@warnfont{HarmonyOS Sans}{Liberation Sans}%
-    \IfFontExistsTF{Liberation Sans}
-      {\setmainfont{Liberation Sans}}
-      {\IfFontExistsTF{Arial}
-        {\setmainfont{Arial}}
-         {\lg@warnfont{Arial}{fontspec default}}}}
+    \setmainfont{Liberation Sans}}
 
+% Code font: Cascadia Code (required) → DejaVu Sans Mono (sole fallback)
 \IfFontExistsTF{Cascadia Code}
   {\newfontfamily\consolasfont{Cascadia Code}[Ligatures=NoCommon]}
-  {\lg@warnfont{Cascadia Code}{Consolas}%
-   \IfFontExistsTF{Consolas}
-     {\newfontfamily\consolasfont{Consolas}[Ligatures=NoCommon]}
-     {\lg@warnfont{Consolas}{DejaVu Sans Mono}%
-      \newfontfamily\consolasfont{DejaVu Sans Mono}[Ligatures=NoCommon]}}
+  {\lg@warnfont{Cascadia Code}{DejaVu Sans Mono}%
+   \newfontfamily\consolasfont{DejaVu Sans Mono}[Ligatures=NoCommon]}
 \newcommand{\codefont}{\consolasfont}
 
 % Tamanho base do corpo: 10.5pt com entrelinha ~14pt

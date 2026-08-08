@@ -56,10 +56,12 @@ approval. Changing them breaks existing documents and reproducibility.
 - `install.sh` extracts the name from frontmatter, not from the directory.
 
 ### L8. Font fallback chain
-- Main font: HarmonyOS Sans -> Liberation Sans -> Arial -> fontspec default.
-- Mono font: Cascadia Code -> Consolas -> DejaVu Sans Mono.
-- All font loads use `\IfFontExistsTF` — never hard-fail on a missing font.
-- Documents must always compile, even without brand fonts installed.
+- Main font: HarmonyOS Sans -> Liberation Sans (sole fallback).
+- Mono font: Cascadia Code -> DejaVu Sans Mono (sole fallback).
+- Brand fonts are loaded with `\IfFontExistsTF`; if missing, a single
+  fallback is used with a class warning.
+- Removed fallbacks: Arial, Consolas, fontspec default.
+- `install.sh` installs both brand fonts; the fallbacks are safety nets.
 
 ### L9. Colors are hardcoded to Huawei brand
 - `huaweired` (`#C7000B`), `codebg` (`#F6F8FA`), `codetext` (`#1F2328`),

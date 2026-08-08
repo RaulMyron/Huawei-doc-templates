@@ -206,10 +206,10 @@ check_font() {
     fi
 }
 
-check_font "HarmonyOS Sans"    "body text"      "Liberation Sans"
-check_font "Liberation Sans"   "body fallback"  "Arial"
-check_font "Cascadia Code"     "code font"      "Consolas or DejaVu Sans Mono"
-check_font "DejaVu Sans Mono"  "code fallback"  "fontspec default"
+check_font "HarmonyOS Sans"    "body text (required)"      "Liberation Sans"
+check_font "Liberation Sans"   "body fallback"             "(install fonts-liberation)"
+check_font "Cascadia Code"     "code font (required)"      "DejaVu Sans Mono"
+check_font "DejaVu Sans Mono"  "code fallback"             "(preinstalled on most distros)"
 
 # ── Install opencode skills ──
 log_step "Installing opencode skills"

@@ -66,9 +66,11 @@ hard-coded to the Huawei house style.
 - **fvextra ≥ 1.5** — provides `backgroundcolor` for code blocks. TeX Live
   2024+ includes it; on older installs, update from CTAN or run `install.sh`.
 - **Fonts** are loaded from the OS, not the LaTeX tree:
-  - *HarmonyOS Sans* (body text) — falls back to Liberation Sans → Arial.
-  - *Cascadia Code* (code) — falls back to Consolas, then DejaVu Sans Mono.
-  The document always compiles; missing fonts only reduce fidelity.
+  - *HarmonyOS Sans* (body text) — required. Falls back to Liberation Sans
+    (sole fallback) with a warning if missing.
+  - *Cascadia Code* (code) — required. Falls back to DejaVu Sans Mono
+    (sole fallback) with a warning if missing.
+  `install.sh` installs both brand fonts automatically.
 
 ---
 

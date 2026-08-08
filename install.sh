@@ -9,19 +9,35 @@
 # Usage:
 #   ./install.sh                # full install (idempotent — safe to re-run)
 #   ./install.sh --yes          # non-interactive (skip confirmation prompt)
+#   ./install.sh --clone        # clone repo first, then install (for curl one-liner)
 # ──────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 # ── Parse arguments ──
 AUTO_YES=false
+DO_CLONE=false
 for arg in "$@"; do
     case "$arg" in
         --yes|-y) AUTO_YES=true ;;
+        --clone)  DO_CLONE=true ;;
         *) echo "Unknown argument: $arg"; exit 1 ;;
     esac
 done
+
+# ── If --clone, fetch the repo first (supports curl | bash one-liner) ──
+REPO_URL="https://github.com/wallacelw/Huawei-doc-templates.git"
+if [[ "$DO_CLONE" == true ]]; then
+    CLONE_DIR="Huawei-doc-templates"
+    if [[ -d "$CLONE_DIR" ]]; then
+        echo "  $CLONE_DIR already exists — skipping clone"
+    else
+        git clone "$REPO_URL" "$CLONE_DIR"
+    fi
+    cd "$CLONE_DIR"
+    SCRIPT_DIR="$(pwd)"
+else
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 
 # ── Colors (TTY-aware) ──
 if [ -t 1 ]; then

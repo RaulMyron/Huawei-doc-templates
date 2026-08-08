@@ -84,7 +84,7 @@ approval. Changing them breaks existing documents and reproducibility.
 +-- install.sh               # one-command setup
 +-- Makefile                 # build convenience (make samples/examples/clean)
 +-- opencode.json            # skill discovery (scans templates/)
-+-- README.md                # collection index
++-- README.md                # comprehensive guide for all templates
 +-- LICENSE                  # MIT
 +-- .vscode/settings.json    # latexmk as default recipe
 +-- templates/

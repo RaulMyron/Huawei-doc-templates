@@ -26,6 +26,8 @@
 \DeclareOption{portuguese}{\@portuguesetrue}
 \newif\if@showtime \@showtimetrue
 \DeclareOption{notime}{\@showtimefalse}
+\newif\if@changelog \@changelogtrue
+\DeclareOption{nochangelog}{\@changelogfalse}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 \LoadClass[a4paper,10pt]{article}
@@ -486,5 +488,12 @@
   \end{itemize}
   \endgroup
 }
+
+% Disable changelog when [nochangelog] option is active.
+% The environment and entries become no-ops (content is absorbed, nothing rendered).
+\if@changelog\else
+  \renewenvironment{changelog}{}{}
+  \renewcommand{\changelogentry}[3]{\ignorespaces}
+\fi
 
 \endinput

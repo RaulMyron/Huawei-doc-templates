@@ -70,9 +70,23 @@ approval. Changing them breaks existing documents and reproducibility.
 - Do not change these values. They match the Huawei house style.
 
 ### L10. Body order is fixed
-- `\makecover` -> `\maketoc` -> `\startbody` -> sections.
+- `\makecover` -> `\maketoc` -> `\startbody` -> sections -> `changelog` -> `\end{document}`.
 - `\startbody` resets page numbering to 1.
 - Do not reorder or skip these commands.
+
+### L11. Auto-version on every AI-assisted change
+- Every AI-assisted edit to a document must bump `\setdocversion` and add a
+  `\changelogentry` (newest first) in the `changelog` block.
+- Bump levels: patch (typo/wording), minor (new content/section), major
+  (structural/breaking).
+- Recompile after bumping. The PDF must always reflect the latest version.
+- See `SKILL.md` "Versioning workflow" for the full procedure.
+
+### L12. Changelog can be disabled with `[nochangelog]`
+- The `nochangelog` class option makes `changelog` and `\changelogentry`
+  no-ops (content stays in `.tex` but nothing is rendered).
+- Use when the changelog grows too large for the PDF.
+- Default: changelog is shown.
 
 ---
 
@@ -228,6 +242,9 @@ at the repo root registers `templates/` as a discovery path.
 
 - **`guide.cls`** — the single source of truth for all formatting. Changes
   here affect every document. Test with both samples before committing.
+- **`.tex` files** — content only. No formatting overrides, no `\usepackage`,
+  no `\renewcommand`. All look-and-feel comes from `guide.cls`. After any
+  AI-assisted edit, bump version and add changelog entry (see L11).
 - **`SKILL.md`** — canonical command and environment reference. Must stay in
   sync with `guide.cls`. Every command in the class must be documented here.
   Every locked decision must be respected.

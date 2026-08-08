@@ -142,6 +142,13 @@ the user asks.
   \item <step 2>
 \end{enumerate}
 
+% --- Changelog (after all sections, before \end{document}) ---
+\begin{changelog}
+  \changelogentry{1.0.0}{2026-08-08}{
+    \item Initial version.
+  }
+\end{changelog}
+
 \end{document}
 ```
 
@@ -220,7 +227,7 @@ class. Do not pass `enumitem` options unless asked.
 |---|---|
 | `\begin{code} ... \end{code}` | Code block: `#F6F8FA` bg, Cascadia Code 10pt, `#1F2328` text, left-indented, no border. **Verbatim** — `_{}^\` are literal, no escaping. Clean copy-paste from PDF. |
 | `\begin{code}[bash] ... \end{code}` | Same; the `[bash]` hint is accepted for backward compatibility but ignored (no syntax highlighting). |
-| `\codefile[linguagem]{arquivo}` | Code block from an external file. |
+| `\codefile[language]{file}` | Code block from an external file. |
 | `\inlinecode{...}` | Inline monospace code. **Standard LaTeX escaping rules apply** here. |
 | `\param{...}` | Filename/parameter in italic (e.g. `\param{provider.tf}`). |
 
@@ -321,12 +328,50 @@ Example:
 \end{changelog}
 ```
 
+### Versioning workflow (for AI-assisted edits)
+
+**Every AI-assisted change to a document must bump the version and add a
+changelog entry.** This ensures the PDF always reflects what changed and when.
+
+#### Steps (after making content edits):
+
+1. **Determine the bump level:**
+   - **Patch** (`1.0.0` → `1.0.1`): typo fixes, wording tweaks, small corrections.
+   - **Minor** (`1.0.0` → `1.1.0`): new sections, new content, new features.
+   - **Major** (`1.0.0` → `2.0.0`): structural changes, removed sections, breaking reorganization.
+
+2. **Update `\setdocversion{...}`** in the preamble with the new version.
+
+3. **Add a `\changelogentry` at the top of the `changelog` block** (newest first):
+   ```latex
+   \changelogentry{1.0.1}{2026-08-08}{
+     \item Fixed typo in section 2.
+     \item Updated ECS instance type table.
+   }
+   ```
+
+4. **Recompile** with `latexmk main.tex` to produce the updated PDF.
+
+5. **Report** the new version number to the user.
+
+#### Disabling the changelog
+
+When the changelog becomes too large, add the `nochangelog` class option to
+suppress it from the PDF:
+
+```latex
+\documentclass[nochangelog]{guide}
+```
+
+The environment and all `\changelogentry` calls become no-ops — nothing is
+rendered, but the content remains in the `.tex` file for future reference.
+
 ---
 
 ## Class options
 
 ```latex
-\documentclass[portuguese,indentbody,notime]{guide}
+\documentclass[portuguese,indentbody,notime,nochangelog]{guide}
 ```
 - `portuguese` — switches all predefined labels to Portuguese and loads `babel`
   with `brazilian`. Default off (English).
@@ -334,6 +379,10 @@ Example:
   off (text flush to the left margin).
 - `notime` — hides the compilation time on the cover page. Default off
   (time is shown).
+- `nochangelog` — suppresses the changelog section entirely. The `changelog`
+  environment and `\changelogentry` calls become no-ops (content stays in the
+  `.tex` file but nothing is rendered). Use when the changelog grows too large.
+  Default off (changelog is shown).
 
 ---
 
@@ -400,10 +449,13 @@ The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
    `latexmk` (handles it via `.latexmkrc`).
 2. Edit `.tex` files for content; touch `guide.cls` only for look-and-feel
    changes the user explicitly requested.
-3. Keep body order: `\makecover` → `\maketoc` → `\startbody` → sections.
+3. Keep body order: `\makecover` → `\maketoc` → `\startbody` → sections →
+   `changelog` → `\end{document}`.
 4. Inside `code`, write literal code. In prose, use `\inlinecode{...}` with normal
    escaping.
 5. After edits, compile and check the PDF (TOC + page numbers need the
    second pass).
-6. If a font is missing, the class warns and falls back — the build still
+6. **After any content change, bump the version and add a changelog entry**
+   (see Versioning workflow above). Recompile to produce the updated PDF.
+7. If a font is missing, the class warns and falls back — the build still
    succeeds; surface the warning to the user but do not block.

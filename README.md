@@ -37,14 +37,14 @@ language, and content, then compiles and verifies the PDF.
 ## Manual usage
 
 ```bash
-cd templates/guide/samples/pt && latexmk main.tex   # Portuguese
-cd templates/guide/samples/en && latexmk main.tex   # English
+cd examples/guide/pt && latexmk main.tex   # Portuguese
+cd examples/guide/en && latexmk main.tex   # English
 ```
 
 Or with raw XeLaTeX (run twice for the TOC):
 
 ```bash
-cd templates/guide/samples/pt
+cd examples/guide/pt
 xelatex main.tex && xelatex main.tex
 ```
 

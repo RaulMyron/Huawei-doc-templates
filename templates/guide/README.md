@@ -118,9 +118,9 @@ differs by operating system — follow the section for yours.
     - Without these, the template falls back to **DejaVu Sans Mono** (preinstalled
       on virtually all Linux distros) and still compiles.
 
-4. **Compile** — in the sample folder (e.g., `samples/pt/`):
+4. **Compile** — in the sample folder (e.g., `examples/guide/pt/`):
    ```
-   cd samples/pt
+   cd examples/guide/pt
    xelatex main.tex
    xelatex main.tex
    ```
@@ -157,7 +157,7 @@ just open the repo root and start editing.
    repo root. The `.vscode/settings.json` at the root is pre-configured for
    XeLaTeX (via `latexmk`), so LaTeX Workshop never falls back to pdflatex.
 
-4. **Open `samples/pt/main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
+4. **Open `examples/guide/pt/main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
    Workshop compiles with XeLaTeX automatically (two passes for the TOC) and
    opens the PDF preview in a side tab.
 
@@ -248,7 +248,7 @@ so `guide.cls` and `assets/` are found from the template root.
 **Portuguese** (default):
 
 ```bash
-cd samples/pt
+cd examples/guide/pt
 xelatex main.tex      # run TWICE so the TOC and page numbers are correct
 xelatex main.tex
 ```
@@ -256,7 +256,7 @@ xelatex main.tex
 **English** (uses the `[english]` class option):
 
 ```bash
-cd samples/en
+cd examples/guide/en
 xelatex main.tex      # run TWICE so the TOC and page numbers are correct
 xelatex main.tex
 ```
@@ -265,8 +265,8 @@ xelatex main.tex
 XeLaTeX as the default engine, so no `-xelatex` flag is needed):
 
 ```bash
-cd samples/pt && latexmk main.tex    # Portuguese
-cd samples/en && latexmk main.tex    # English
+cd examples/guide/pt && latexmk main.tex    # Portuguese
+cd examples/guide/en && latexmk main.tex    # English
 ```
 
 `latexmk` needs Perl — see Environment setup above.

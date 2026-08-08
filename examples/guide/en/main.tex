@@ -30,6 +30,13 @@
 % ---- BODY (restarts page numbering at 1) ---------------------------
 \startbody
 
+\begin{infobox}
+This document demonstrates the \code{guide} template (\code{guide.cls}) for
+Huawei Cloud guides. It exercises all available commands and environments:
+cover page, table of contents, objectives, code blocks, images, callouts,
+badge, changelog, and the \code{\textbackslash menu} command for menu paths.
+\end{infobox}
+
 % =====================================================================
 %  Chapter 1 — Provision an Elastic Cloud Server
 % =====================================================================
@@ -65,7 +72,7 @@ consult the official Huawei Cloud documentation.
   \item In the Console, open the service catalog and select
         \textbf{Elastic Cloud Server (ECS)}.
 
-  \imagemc{../../assets/exemplo-menu.png}{Figure 1 -- Service catalog in the Console.}
+  \imagemc{assets/exemplo-menu.png}{Figure 1 -- Service catalog in the Console.}
 
   \item Click \textbf{Create ECS} and fill in the basic configuration:
 
@@ -83,7 +90,7 @@ Security Group: sg-ssh (allows inbound TCP 22)
         earlier. Click \textbf{Create Now} and wait for the status to change
         to \textbf{Running}.
 
-  \imagem{../../assets/exemplo-login.png}
+  \imagem{assets/exemplo-login.png}
 
   \nota{The instance is assigned a public IP (EIP). If you need a fixed IP,
     allocate a dedicated EIP and bind it after creation.}

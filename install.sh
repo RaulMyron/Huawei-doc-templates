@@ -336,8 +336,8 @@ fi
 # ── Test compilation ──
 log_step "Test compilation"
 
-PT_DIR="$SCRIPT_DIR/templates/guide/samples/pt"
-EN_DIR="$SCRIPT_DIR/templates/guide/samples/en"
+PT_DIR="$SCRIPT_DIR/examples/guide/pt"
+EN_DIR="$SCRIPT_DIR/examples/guide/en"
 SG_DIR="$SCRIPT_DIR/examples/setup-guide"
 
 compile_sample() {
@@ -379,8 +379,8 @@ log_dim "1. Open this project in opencode"
 log_dim "2. Run /skill huawei-template-guide to create a new guide"
 log_dim "3. Or open in VS Code — save a .tex file to auto-compile"
 log_dim "4. Or compile manually:"
-log_dim "   cd templates/guide/samples/pt && latexmk main.tex   # Portuguese"
-log_dim "   cd templates/guide/samples/en && latexmk main.tex   # English"
+log_dim "   cd examples/guide/pt && latexmk main.tex   # Portuguese"
+    log_dim "   cd examples/guide/en && latexmk main.tex   # English"
 echo ""
 echo -e "  ${C_BOLD}Optional:${C_RESET}"
 log_dim "Consolas is optional — Cascadia Code is the default code font"

@@ -80,6 +80,7 @@ approval. Changing them breaks existing documents and reproducibility.
 .
 +-- AGENTS.md               # this file
 +-- install.sh               # one-command setup
++-- Makefile                 # build convenience (make samples/examples/clean)
 +-- opencode.json            # skill discovery (scans templates/)
 +-- README.md                # collection index
 +-- LICENSE                  # MIT
@@ -90,11 +91,11 @@ approval. Changing them breaks existing documents and reproducibility.
         +-- README.md         # human-readable docs
         +-- guide.cls         # all formatting lives here
         +-- .latexmkrc        # XeLaTeX, TZ=America/Sao_Paulo
-        +-- assets/           # logos and sample images
-        +-- samples/
-            +-- pt/            # Portuguese sample
-            +-- en/            # English sample
-+-- examples/                 # reference projects using the template
+        +-- assets/           # logos, sample images, example scripts
++-- examples/                 # all example documents and samples
+    +-- guide/               # samples for the guide template
+        +-- pt/               # Portuguese sample
+        +-- en/               # English sample
     +-- setup-guide/          # ECS + SSH + MaaS gateway setup guide
         +-- setup-guide.tex
         +-- .latexmkrc        # TEXINPUTS + TZ override
@@ -114,6 +115,24 @@ approval. Changing them breaks existing documents and reproducibility.
 - Template `.latexmkrc` files: `$ENV{TZ} = "America/Sao_Paulo"` (locked, see L4).
 - Project `.latexmkrc` files: can override TZ (last one wins).
 - `\today` and `\time` respect the TZ environment variable.
+
+---
+
+## Sample and example conventions
+
+- **Two samples per template**: each template `<name>` has exactly two samples
+  in `examples/<name>/pt/` and `examples/<name>/en/` (Portuguese and English).
+  Samples demonstrate all available commands and environments.
+- **Template explanation**: each sample includes an `\begin{infobox}` on the
+  first page explaining which template it uses and what it demonstrates.
+- **Setup guide is additional**: `examples/setup-guide/` is not a sample — it
+  is a real-world document used for validation and actual installation
+  instructions. It exercises features the samples don't (e.g. `\menu`,
+  `\badge`, multi-entry changelog).
+- **Setup guide PDF in root**: `make examples` copies `setup-guide.pdf` to the
+  repo root for easy reading. The copy is gitignored (build artifact).
+- **Self-contained**: each sample/example has its own `.latexmkrc` with
+  `TEXINPUTS` pointing to `templates/<name>/`. Never share `.latexmkrc` files.
 
 ---
 
@@ -139,7 +158,7 @@ at the repo root registers `templates/` as a discovery path.
    - `README.md` — human-readable documentation
    - `.latexmkrc` — latexmk config (XeLaTeX, no TZ)
    - `assets/` — logos, sample images
-   - `samples/pt/` and `samples/en/` — sample documents, each with `.latexmkrc`
+   - Samples live in `examples/<name>/pt/` and `examples/<name>/en/` (see below)
 
 2. **SKILL.md format** — must start with YAML frontmatter:
    ```yaml
@@ -182,7 +201,7 @@ at the repo root registers `templates/` as a discovery path.
 1. Define the command in `guide.cls` with a `\newcommand`.
 2. Use internal prefix `\lg@` for internal macros (e.g. `\lg@docversion`).
 3. Add the command to the reference tables in `SKILL.md` and `README.md`.
-4. Demonstrate the command in both samples (`samples/pt/` and `samples/en/`).
+4. Demonstrate the command in both samples (`examples/guide/pt/` and `examples/guide/en/`).
 5. Compile both samples to verify: `latexmk main.tex` from each folder.
 6. Commit only if both samples compile without errors.
 

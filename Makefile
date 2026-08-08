@@ -8,8 +8,8 @@
 
 .PHONY: all samples examples clean clean-samples clean-examples
 
-PT_DIR   = templates/guide/samples/pt
-EN_DIR   = templates/guide/samples/en
+PT_DIR   = examples/guide/pt
+EN_DIR   = examples/guide/en
 SG_DIR   = examples/setup-guide
 
 all: samples examples
@@ -20,6 +20,7 @@ samples:
 
 examples:
 	cd $(SG_DIR) && latexmk setup-guide.tex
+	cp $(SG_DIR)/setup-guide.pdf setup-guide.pdf
 
 clean: clean-samples clean-examples
 
@@ -29,3 +30,4 @@ clean-samples:
 
 clean-examples:
 	cd $(SG_DIR) && latexmk -C setup-guide.tex
+	rm -f setup-guide.pdf

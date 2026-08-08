@@ -40,7 +40,7 @@ hard-coded to the Huawei house style.
        $xelatex = 'xelatex -interaction=nonstopmode %O %S';
        ```
         For example, if the project is at `examples/my-guide/` in the repo,
-        the path is `../templates/guide/`. If inside `samples/pt/`, use `../../`.
+        the path is `../templates/guide/`. If inside `examples/guide/pt/`, use `../../../templates/guide/`.
       - **Timezone:** The cover page shows the compilation date and time
         automatically (`\today` + `\time`). The template sets a default
         TZ of `America/Sao_Paulo` (GMT-3). To use a different timezone,
@@ -373,8 +373,8 @@ xelatex main.tex && xelatex main.tex   # two passes for TOC
 **Never use pdflatex** — the class loads `fontspec` which requires XeLaTeX.
 
 The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
-`guide.cls` and `assets/` are found. The existing `samples/pt/` and
-`samples/en/` folders are pre-configured examples.
+`guide.cls` and `assets/` are found. The existing `examples/guide/pt/` and
+`examples/guide/en/` folders are pre-configured examples.
 
 ---
 

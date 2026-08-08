@@ -77,7 +77,7 @@ avançadas, consulte a documentação oficial da Huawei Cloud.
 
   \item Após o login, o painel principal do Console é exibido. No canto
         superior esquerdo, abra o catálogo de serviços clicando no ícone de
-        menu.
+        menu e navegue até \menu{Console, Elastic Cloud Server}.
 
   \imagem{assets/exemplo-menu.png}
 
@@ -184,7 +184,10 @@ provider "huaweicloud" {
 \end{codigo}
 
   Substitua os valores de \param{access\_key} e \param{secret\_key} pelas
-  credenciais obtidas na seção anterior.
+  credenciais obtidas na seção anterior. Alternativamente, você pode incluir
+  o código a partir de um arquivo externo:
+
+  \codigoarquivo[bash]{assets/example-script.sh}
 
   \item No terminal, na pasta do projeto, inicialize o diretório de trabalho
         do \code{terraform}:

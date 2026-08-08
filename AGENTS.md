@@ -221,10 +221,15 @@ at the repo root registers `templates/` as a discovery path.
 
 - **`guide.cls`** — the single source of truth for all formatting. Changes
   here affect every document. Test with both samples before committing.
-- **`SKILL.md`** — must stay in sync with `guide.cls`. Every command in the
-  class must be documented here. Every locked decision must be respected.
-- **`README.md`** (template) — human-readable version of SKILL.md. Keep the
-  command tables in sync.
+- **`SKILL.md`** — canonical command and environment reference. Must stay in
+  sync with `guide.cls`. Every command in the class must be documented here.
+  Every locked decision must be respected.
+- **`README.md`** (root) — comprehensive installation, setup, and project info
+  for all templates. The single source of truth for environment setup,
+  requirements, compilation, and project layout.
+- **`README.md`** (template) — brief template-specific details only (class
+  options, format tokens, customization). Points to root README for setup and
+  SKILL.md for commands. Do not duplicate content from either.
 - **`AGENTS.md`** (this file) — update when standards change or new locked
   decisions are made.
 - **Samples** — must always compile. They are the user's reference. Any new

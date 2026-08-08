@@ -63,6 +63,8 @@ hard-coded to the Huawei house style.
   `pdflatex` will fail. Always compile with `xelatex` (or `lualatex`).
 - **Compile twice** on the first run so the TOC and page numbers settle.
   `latexmk` handles this automatically (`.latexmkrc` is included).
+- **fvextra ≥ 1.5** — provides `backgroundcolor` for code blocks. TeX Live
+  2024+ includes it; on older installs, update from CTAN or run `install.sh`.
 - **Fonts** are loaded from the OS, not the LaTeX tree:
   - *HarmonyOS Sans* (body text) — falls back to Liberation Sans → Arial.
   - *Cascadia Code* (code) — falls back to Consolas, then DejaVu Sans Mono.
@@ -73,23 +75,26 @@ hard-coded to the Huawei house style.
 ## Project layout (this directory)
 
 ```
-.
+templates/guide/
 ├── guide.cls          # the class — ALL formatting lives here
-├── README.md           # human docs
+├── README.md           # human docs (brief — see root README for setup)
 ├── SKILL.md            # this file (opencode skill)
 ├── .latexmkrc          # latexmk config (XeLaTeX by default)
-├── assets/
-│   ├── huawei-logo-header.png   # header logo
-│   ├── huawei-logo-cover.png    # cover logo
-│   ├── exemplo-menu.png         # sample image
-│   └── exemplo-login.png        # sample image
-└── samples/            # self-contained project folders by language
-    ├── pt/
-    │   ├── .latexmkrc  # TEXINPUTS=../../ so guide.cls is found
-    │   └── main.tex    # Portuguese sample (reference)
-    └── en/
-        ├── .latexmkrc
-        └── main.tex    # English sample (reference)
+└── assets/
+    ├── huawei-logo-header.png   # header logo
+    ├── huawei-logo-cover.png    # cover logo
+    ├── exemplo-menu.png         # sample image
+    ├── exemplo-login.png        # sample image
+    └── example-script.sh        # example code file for \codigoarquivo
+
+# Samples live in examples/guide/ (not here):
+examples/guide/
+├── pt/
+│   ├── .latexmkrc  # TEXINPUTS → ../../../templates/guide/
+│   └── main.tex    # Portuguese sample (reference)
+└── en/
+    ├── .latexmkrc
+    └── main.tex    # English sample (reference)
 ```
 
 **Rule of thumb:** content/structure goes in `.tex` files; look-and-feel goes

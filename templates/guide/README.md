@@ -4,517 +4,70 @@ A LaTeX template that produces a Huawei Cloud guide PDF: cover page, header,
 table of contents, giant chapter numbers, objectives box, code blocks,
 callout boxes, badges, colors, spacing, and fonts.
 
-> **Language note:** by default the guide renders in **Portuguese** — the
-> class loads `babel` with the `brazilian` language and built-in labels such as
-> *Sumário*, *Objetivo Geral:*, *Objetivo:*, *Pré-requisitos:* and
-> *Passo a passo:* are in Portuguese. Pass the **`english`** class option
-> (`\documentclass[english]{guide}`) to switch all labels to English and load
-> `babel` with `english` instead. See [Class options](#class-options) below.
+> **Setup:** see the [root README](../../README.md) for installation,
+> environment setup, VS Code configuration, and compilation instructions.
+> See [SKILL.md](SKILL.md) for the full command and environment reference.
 
-## Project structure
+## Language
 
-```
-.
-├── guide.cls          # the class — all formatting lives here
-├── README.md           # this file (human guide)
-├── SKILL.md            # agent orientation
-├── .latexmkrc          # latexmk config (uses XeLaTeX by default)
-├── assets/
-│   ├── huawei-logo-header.png   # header logo
-│   ├── huawei-logo-cover.png    # cover logo
-│   ├── exemplo-menu.png         # sample image
-│   └── exemplo-login.png        # sample image
-└── samples/            # self-contained project folders by language
-    ├── pt/
-    │   ├── .latexmkrc  # TEXINPUTS=../../ so guide.cls is found
-    │   └── main.tex    # sample document in Portuguese (starting point)
-    └── en/
-        ├── .latexmkrc
-        └── main.tex    # sample document in English (uses [english] option)
-```
+By default the guide renders in **Portuguese** — the class loads `babel` with
+the `brazilian` language and built-in labels such as *Sumário*,
+*Objetivo Geral:*, *Objetivo:*, *Pré-requisitos:* and *Passo a passo:* are in
+Portuguese. Pass the **`english`** class option
+(`\documentclass[english]{guide}`) to switch all labels to English and load
+`babel` with `english` instead.
 
-## Environment setup
-
-The template needs XeLaTeX (or LuaLaTeX) and a couple of system fonts. Setup
-differs by operating system — follow the section for yours.
-
-### Windows
-
-1. **Install MiKTeX** — download the 64-bit installer from
-   <https://miktex.org/download> and follow the wizard with the default options.
-   Keep **"Install missing packages on-the-fly"** enabled so packages like
-   `fontspec` are downloaded automatically on first compile. (TeX Live
-   <https://www.tug.org/texlive/> is an alternative; MiKTeX is lighter on
-   Windows.)
-
-2. **Verify `xelatex`** — open Command Prompt or PowerShell and run
-   `xelatex --version`. If you get "command not found", restart the computer
-   (the installer adjusts the PATH) or manually add the MiKTeX `bin` folder —
-   e.g. `C:\Users\YOUR_USER\AppData\Local\Programs\MiKTeX\miktex\bin\x64` — to
-   the environment variables.
-
-3. **Install the fonts** (optional, for full fidelity) — install **HarmonyOS Sans**
-   and **Cascadia Code** via the Windows Fonts control panel (right-click the
-   `.ttf` → Install). Without them the template falls back to Liberation Sans /
-   Arial and Consolas / DejaVu Sans Mono and still compiles.
-
-4. **Compile** — open a Command Prompt in the project folder and run:
-   ```
-   xelatex main.tex
-   xelatex main.tex
-   ```
-   Run **twice** so the TOC and page numbers settle. To automate, use
-   `latexmk -xelatex main.tex` (needs Perl — install
-   [Strawberry Perl](https://strawberryperl.com/) if missing).
-
-5. **Missing packages** — if a compile error mentions a missing package, MiKTeX
-   usually prompts to install it automatically — accept.
-
-6. **Timezone note** — the `.latexmkrc` sets `TZ=America/Sao_Paulo` for the
-   cover page timestamp. On Windows, `TZ` may not be respected by Perl/TeX.
-   If the cover time is wrong, set it manually in your environment before
-   compiling: `set TZ=America/Sao_Paulo` (Command Prompt) or
-   `$env:TZ="America/Sao_Paulo"` (PowerShell).
-
-### Linux
-
-1. **Install TeX Live and latexmk.**
-
-   Debian/Ubuntu (minimal — provides `xelatex`, every package the template
-   needs, and Brazilian Portuguese babel support):
-   ```
-   sudo apt install texlive-xetex texlive-lang-portuguese latexmk
-   ```
-   Fedora (minimal):
-   ```
-   sudo dnf install texlive-collection-xetex texlive-collection-latexextra \
-                     texlive-collection-lang-portuguese latexmk
-   ```
-   Fallback that pulls in everything (~5–6 GB; simplest if a package is
-   missing): `sudo apt install texlive-full` (Debian/Ubuntu) or
-   `sudo dnf install texlive-scheme-full` (Fedora).
-
-2. **Verify `xelatex`** — run `xelatex --version`. Distro packages put the
-   binary in `/usr/bin` (no PATH setup needed). If you installed upstream TeX
-   Live via `install-tl`, add its bin folder to `PATH`, e.g.
-   `export PATH="/usr/local/texlive/2024/bin/x86_64-linux:$PATH"` in `~/.bashrc`.
-
-3. **Install the fonts** (optional, for full fidelity) — copy font files into
-   `~/.local/share/fonts/` (current user) or `/usr/local/share/fonts/` (all
-   users), then rebuild the cache:
-   ```
-   fc-cache -f
-   ```
-    - **HarmonyOS Sans** — free for commercial use; download from
-       [GitHub](https://github.com/zhiyuan1i/fonts-harmonyos-sans-cn/releases)
-       (`.deb` package) or from
-       [Huawei Design](https://developer.huawei.com/consumer/en/design/resource/).
-    - **Cascadia Code** — open source from Microsoft, install via
-      `sudo apt install fonts-cascadia-code` (or download from
-       [GitHub](https://github.com/microsoft/cascadia-code)).
-    - **Consolas** — optional fallback; a Microsoft font, not freely
-      redistributable. Copy from a licensed Windows install
-      (`C:\Windows\Fonts\consola*.ttf`) if you have one.
-    - Without these, the template falls back to **DejaVu Sans Mono** (preinstalled
-      on virtually all Linux distros) and still compiles.
-
-4. **Compile** — in the sample folder (e.g., `examples/guide/pt/`):
-   ```
-   cd examples/guide/pt
-   xelatex main.tex
-   xelatex main.tex
-   ```
-   Run **twice** so the TOC and page numbers settle. Or automate with
-   `latexmk main.tex` (Perl is preinstalled on Linux, so `latexmk`
-   works once the package above is installed).
-
-5. **Missing packages** — install the relevant `texlive-*` package via your
-   package manager, or fall back to `texlive-full` / `texlive-scheme-full`.
-
-### Code editor — VS Code with LaTeX Workshop (recommended)
-
-[VS Code](https://code.visualstudio.com/) with the **LaTeX Workshop** extension
-gives you syntax highlighting, compile-on-save, a live PDF preview side-by-side,
-and SyncTeX (click in the PDF to jump to the source line, and vice versa).
-
-This template ships a ready-made `.vscode/settings.json` at the repo root
-pre-configured for **latexmk (XeLaTeX)**, so the build works out of the box —
-just open the repo root and start editing.
-
-#### Step-by-step setup
-
-1. **Install VS Code** — download from <https://code.visualstudio.com/> and
-   follow the installer for your OS.
-
-2. **Install the LaTeX Workshop extension** — open VS Code, go to the Extensions
-   sidebar (`Ctrl+Shift+X` / `Cmd+Shift+X`), search for **LaTeX Workshop**
-   (publisher: *James Yu*), and click **Install**. Or from the terminal:
-   ```bash
-   code --install-extension James-Yu.latex-workshop
-   ```
-
-3. **Open the project in VS Code** — `File → Open Folder…` and select the
-   repo root. The `.vscode/settings.json` at the root is pre-configured for
-   XeLaTeX (via `latexmk`), so LaTeX Workshop never falls back to pdflatex.
-
-4. **Open `examples/guide/pt/main.tex`** and press `Ctrl+S` (`Cmd+S` on macOS) to save. LaTeX
-   Workshop compiles with XeLaTeX automatically (two passes for the TOC) and
-   opens the PDF preview in a side tab.
-
-5. **View the PDF** — if the preview doesn't open automatically, click the
-   **View LaTeX PDF** icon in the top-right of the editor, or press
-   `Ctrl+Alt+V` (`Cmd+Option+V` on macOS).
-
-#### Useful shortcuts
-
-| Action | Shortcut |
-|---|---|
-| Build (compile) | `Ctrl+Alt+B` / `Cmd+Option+B` |
-| View PDF | `Ctrl+Alt+V` / `Cmd+Option+V` |
-| SyncTeX: PDF → source | `Ctrl+click` in the PDF |
-| SyncTeX: source → PDF | `Ctrl+Alt+J` / `Cmd+Option+J` |
-
-#### What `.vscode/settings.json` configures
-
-```json
-{
-  "latex-workshop.latex.recipe.default": "latexmk",
-  "latex-workshop.latex.recipes": [
-    { "name": "latexmk", "tools": ["latexmk"] },
-    { "name": "xelatex×2", "tools": ["xelatex", "xelatex"] },
-    { "name": "xelatex",   "tools": ["xelatex"] }
-  ],
-  "latex-workshop.latex.tools": [
-    {
-      "name": "latexmk",
-      "command": "latexmk",
-      "args": ["-cd", "-xelatex", "-interaction=nonstopmode", "%DOC%"]
-    },
-    {
-      "name": "xelatex",
-      "command": "xelatex",
-      "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"]
-    }
-  ],
-  "latex-workshop.view.pdf.viewer": "tab",
-  "latex-workshop.latex.autoBuild.run": "onSave"
-}
-```
-
-- **`latexmk`** recipe — the default. Reads `.latexmkrc` (which sets XeLaTeX
-  and `TEXINPUTS`), handles multi-pass automatically, and finds `guide.cls`
-  from the parent template directory.
-- **`xelatex×2`** / **`xelatex`** recipes — available for manual use; note
-  these bypass `.latexmkrc` so `TEXINPUTS` must be set separately.
-- **`viewer: tab`** — opens the PDF inside VS Code instead of an external app.
-- **`autoBuild: onSave`** — recompiles every time you save.
-
-> **pdflatex won't work.** The class loads `fontspec` (system fonts), which
-> requires XeLaTeX or LuaLaTeX. The included settings enforce XeLaTeX so you
-> don't accidentally use pdflatex.
-
-#### Optional: spell and grammar checking
-
-Install the **LTeX** extension (publisher: *valentjn*) for inline grammar and
-spell checking in LaTeX text. It supports both Portuguese and English —
-configure it per workspace to match your `guide` language option.
-
-#### Alternative: TeXworks
-
-TeXworks (bundled with MiKTeX on Windows; available with TeX Live on Linux) is
-a simpler editor with a built-in PDF preview. Choose it if you prefer a
-lightweight single-purpose tool over VS Code.
-
----
-
-## Requirements
-
-- **Engine:** XeLaTeX **or** LuaLaTeX (required — the template uses `fontspec`).
-  `pdflatex` **does not** work.
-- **Fonts** (installed on the operating system, not in the LaTeX tree):
-  - **HarmonyOS Sans** — body text. If absent, it falls back automatically to
-    *Liberation Sans* / *Arial* and emits a warning.
-  - **Cascadia Code** — code. If absent, falls back to *Consolas*, then
-    *DejaVu Sans Mono*.
-
-  The swap is automatic: the document always compiles, but for full fidelity
-  install both fonts.
-
-## How to compile
-
-Each `samples/<lang>/` folder has a `.latexmkrc` that sets `TEXINPUTS=../../`
-so `guide.cls` and `assets/` are found from the template root.
-
-**Portuguese** (default):
-
-```bash
-cd examples/guide/pt
-xelatex main.tex      # run TWICE so the TOC and page numbers are correct
-xelatex main.tex
-```
-
-**English** (uses the `[english]` class option):
-
-```bash
-cd examples/guide/en
-xelatex main.tex      # run TWICE so the TOC and page numbers are correct
-xelatex main.tex
-```
-
-(or `lualatex main.tex`). With `latexmk` (the included `.latexmkrc` sets
-XeLaTeX as the default engine, so no `-xelatex` flag is needed):
-
-```bash
-cd examples/guide/pt && latexmk main.tex    # Portuguese
-cd examples/guide/en && latexmk main.tex    # English
-```
-
-`latexmk` needs Perl — see Environment setup above.
-
-### Timezone
-
-The cover page shows the compilation date and time via `\today` and TeX's
-`\time` primitive. The template sets a default TZ of `America/Sao_Paulo`
-(GMT-3) in its `.latexmkrc` files. To use a different timezone, override
-it in your project's `.latexmkrc`:
-
-```perl
-$ENV{TZ} = "UTC";  # override the template default
-```
-
----
-
-## Commands and environments
-
-Below are the commands **created by the template** and also standard LaTeX
-commands that, in this template, produce a specific look.
-
-### 1. Configuration (preamble)
-
-| Command | What it does |
-|---|---|
-| `\setguidetitle{...}` | Sets the large **cover** title. |
-| `\setheadertitle{...}` | Sets the centered **header** text (shown on body pages; cover, TOC, and changelog have no header). |
-| `\setcovertext{...}` | Sets the line below the cover logo (default: `Huawei Technologies CO., LTD`). |
-| `\setheaderlogo{path}` | Sets the **header logo** image path (default: `assets/huawei-logo-header.png`). |
-| `\setcoverlogo{path}` | Sets the **cover logo** image path (default: `assets/huawei-logo-cover.png`). |
-| `\setdocversion{1.0.0}` | Sets the **version** shown on the cover page (e.g. "v1.0.0"). |
-| `\setdocdate{2026-08-05}` | Sets the **date** shown on the cover page next to the version. **Optional** — defaults to `\today` (compilation date) if omitted. |
-
-Example:
+## Class options
 
 ```latex
-\setguidetitle{Guia: Salada de frutas}
-\setheadertitle{Huawei Cloud -- Guia sobre bananas e maçãs}
-\setcovertext{Huawei Technologies CO., LTD}
+\documentclass[english,indentbody,notime]{guide}
 ```
 
-### 2. Document structure
-
-| Command | What it does |
+| Option | Effect |
 |---|---|
-| `\makecover` | Generates the **cover** (title + centered logo + text). Call right after `\begin{document}`. |
-| `\sumario` | Generates the **table of contents** ("Sumário" on the right, with a rule and dotted leaders) and page-breaks. |
-| `\startbody` | Marks the start of the body and **restarts page numbering at 1** and restores the header (logo + title). |
+| `english` | Switches all predefined labels to English; loads `babel` with `english`. Default off (Portuguese / `brazilian`). |
+| `indentbody` | Indents all running text by `\contentindent` (0.6 cm). Default off (text flush to the left margin). |
+| `notime` | Hides the compilation time (HH:MM) on the cover page. Default off (time is shown). |
 
-### 3. Headings (automatic numbering 1 / 1.1 / 1.1.1 / 1.1.1.1)
+### Label translations
 
-Use the **standard sectioning commands** — the template restyles them with the
-Huawei look:
-
-| Command | Result |
-|---|---|
-| `\section{...}` | **H1**: giant chapter number (72 pt) + 22 pt **bold** right-aligned title + bottom rule. Enters the TOC. |
-| `\subsection{...}` | **H2**: 18 pt, regular, left-aligned (e.g. `1.1`). |
-| `\subsubsection{...}` | **H3**: 16 pt, regular (e.g. `1.2.1`). |
-| `\paragraph{...}` | **H4**: 14 pt, regular (e.g. `1.2.1.1`). |
-
-Starred forms (`\section*{...}`) drop the number and the TOC entry. Each
-`\section` starts on a new page.
-
-### 4. Objectives / prerequisites block
-
-The `objetivos` environment groups the chapter's introductory text and **closes
-with a 1.5 pt horizontal rule**.
-
-| Command | Result |
-|---|---|
-| `\begin{objetivos} ... \end{objetivos}` | Opens the block and draws the closing rule. |
-| `\objgeral{...}` | **"Objetivo Geral:"** line (bold label) + text. |
-| `\objpratica{...}` | **"Objetivo:"** / **"Objective:"** line + text. |
-| `\prerequisitos` | **"Pré-requisitos:"** label (use before a list). |
-| `\passoapasso` | **"Passo a passo:"** label (use before a numbered list). |
-
-Example:
-
-```latex
-\begin{objetivos}
-  \objgeral{Lorem ipsum dolor sit amet...}
-  \prerequisitos
-  \begin{itemize}
-    \item Usuário IAM ativo na Huawei Cloud.
-    \item Maçã na mão direita.
-  \end{itemize}
-\end{objetivos}
-```
-
-> `\objpratica` and `\passoapasso` also work outside the `objetivos`
-> environment (e.g. inside a subsection); see `main.tex`.
-
-### 5. Lists
-
-Use the **standard** `itemize` (bullets) and `enumerate` (numbered) environments
-— they already carry the template's indent and spacing.
-
-```latex
-\begin{enumerate}
-  \item First step.
-  \item Second step.
-\end{enumerate}
-```
-
-### 6. Code
-
-| Command | Result |
-|---|---|
-| `\begin{codigo} ... \end{codigo}` | **Code block**: `#F6F8FA` background, Cascadia Code 10 pt, `#1F2328` text, left-indented, no border. Content is literal (verbatim). Clean copy-paste from PDF. |
-| `\begin{codigo}[language] ... \end{codigo}` | Same; `[language]` is accepted for backward compatibility but ignored. |
-| `\codigoarquivo[language]{file}` | Inserts a code block from an **external file**. |
-| `\code{...}` | **Inline code** (monospaced) within text. |
-| `\param{...}` | File/parameter name in **italic** within text (e.g. `\param{provider.tf}`). |
-
-Example:
-
-```latex
-\begin{codigo}
-terraform {
-  required_providers { ... }
-}
-\end{codigo}
-```
-
-> Inside the `codigo` environment, write code exactly as it should appear;
-> `_`, `{`, `}`, `\` etc. are literal (no escaping needed). In running text,
-> use `\code{...}` (there, normal LaTeX escaping rules apply).
-
-### 7. Images (always horizontally centered)
-
-**Policy: avoid images by default.** Guides should be text-driven. Only add an
-image when the user explicitly asks for one.
-
-**Workflow when a user requests an image:**
-1. The AI inserts `\imagemplaceholder{assets/filename.png}{description}` at the
-   desired location.
-2. The AI creates the `assets/` folder and tells the user the exact path.
-3. The user manually adds the image file at that path.
-4. The AI replaces `\imagemplaceholder` with `\imagem` or `\imagemc`.
-
-| Command | Result |
-|---|---|
-| `\imagem[width]{file}` | Inserts the image **centered**. `width` is optional (default `0.65\linewidth`). Max height `0.4\textheight` with `keepaspectratio`. |
-| `\imagemc[width]{file}{caption}` | Same, with a **numbered** caption ("Figure 1: ...") centered below. Same size limits. |
-| `\imagemplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the file is not yet available. |
-
-Examples:
-
-```latex
-\imagem{assets/tela1.png}
-\imagem[0.6\linewidth]{assets/tela2.png}
-\imagemc{assets/tela3.png}{Figura 1 -- Tela de login.}
-\imagemplaceholder{assets/diagram.png}{Architecture diagram of the proxy stack}
-```
-
-### 8. Tables
-
-Tables are generated directly by the AI. The class loads `booktabs` and
-`array` for professional-looking tables.
-
-**Rules:**
-- Use `\toprule`, `\midrule`, `\bottomrule` (never `\hline`).
-- Use `\centering` + `tabular` inside a `table` float, or just `\centering`
-  + `tabular` for inline placement.
-- Use `\small` or `\footnotesize` for wide tables.
-
-```latex
-\begin{table}[h]
-  \centering
-  \small
-  \begin{tabular}{lll}
-    \toprule
-    \textbf{Column A} & \textbf{Column B} & \textbf{Column C} \\
-    \midrule
-    Row 1 & Value & Value \\
-    Row 2 & Value & Value \\
-    \bottomrule
-  \end{tabular}
-  \caption{Table caption.}
-\end{table}
-```
-
-### 9. Notes and links
-
-| Command | Result |
-|---|---|
-| `\nota{...}` | **Observation paragraph in italic**. |
-| `\weblink{url}{text}` | Clickable link, **blue, no underline** (`#0000FF`). |
-| `\menu{A, B, C}` | Menu path: **A** → **B** → **C** (bold items joined by arrows). |
-| `\href{url}{text}` | Standard `hyperref` link (also blue via `urlcolor`). |
-| `\textbf{...}` | Bold — used to highlight interface terms (e.g. **Console**). |
-
-### 10. Callout boxes
-
-| Environment | Color | Use |
+| Token | Portuguese (default) | English (`[english]`) |
 |---|---|---|
-| `\begin{aviso} ... \end{aviso}` | Amber | **Warning / caution** — potential pitfalls. |
-| `\begin{dica} ... \end{dica}` | Green | **Tip / suggestion** — best practices. |
-| `\begin{infobox} ... \end{infobox}` | Blue | **Informational note** — helpful context. |
+| TOC title | Sumário | Contents |
+| Cover title default | Guia | Guide |
+| `\objgeral` label | Objetivo Geral: | General Objective: |
+| `\objpratica` label | Objetivo: | Objective: |
+| `\prerequisitos` label | Pré-requisitos: | Prerequisites: |
+| `\passoapasso` label | Passo a passo: | Step by step: |
+| Footer page label | Página | Page |
 
-All boxes have a 3pt left border, light background, and break across pages.
+## Document structure
 
-Example:
-
-```latex
-\begin{aviso}
-The EIP is released when the instance is deleted.
-\end{aviso}
-```
-
-### 11. Badge
-
-| Command | Result |
-|---|---|
-| `\badge{...}` | Inline **red label** with white text (e.g. `\badge{Novo}`). |
-
-### 12. Changelog / Versioning
-
-| Command | Result |
-|---|---|
-| `\setdocversion{1.0.0}` | Shows **v1.0.0** on the cover page. |
-| `\setdocdate{2026-08-05}` | Shows the date on the cover page next to the version. **Optional** — defaults to `\today` if omitted. |
-| `\begin{changelog} ... \end{changelog}` | Version history block, framed with horizontal rules. |
-| `\changelogentry{ver}{date}{items}` | One entry: bold version, italic date, bulleted changes. |
-
-Example:
+The body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 
 ```latex
+\documentclass{guide}          % or [english] for English
+
+\setguidetitle{Guia: <topic>}
+\setheadertitle{Huawei Cloud -- <short title>}
 \setdocversion{1.0.0}
-\setdocdate{2026-08-05}
 
-% ... in the document body (typically the last chapter):
-\begin{changelog}
-  \changelogentry{1.0.0}{2026-08-05}{
-    \item Initial version.
-    \item Added ECS provisioning.
-  }
-  \changelogentry{0.9.0}{2025-07-15}{
-    \item Draft.
-  }
-\end{changelog}
+\begin{document}
+\makecover
+\sumario
+\startbody
+
+\section{<chapter title>}
+% ... content ...
+
+\end{document}
 ```
 
----
+See [SKILL.md](SKILL.md) for the complete skeleton and all available commands
+and environments (`\objgeral`, `\prerequisitos`, `\passoapasso`, `codigo`,
+`\imagem`, `\menu`, `\badge`, `changelog`, callout boxes, etc.).
 
-## Format tokens (quick reference)
+## Format reference
 
 | Element | Value |
 |---|---|
@@ -534,42 +87,21 @@ Example:
 | Tip box | `#E8F5E9` bg / `#2E7D32` border |
 | Info box | `#E3F2FD` bg / `#1565C0` border |
 
-These colors are defined in `guide.cls` (`codebg`, `codetext`, `linkblue`,
-`huaweired`) and can be reused with `\textcolor{name}{...}`.
-
-## Class options
-
-```latex
-\documentclass[english,indentbody,notime]{guide}
-```
-
-- `english` — switches all predefined labels to English (Contents, General
-  Objective:, Objective:, Prerequisites:, Step by step:, Page) and
-  loads `babel` with the `english` language. Without this option (default),
-  labels are in Portuguese and `babel` loads `brazilian`.
-- `indentbody` — indents **all running text** by `\contentindent` (0.6 cm),
-  reproducing the body indent of the original layout. Without the option
-  (default), text is flush to the left margin, aligned with the heading rules.
-- `notime` — hides the compilation time (HH:MM) on the cover page. Without
-  this option (default), time is shown next to the date.
-
-### Label translations
-
-| Token | Portuguese (default) | English (`[english]`) |
-|---|---|---|
-| TOC title | Sumário | Contents |
-| Cover title default | Guia | Guide |
-| `\objgeral` label | Objetivo Geral: | General Objective: |
-| `\objpratica` label | Objetivo: | Objective: |
-| `\prerequisitos` label | Pré-requisitos: | Prerequisites: |
-| `\passoapasso` label | Passo a passo: | Step by step: |
-| Footer page label | Página | Page |
+Colors are defined in `guide.cls` and reusable via `\textcolor{name}{...}`.
 
 ## Customization
 
-- **Swap the logo:** replace the files in `assets/` keeping the names, or use
-  `\setheaderlogo{path}` and `\setcoverlogo{path}` in the preamble.
-- **Adjust colors:** edit the `\definecolor` block at the top of `guide.cls`.
-- **Adjust sizes/spacing:** each concern is in a commented section of
-  `guide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section and
-  edit there.
+- **Logos:** replace files in `assets/` keeping the names, or use
+  `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
+- **Colors:** edit the `\definecolor` block at the top of `guide.cls`.
+- **Sizes/spacing:** each concern is in a commented section of `guide.cls`
+  (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section and edit there.
+
+## Samples
+
+Two samples demonstrate all commands and environments:
+
+- [`examples/guide/pt/main.tex`](../../examples/guide/pt/main.tex) — Portuguese
+- [`examples/guide/en/main.tex`](../../examples/guide/en/main.tex) — English
+
+Compile with `latexmk main.tex` from either folder.

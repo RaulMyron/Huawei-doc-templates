@@ -8,10 +8,20 @@
 #
 # Usage:
 #   ./install.sh                # full install (idempotent — safe to re-run)
+#   ./install.sh --yes          # non-interactive (skip confirmation prompt)
 # ──────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# ── Parse arguments ──
+AUTO_YES=false
+for arg in "$@"; do
+    case "$arg" in
+        --yes|-y) AUTO_YES=true ;;
+        *) echo "Unknown argument: $arg"; exit 1 ;;
+    esac
+done
 
 # ── Colors (TTY-aware) ──
 if [ -t 1 ]; then
@@ -58,6 +68,16 @@ log_dim "• Ubuntu 22.04+ (WSL or native)     (required)"
 log_dim "• apt-get, sudo                      (required)"
 log_dim "• VS Code CLI (code)                 (optional — for extension install)"
 echo ""
+
+# ── Confirmation ──
+if [[ "$AUTO_YES" != true ]]; then
+    echo -e "  ${C_BOLD}Proceed with installation?${C_RESET} [y/N] "
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo -e "  ${C_DIM}Aborted.${C_RESET}"
+        exit 0
+    fi
+fi
 
 # ── Pre-flight checks ──
 log_step "Pre-flight checks"

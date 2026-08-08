@@ -61,10 +61,34 @@ language, and content, then compiles and verifies the PDF.
 
 ```bash
 sudo apt install texlive-xetex texlive-latex-extra texlive-lang-portuguese \
-                  latexmk fonts-liberation fonts-cascadia-code poppler-utils
+                  latexmk fonts-liberation fonts-cascadia-code
 ```
 
-If code block backgrounds look wrong, fvextra is too old. Update from CTAN:
+> `poppler-utils` (provides `pdfinfo`) is only needed by `install.sh`'s test
+> compilation step — not for document compilation itself.
+
+**Fallback** — if a LaTeX package is missing, install the full collection
+(~5–6 GB, simplest fix): `sudo apt install texlive-full`.
+
+#### Package mapping (for troubleshooting)
+
+The `guide.cls` class loads these LaTeX packages. Here's which `texlive-*`
+package provides each one:
+
+| LaTeX package | Provided by | Notes |
+|---|---|---|
+| `fontspec` | `texlive-xetex` | Requires XeLaTeX/LuaLaTeX |
+| `geometry`, `booktabs`, `caption` | `texlive-latex-recommended` | Pulled as dependency of `texlive-xetex` |
+| `xcolor`, `graphicx`, `fancyhdr`, `array`, `babel`, `hyperref` | `texlive-latex-base` | Core, always installed |
+| `titlesec`, `tocloft`, `enumitem`, `fancyvrb`, `tcolorbox`, `ragged2e`, `needspace`, `etoolbox`, `environ`, `trimspaces` | `texlive-latex-extra` | |
+| `pgf` | `texlive-pictures` | Pulled as dependency of `texlive-latex-extra` |
+| `fvextra` | `texlive-latex-extra` | **Often outdated** — see below if ≥1.5 needed |
+| `babel` (brazilian) | `texlive-lang-portuguese` | Portuguese language support |
+
+#### Updating fvextra (if code block backgrounds look wrong)
+
+`fvextra ≥ 1.5` introduced `backgroundcolor`. TeX Live 2023 ships an older
+version. `install.sh` handles this automatically; manually:
 
 ```bash
 wget https://mirrors.ctan.org/macros/latex/contrib/fvextra.zip
@@ -73,6 +97,43 @@ cd /tmp/fvextra-build/fvextra && latex fvextra.ins
 sudo cp fvextra.sty "$(kpsewhich fvextra.sty)"
 sudo texhash
 ```
+
+#### Verifying the installation
+
+```bash
+xelatex --version          # must show XeTeX
+latexmk --version          # must show latexmk 4.70+
+fc-list | grep "HarmonyOS"  # optional — body font
+fc-list | grep "Cascadia"   # optional — code font
+```
+
+Then test-compile a sample:
+
+```bash
+cd examples/guide/pt && latexmk main.tex
+```
+
+If it produces `main.pdf` without errors, the installation is complete.
+
+### WSL (Windows Subsystem for Linux)
+
+`install.sh` works directly in WSL — it's a bash script using `apt-get`.
+A few WSL-specific notes:
+
+- **Fonts go in the Linux filesystem**, not the Windows side. Install to
+  `~/.local/share/fonts/` (current user) or `/usr/local/share/fonts/` (all
+  users), then run `fc-cache -f` in the WSL terminal. Windows-installed fonts
+  are not visible to `xelatex` running in WSL.
+- **VS Code** — use the **WSL** extension (formerly "Remote - WSL") to open
+  the project. LaTeX Workshop then runs in the WSL context using the Linux
+  `xelatex`/`latexmk`. Keep `.tex` files in the WSL filesystem for performance
+  (accessing Windows-side files from WSL is slow).
+- **PDF preview** — with WSLg (Windows 11), VS Code's built-in PDF viewer
+  works out of the box. Without WSLg, open the PDF from Windows:
+  `explorer.exe main.pdf` or navigate to `\\wsl$\<distro>\home\...`.
+- **Timezone** — WSL respects the `TZ` environment variable, so the
+  `.latexmkrc` default (`America/Sao_Paulo`) works correctly without
+  overrides.
 
 ### Linux (Fedora/RHEL) — manual
 

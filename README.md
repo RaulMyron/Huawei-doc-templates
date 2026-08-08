@@ -9,7 +9,7 @@ skill, assets, and build config. Documents compile to PDF via XeLaTeX.
 **One-liner (clone + install):**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wallacelw/Huawei-doc-templates/main/install.sh | bash -s -- --clone --yes
+curl -fsSL https://raw.githubusercontent.com/wallacelw/Huawei-doc-templates/main/install.sh | bash
 ```
 
 **Or step by step:**

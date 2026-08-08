@@ -9,7 +9,7 @@
 # Usage:
 #   ./install.sh                # full install (idempotent — safe to re-run)
 #   ./install.sh --yes          # non-interactive (skip confirmation prompt)
-#   ./install.sh --clone        # clone repo first, then install (for curl one-liner)
+#   curl ... | bash             # auto-detects pipe: clones repo + installs non-interactively
 # ──────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
@@ -24,19 +24,33 @@ for arg in "$@"; do
     esac
 done
 
-# ── If --clone, fetch the repo first (supports curl | bash one-liner) ──
+# ── Determine if running from pipe (curl | bash) or from a file ──
 REPO_URL="https://github.com/wallacelw/Huawei-doc-templates.git"
-if [[ "$DO_CLONE" == true ]]; then
-    CLONE_DIR="Huawei-doc-templates"
+CLONE_DIR="Huawei-doc-templates"
+
+if [[ -n "${BASH_SOURCE[0]:-}" ]] && [[ -f "${BASH_SOURCE[0]}" ]]; then
+    # Running from a file (./install.sh)
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    # If --clone flag, clone first
+    if [[ "$DO_CLONE" == true ]]; then
+        if [[ -d "$CLONE_DIR" ]]; then
+            echo "  $CLONE_DIR already exists — skipping clone"
+        else
+            git clone "$REPO_URL" "$CLONE_DIR"
+        fi
+        cd "$CLONE_DIR"
+        SCRIPT_DIR="$(pwd)"
+    fi
+else
+    # Running from pipe (curl | bash) — auto-clone + non-interactive
+    AUTO_YES=true
     if [[ -d "$CLONE_DIR" ]]; then
-        echo "  $CLONE_DIR already exists — skipping clone"
+        echo "  $CLONE_DIR already exists — reusing"
     else
         git clone "$REPO_URL" "$CLONE_DIR"
     fi
     cd "$CLONE_DIR"
     SCRIPT_DIR="$(pwd)"
-else
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 fi
 
 # ── Colors (TTY-aware) ──

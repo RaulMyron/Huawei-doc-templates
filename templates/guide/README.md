@@ -10,51 +10,50 @@ callout boxes, badges, colors, spacing, and fonts.
 
 ## Language
 
-By default the guide renders in **Portuguese** — the class loads `babel` with
-the `brazilian` language and built-in labels such as *Sumário*,
-*Objetivo Geral:*, *Objetivo:*, *Pré-requisitos:* and *Passo a passo:* are in
-Portuguese. Pass the **`english`** class option
-(`\documentclass[english]{guide}`) to switch all labels to English and load
-`babel` with `english` instead.
+By default the guide renders in **English** — built-in labels such as
+*Contents*, *General Objective:*, *Objective:*, *Prerequisites:* and
+*Step by step:* are in English. Pass the **`portuguese`** class option
+(`\documentclass[portuguese]{guide}`) to switch all labels to Portuguese and
+load `babel` with `brazilian` instead.
 
 ## Class options
 
 ```latex
-\documentclass[english,indentbody,notime]{guide}
+\documentclass[portuguese,indentbody,notime]{guide}
 ```
 
 | Option | Effect |
 |---|---|
-| `english` | Switches all predefined labels to English; loads `babel` with `english`. Default off (Portuguese / `brazilian`). |
+| `portuguese` | Switches all predefined labels to Portuguese; loads `babel` with `brazilian`. Default off (English). |
 | `indentbody` | Indents all running text by `\contentindent` (0.6 cm). Default off (text flush to the left margin). |
 | `notime` | Hides the compilation time (HH:MM) on the cover page. Default off (time is shown). |
 
 ### Label translations
 
-| Token | Portuguese (default) | English (`[english]`) |
+| Token | English (default) | Portuguese (`[portuguese]`) |
 |---|---|---|
-| TOC title | Sumário | Contents |
-| Cover title default | Guia | Guide |
-| `\objgeral` label | Objetivo Geral: | General Objective: |
-| `\objpratica` label | Objetivo: | Objective: |
-| `\prerequisitos` label | Pré-requisitos: | Prerequisites: |
-| `\passoapasso` label | Passo a passo: | Step by step: |
-| Footer page label | Página | Page |
+| TOC title | Contents | Sumário |
+| Cover title default | Guide | Guia |
+| `\generalobjective` label | General Objective: | Objetivo Geral: |
+| `\objective` label | Objective: | Objetivo: |
+| `\prerequisites` label | Prerequisites: | Pré-requisitos: |
+| `\stepbystep` label | Step by step: | Passo a passo: |
+| Footer page label | Page | Página |
 
 ## Document structure
 
-The body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
+The body order is fixed: `\makecover` → `\maketoc` → `\startbody` → sections.
 
 ```latex
-\documentclass{guide}          % or [english] for English
+\documentclass{guide}          % or [portuguese] for Portuguese
 
-\setguidetitle{Guia: <topic>}
+\setguidetitle{Guide: <topic>}
 \setheadertitle{Huawei Cloud -- <short title>}
 \setdocversion{1.0.0}
 
 \begin{document}
 \makecover
-\sumario
+\maketoc
 \startbody
 
 \section{<chapter title>}
@@ -64,8 +63,8 @@ The body order is fixed: `\makecover` → `\sumario` → `\startbody` → sectio
 ```
 
 See [SKILL.md](SKILL.md) for the complete skeleton and all available commands
-and environments (`\objgeral`, `\prerequisitos`, `\passoapasso`, `codigo`,
-`\imagem`, `\menu`, `\badge`, `changelog`, callout boxes, etc.).
+and environments (`\generalobjective`, `\prerequisites`, `\stepbystep`, `code`,
+`\image`, `\menu`, `\badge`, `changelog`, callout boxes, etc.).
 
 ## Format reference
 
@@ -95,7 +94,7 @@ Colors are defined in `guide.cls` and reusable via `\textcolor{name}{...}`.
   `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
 - **Colors:** edit the `\definecolor` block at the top of `guide.cls`.
 - **Sizes/spacing:** each concern is in a commented section of `guide.cls`
-  (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section and edit there.
+  (`TITLES`, `CODE`, `HEADER AND FOOTER`, etc.) — find the section and edit there.
 
 ## Samples
 

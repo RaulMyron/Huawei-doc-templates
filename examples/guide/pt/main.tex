@@ -3,9 +3,9 @@
 %  Compilar com XeLaTeX ou LuaLaTeX:
 %      xelatex main.tex   (rode 2x para o sumário)
 %
-%  Para versão em inglês, use:  \documentclass[english]{guide}
+%  Para versão em ingles, use:  \documentclass{guide}
 % =====================================================================
-\documentclass{guide}
+\documentclass[portuguese]{guide}
 
 % --- Configuração do documento --------------------------------------
 \setguidetitle{Guia: Acessar o Console da Huawei Cloud}
@@ -20,16 +20,16 @@
 \makecover
 
 % ---- SUMÁRIO -------------------------------------------------------
-\sumario
+\maketoc
 
 % ---- CORPO (reinicia a numeração de páginas) -----------------------
 \startbody
 
 \begin{infobox}
-Este documento exemplifica o uso do template \code{guide.cls} para guias
+Este documento exemplifica o uso do template \inlinecode{guide.cls} para guias
 da Huawei Cloud. Ele demonstra todos os comandos e ambientes disponíveis:
 capa, sumário, objetivos, blocos de código, imagens, callouts, badge,
-changelog e o comando \code{\textbackslash menu} para caminhos de menu.
+changelog e o comando \inlinecode{\textbackslash menu} para caminhos de menu.
 \end{infobox}
 
 % =====================================================================
@@ -37,21 +37,21 @@ changelog e o comando \code{\textbackslash menu} para caminhos de menu.
 % =====================================================================
 \section{Acessar o Console da Huawei Cloud}
 
-\begin{objetivos}
-  \objgeral{Este laboratório apresenta o acesso ao Console da Huawei Cloud,
+\begin{objectives}
+  \generalobjective{Este laboratório apresenta o acesso ao Console da Huawei Cloud,
     desde o login no portal até a navegação básica pelo painel de serviços.
     Ao concluir, você será capaz de autenticar-se na plataforma, selecionar a
     região desejada e localizar os principais serviços do catálogo.}
 
-  \prerequisitos
+  \prerequisites
   \begin{itemize}
     \item Conta IAM ativa na Huawei Cloud (com usuário e senha válidos).
     \item Navegador web atualizado (Google Chrome, Mozilla Firefox ou
           Microsoft Edge).
     \item Acesso à internet e permissão para acessar o endpoint
-          \code{console.huaweicloud.com}.
+          \inlinecode{console.huaweicloud.com}.
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \begin{infobox}
 Este guia cobre o fluxo básico de acesso ao Console. Para operações
@@ -60,16 +60,16 @@ avançadas, consulte a documentação oficial da Huawei Cloud.
 
 \subsection{Acessar e navegar no Console}
 
-\objpratica{Realizar o login no portal da Huawei Cloud e percorrer os
+\objective{Realizar o login no portal da Huawei Cloud e percorrer os
   elementos principais do Console: catálogo de serviços, seletor de região
   e área de notificações.}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Acesse a \weblink{https://www.huaweicloud.com/intl/en-us/}{Huawei Cloud}
         e, no canto superior direito, clique em \textbf{Console}.
 
-  \imagemc{assets/exemplo-login.png}{Figura 1 -- Tela de login do Console.}
+  \imagecap{assets/exemplo-login.png}{Figura 1 -- Tela de login do Console.}
 
   \item Informe o nome de usuário e a senha da sua conta IAM e clique em
         \textbf{Log In}. Se a conta tiver autenticação em dois fatores habilitada,
@@ -79,19 +79,19 @@ avançadas, consulte a documentação oficial da Huawei Cloud.
         superior esquerdo, abra o catálogo de serviços clicando no ícone de
         menu e navegue até \menu{Console, Elastic Cloud Server}.
 
-  \imagem{assets/exemplo-menu.png}
+  \image{assets/exemplo-menu.png}
 
   \item No canto superior direito, selecione a região em que seus recursos
-        serão criados (por exemplo, \code{sa-brazil-1}).
+        serão criados (por exemplo, \inlinecode{sa-brazil-1}).
 
-  \nota{A região selecionada no Console define onde os novos recursos são
+  \note{A região selecionada no Console define onde os novos recursos são
     provisionados. Recursos já existentes em outras regiões continuam visíveis
     apenas quando você alterna para a região correspondente.}
 
-  \begin{aviso}
+  \begin{warning}
   A região não pode ser alterada para recursos já provisionados.
   Planeje a região antes de criar seus recursos.
-  \end{aviso}
+  \end{warning}
 \end{enumerate}
 
 \subsection{Explorar o Console}
@@ -108,7 +108,7 @@ Use o catálogo para abrir qualquer serviço, como \textbf{Elastic Cloud Server
 Cada região pode conter múltiplos projetos IAM. O seletor de projeto, ao lado
 do seletor de região, permite isolar recursos por equipe ou finalidade. O
 parâmetro \param{region} do provedor Terraform deve corresponder exatamente ao
-identificador da região escolhida aqui, por exemplo \code{sa-brazil-1}.
+identificador da região escolhida aqui, por exemplo \inlinecode{sa-brazil-1}.
 
 \subsubsection{Regiões disponíveis}
 
@@ -121,37 +121,37 @@ A tabela abaixo lista as regiões suportadas para o Brasil e América Latina:
     \toprule
     \textbf{Região} & \textbf{Localidade} & \textbf{Código} \\
     \midrule
-    São Paulo & Brasil & \code{sa-brazil-1} \\
-    Santiago  & Chile & \code{la-south-2} \\
+    São Paulo & Brasil & \inlinecode{sa-brazil-1} \\
+    Santiago  & Chile & \inlinecode{la-south-2} \\
     \bottomrule
   \end{tabular}
   \caption{Regiões disponíveis na Huawei Cloud.}
 \end{table}
 
-\imagemplaceholder{assets/console-regions.png}{Captura de tela do seletor de região no Console}
+\imageplaceholder{assets/console-regions.png}{Captura de tela do seletor de região no Console}
 
 % =====================================================================
 %  Capítulo 2 — Configurar credenciais para a CLI
 % =====================================================================
 \section{Configurar credenciais para a CLI}
 
-\begin{objetivos}
-  \objgeral{Este capítulo mostra como obter um par de chaves de acesso
+\begin{objectives}
+  \generalobjective{Este capítulo mostra como obter um par de chaves de acesso
     (AK/SK) no Console e declarar o provedor da Huawei Cloud em um arquivo
     de configuração, preparando o ambiente para uso com a CLI e com
     ferramentas de Infrastructure as Code.}
 
-  \prerequisitos
+  \prerequisites
   \begin{itemize}
     \item Acesso ao Console da Huawei Cloud concluído no Capítulo 1.
     \item Permissão IAM para criar credenciais de acesso.
-    \item \code{terraform} instalado localmente (versão 1.0 ou superior).
+    \item \inlinecode{terraform} instalado localmente (versão 1.0 ou superior).
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \subsection{Criar uma AK/SK}
 
-\objpratica{Gerar um par de Access Key ID / Secret Access Key para autenticar
+\objective{Gerar um par de Access Key ID / Secret Access Key para autenticar
   ferramentas externas na Huawei Cloud.}
 
 No Console, clique no nome do usuário, no canto superior direito, e abra
@@ -161,12 +161,12 @@ seguro: a Secret Access Key é exibida apenas uma vez.
 
 \subsection{Declarar o provider}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Crie um arquivo chamado \param{provider.tf} no diretório do seu
         projeto com o seguinte conteúdo:
 
-\begin{codigo}
+\begin{code}
 terraform {
   required_providers {
     huaweicloud = {
@@ -181,23 +181,23 @@ provider "huaweicloud" {
   access_key = "SUA_ACCESS_KEY_AQUI"
   secret_key = "SUA_SECRET_KEY_AQUI"
 }
-\end{codigo}
+\end{code}
 
   Substitua os valores de \param{access\_key} e \param{secret\_key} pelas
   credenciais obtidas na seção anterior. Alternativamente, você pode incluir
   o código a partir de um arquivo externo:
 
-  \codigoarquivo[bash]{assets/example-script.sh}
+  \codefile[bash]{assets/example-script.sh}
 
   \item No terminal, na pasta do projeto, inicialize o diretório de trabalho
-        do \code{terraform}:
+        do \inlinecode{terraform}:
 
-\begin{codigo}[bash]
+\begin{code}[bash]
 terraform init
 terraform plan
-\end{codigo}
+\end{code}
 
-  \nota{Nunca versione o arquivo \param{provider.tf} com credenciais reais.
+  \note{Nunca versione o arquivo \param{provider.tf} com credenciais reais.
     Use variáveis de ambiente ou um arquivo de estado ignorado pelo controle
     de versão.}
 \end{enumerate}
@@ -205,18 +205,18 @@ terraform plan
 \subsection{Próximos passos}
 
 Com o provider declarado, você pode começar a definir recursos no
-\code{terraform}. Para conhecer todos os recursos disponíveis, consulte a
+\inlinecode{terraform}. Para conhecer todos os recursos disponíveis, consulte a
 documentação oficial em
 \weblink{https://registry.terraform.io/providers/huaweicloud/huaweicloud/latest/docs}{Huawei Cloud Provider}.
 
-\begin{dica}
-Use \code{terraform validate} para verificar a sintaxe antes de aplicar
+\begin{tip}
+Use \inlinecode{terraform validate} para verificar a sintaxe antes de aplicar
 as alterações.
-\end{dica}
+\end{tip}
 
 \badge{Exemplo}
 
-\nota{Este guia é um exemplo de uso do template \code{guide.cls};
+\note{Este guia é um exemplo de uso do template \inlinecode{guide.cls};
   ajuste os textos, imagens e blocos de código conforme o fluxo real do
   seu guia.}
 

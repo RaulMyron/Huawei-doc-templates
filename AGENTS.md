@@ -26,11 +26,11 @@ approval. Changing them breaks existing documents and reproducibility.
 
 ### L2. Class name: `guide` (not `labguide`)
 - The class was renamed from `labguide` to `guide`. The old name is gone.
-- `\documentclass{guide}` or `\documentclass[english]{guide}`.
+- `\documentclass{guide}` or `\documentclass[portuguese]{guide}`.
 
-### L3. Callout box names: `aviso`, `dica`, `infobox`
-- `info` was renamed to `infobox` to avoid package name collisions.
-- Never reintroduce an `info` environment.
+### L3. Callout box names: `warning`, `tip`, `infobox`
+- `aviso` was renamed to `warning`, `dica` to `tip`, `info` to `infobox`.
+- Never reintroduce `aviso`, `dica`, or `info` environments.
 
 ### L4. Template default timezone is America/Sao_Paulo (GMT-3)
 - The template's `.latexmkrc` files set `$ENV{TZ} = "America/Sao_Paulo"`.
@@ -70,7 +70,7 @@ approval. Changing them breaks existing documents and reproducibility.
 - Do not change these values. They match the Huawei house style.
 
 ### L10. Body order is fixed
-- `\makecover` -> `\sumario` -> `\startbody` -> sections.
+- `\makecover` -> `\maketoc` -> `\startbody` -> sections.
 - `\startbody` resets page numbering to 1.
 - Do not reorder or skip these commands.
 
@@ -133,6 +133,11 @@ approval. Changing them breaks existing documents and reproducibility.
   `\badge`, multi-entry changelog).
 - **Setup guide PDF in root**: `make examples` copies `setup-guide.pdf` to the
   repo root for easy reading. The copy is gitignored (build artifact).
+- **Compiled PDFs are committed**: the sample PDFs
+  (`examples/guide/pt/main.pdf`, `examples/guide/en/main.pdf`) and the
+  setup-guide PDF (`examples/setup-guide/setup-guide.pdf`) are committed to
+  git for validation. Always recompile and commit updated PDFs when the
+  `.tex` or `.cls` files change.
 - **Self-contained**: each sample/example has its own `.latexmkrc` with
   `TEXINPUTS` pointing to `templates/<name>/`. Never share `.latexmkrc` files.
 
@@ -244,9 +249,12 @@ at the repo root registers `templates/` as a discovery path.
 ## Git conventions
 
 - Commit messages: imperative mood, concise first line, detail in body.
-- Never commit build artifacts (`.pdf`, `.aux`, `.log`, `.out`, `.toc`,
+- Never commit build artifacts (`.aux`, `.log`, `.out`, `.toc`,
   `.xdv`, `.fls`, `.fdb_latexmk`, `.synctex.gz`). They are in `.gitignore`.
-- The setup guide PDF (`examples/setup-guide/setup-guide.pdf`) is also gitignored.
+- **Compiled PDFs are committed**: `examples/guide/pt/main.pdf`,
+  `examples/guide/en/main.pdf`, and `examples/setup-guide/setup-guide.pdf`
+  are committed to git for validation. All other PDFs are gitignored.
+  Always recompile and commit updated PDFs when `.tex` or `.cls` files change.
 - A commit that breaks sample compilation must not be pushed to `main`.
 - **One change, commit, push.** Make one logical change, commit it, and push
   immediately. Do not accumulate multiple unpushed commits. This keeps the

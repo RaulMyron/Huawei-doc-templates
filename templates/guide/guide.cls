@@ -1,36 +1,36 @@
 %% guide.cls
 %% =====================================================================
-%%  Classe LaTeX para guias (Huawei Cloud)
-%%  Requer XeLaTeX ou LuaLaTeX (por causa do fontspec).
+%%  LaTeX class for Huawei Cloud guides
+%%  Requires XeLaTeX or LuaLaTeX (due to fontspec).
 %%
-%%  Fontes usadas:
-%%    - Texto : HarmonyOS Sans (fallback: Liberation Sans / Arial)
-%%    - Código : Cascadia Code (fallback: Consolas / DejaVu Sans Mono)
+%%  Fonts:
+%%    - Body : HarmonyOS Sans (fallback: Liberation Sans)
+%%    - Code : Cascadia Code (fallback: DejaVu Sans Mono)
 %%
-%%  Opções de classe:
-%%    english     -> usa inglês nos rótulos predefinidos e no babel.
-%%                   (padrão: português brasileiro).
-%%    indentbody  -> recua todo o texto corrido em \contentindent,
-%%                   (padrão: desligado).
-%%    notime      -> oculta a hora de compilação na capa.
-%%                   (padrão: mostra hora).
-%%    <qualquer>  -> repassada para a classe article.
+%%  Class options:
+%%    portuguese  -> uses Portuguese for predefined labels and babel.
+%%                   (default: English)
+%%    indentbody  -> indents all running text by \contentindent.
+%%                   (default: off)
+%%    notime      -> hides the compilation time on the cover.
+%%                   (default: show time)
+%%    <any>       -> passed to the article class.
 %% =====================================================================
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{guide}[2025/07/20 Huawei Guide template]
 
-% ---- Opções --------------------------------------------------------
+% ---- Options --------------------------------------------------------
 \newif\if@indentbody \@indentbodyfalse
 \DeclareOption{indentbody}{\@indentbodytrue}
-\newif\if@english \@englishfalse
-\DeclareOption{english}{\@englishtrue}
+\newif\if@portuguese \@portuguesefalse
+\DeclareOption{portuguese}{\@portuguesetrue}
 \newif\if@showtime \@showtimetrue
 \DeclareOption{notime}{\@showtimefalse}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 \LoadClass[a4paper,10pt]{article}
 
-% ---- Pacotes -------------------------------------------------------
+% ---- Packages -------------------------------------------------------
 \RequirePackage[a4paper,top=3cm,bottom=3cm,left=2cm,right=2cm,%
                 headheight=1.4cm,headsep=0.7cm]{geometry}
 \RequirePackage{fontspec}
@@ -48,10 +48,10 @@
 \RequirePackage{booktabs}
 \RequirePackage{array}
 \RequirePackage{babel}
-\if@english
-  \babelprovide[import,main]{english}
-\else
+\if@portuguese
   \babelprovide[import,main]{brazilian}
+\else
+  \babelprovide[import,main]{english}
 \fi
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage{caption}
@@ -59,91 +59,90 @@
 \captionsetup[table]{font={small}, labelfont=bf, labelsep=colon}
 
 % =====================================================================
-%  CORES
+%  COLORS
 % =====================================================================
-\definecolor{codebg}{HTML}{F6F8FA}   % fundo dos blocos de código
-\definecolor{codetext}{HTML}{1F2328} % texto do código
-\definecolor{linkblue}{HTML}{0000FF} % hyperlinks (sem sublinhado)
-\definecolor{huaweired}{HTML}{C7000B}% vermelho da marca (acentos)
-\definecolor{ruleblack}{HTML}{000000} % cor das regras horizontais (preto)
-\definecolor{warningbg}{HTML}{FFF8E1} % fundo dos avisos (âmbar claro)
-\definecolor{warningfg}{HTML}{F57C00} % borda dos avisos (âmbar)
-\definecolor{tipbg}{HTML}{E8F5E9}     % fundo das dicas (verde claro)
-\definecolor{tipfg}{HTML}{2E7D32}     % borda das dicas (verde)
-\definecolor{infobg}{HTML}{E3F2FD}    % fundo das infos (azul claro)
-\definecolor{infofg}{HTML}{1565C0}    % borda das infos (azul)
+\definecolor{codebg}{HTML}{F6F8FA}   % code block background
+\definecolor{codetext}{HTML}{1F2328} % code text color
+\definecolor{linkblue}{HTML}{0000FF} % hyperlinks (no underline)
+\definecolor{huaweired}{HTML}{C7000B}% brand red (accents)
+\definecolor{ruleblack}{HTML}{000000} % horizontal rule color (black)
+\definecolor{warningbg}{HTML}{FFF8E1} % warning box background (light amber)
+\definecolor{warningfg}{HTML}{F57C00} % warning box border (amber)
+\definecolor{tipbg}{HTML}{E8F5E9}     % tip box background (light green)
+\definecolor{tipfg}{HTML}{2E7D32}     % tip box border (green)
+\definecolor{infobg}{HTML}{E3F2FD}    % info box background (light blue)
+\definecolor{infofg}{HTML}{1565C0}    % info box border (blue)
 
 % =====================================================================
-%  FONTES  (com fallback automático se as proprietárias faltarem)
+%  FONTS  (with automatic fallback if brand fonts are missing)
 % =====================================================================
 \newcommand{\lg@warnfont}[2]{%
   \ClassWarning{guide}{Font "#1" not found; using fallback "#2".
     Install the font for full fidelity.}}
 
-% Main font: HarmonyOS Sans (required) → Liberation Sans (sole fallback)
+% Main font: HarmonyOS Sans (required) -> Liberation Sans (sole fallback)
 \IfFontExistsTF{HarmonyOS Sans}
   {\setmainfont{HarmonyOS Sans}}
    {\lg@warnfont{HarmonyOS Sans}{Liberation Sans}%
     \setmainfont{Liberation Sans}}
 
-% Code font: Cascadia Code (required) → DejaVu Sans Mono (sole fallback)
+% Code font: Cascadia Code (required) -> DejaVu Sans Mono (sole fallback)
 \IfFontExistsTF{Cascadia Code}
   {\newfontfamily\consolasfont{Cascadia Code}[Ligatures=NoCommon]}
   {\lg@warnfont{Cascadia Code}{DejaVu Sans Mono}%
    \newfontfamily\consolasfont{DejaVu Sans Mono}[Ligatures=NoCommon]}
 \newcommand{\codefont}{\consolasfont}
 
-% Tamanho base do corpo: 10.5pt com entrelinha ~14pt
+% Base body size: 10.5pt with ~14pt leading
 \renewcommand\normalsize{\@setfontsize\normalsize{10.5}{14}}
 \normalsize
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{4pt}      % espaçamento entre parágrafos
-\frenchspacing                % sem espaço extra após ponto final
+\setlength{\parskip}{4pt}      % space between paragraphs
+\frenchspacing                % no extra space after period
 
-% Recuo opcional do corpo (opção [indentbody])
+% Optional body indent ([indentbody] option)
 \newlength{\contentindent}\setlength{\contentindent}{0.6cm}
 \if@indentbody
   \AtBeginDocument{\setlength{\leftskip}{\contentindent}}
 \fi
 
 % =====================================================================
-%  IDIOMA  (rótulos predefinidos conforme a opção [english])
+%  LANGUAGE  (predefined labels per [portuguese] option)
 % =====================================================================
-\if@english
-  \newcommand{\lg@sumario}{Contents}
-  \newcommand{\lg@objgerallabel}{General Objective:}
-  \newcommand{\lg@objpraticalabel}{Objective:}
-  \newcommand{\lg@prerequisitoslabel}{Prerequisites:}
-  \newcommand{\lg@passoapassolabel}{Step by step:}
-  \newcommand{\lg@paginalabel}{Page}
-  \newcommand{\lg@guidetitle}{Guide}
-\else
-  \newcommand{\lg@sumario}{Sumário}
-  \newcommand{\lg@objgerallabel}{Objetivo Geral:}
-  \newcommand{\lg@objpraticalabel}{Objetivo:}
-  \newcommand{\lg@prerequisitoslabel}{Pré-requisitos:}
-  \newcommand{\lg@passoapassolabel}{Passo a passo}
-  \newcommand{\lg@paginalabel}{Página}
+\if@portuguese
+  \newcommand{\lg@toc}{Sumário}
+  \newcommand{\lg@generalobjectivelabel}{Objetivo Geral:}
+  \newcommand{\lg@objectivelabel}{Objetivo:}
+  \newcommand{\lg@prerequisiteslabel}{Pré-requisitos:}
+  \newcommand{\lg@stepbysteplabel}{Passo a passo:}
+  \newcommand{\lg@pagelabel}{Página}
   \newcommand{\lg@guidetitle}{Guia}
+\else
+  \newcommand{\lg@toc}{Contents}
+  \newcommand{\lg@generalobjectivelabel}{General Objective:}
+  \newcommand{\lg@objectivelabel}{Objective:}
+  \newcommand{\lg@prerequisiteslabel}{Prerequisites:}
+  \newcommand{\lg@stepbysteplabel}{Step by step:}
+  \newcommand{\lg@pagelabel}{Page}
+  \newcommand{\lg@guidetitle}{Guide}
 \fi
 
 % =====================================================================
-%  HYPERREF  (links azuis, sem sublinhado)
+%  HYPERREF  (blue links, no underline)
 % =====================================================================
 \hypersetup{
   colorlinks=true,
-  linkcolor=black,      % links internos (TOC) em preto
+  linkcolor=black,      % internal links (TOC) in black
   urlcolor=linkblue,
   citecolor=linkblue,
   linktoc=all,
   bookmarksnumbered=true,
 }
-% \href e \url ficam azuis; para link textual azul use \weblink
 
 % =====================================================================
-%  CABEÇALHO E RODAPÉ
+%  HEADER AND FOOTER
 % =====================================================================
-% Texto central do cabeçalho (configurável): \setheadertitle{...}
+% Configurable header title: \setheadertitle{...}
 \newcommand{\lg@headertitle}{Huawei Cloud}
 \newcommand{\setheadertitle}[1]{\renewcommand{\lg@headertitle}{#1}}
 \newcommand{\lg@headerlogo}{assets/huawei-logo-header.png}
@@ -154,38 +153,38 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 % Header: logo (left) + title (center)
-% Footer: "Página N" (center)
+% Footer: "Page N" (center)
 \fancyhead[L]{\raisebox{-0.35cm}[0pt][0pt]{%
     \includegraphics[height=1.05cm]{\lg@headerlogo}}}
 \fancyhead[C]{\normalfont\fontsize{10}{12}\selectfont \lg@headertitle}
-\fancyfoot[C]{\normalfont\fontsize{10}{12}\selectfont \lg@paginalabel~\thepage}
+\fancyfoot[C]{\normalfont\fontsize{10}{12}\selectfont \lg@pagelabel~\thepage}
 
 % Plain style: no header, page number in footer (for TOC, changelog)
 \fancypagestyle{plain}{
   \fancyhf{}
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0pt}
-  \fancyfoot[C]{\normalfont\fontsize{10}{12}\selectfont \lg@paginalabel~\thepage}
+  \fancyfoot[C]{\normalfont\fontsize{10}{12}\selectfont \lg@pagelabel~\thepage}
 }
 
 % =====================================================================
-%  TÍTULOS (headings)
+%  TITLES (headings)
 % =====================================================================
 \setcounter{secnumdepth}{4}
 
-% --- H1: número gigante (72pt) + título 22pt bold à direita + regra
+% --- H1: giant number (72pt) + 22pt bold right-aligned title + rule
 \titleformat{\section}
   {\normalfont\bfseries\fontsize{22}{26}\selectfont}
   {\makebox[0pt][l]{\fontsize{72}{72}\selectfont\thesection}}
   {0pt}
-  {\raggedleft\hspace*{1.6cm}}          % empurra o título p/ direita
+  {\raggedleft\hspace*{1.6cm}}          % push title to the right
   [\vspace{2pt}{\color{huaweired}\titlerule[1.5pt]}\vspace{18pt}]
-\titlespacing*{\section}{0pt}{0pt}{40pt} % antes 0 / depois 40pt
-% Cada \section (capítulo) começa em uma nova página
+\titlespacing*{\section}{0pt}{0pt}{40pt} % before 0 / after 40pt
+% Each \section (chapter) starts on a new page
 \let\lg@origsection\section
 \renewcommand{\section}{\clearpage\lg@origsection}
 
-% --- H2/H3/H4: regular, tamanhos decrescentes, alinhados à esquerda
+% --- H2/H3/H4: regular, decreasing sizes, left-aligned
 \titleformat{\subsection}
   {\normalfont\fontsize{18}{22}\selectfont}{\thesubsection}{0.4em}{}
 \titlespacing*{\subsection}{0pt}{30pt}{6pt}
@@ -198,44 +197,44 @@
   {\normalfont\fontsize{14}{18}\selectfont}{\theparagraph}{0.4em}{}
 \titlespacing*{\paragraph}{0pt}{8pt}{4pt}
 
-% Numeração: 1  /  1.1  /  1.1.1  /  1.1.1.1
+% Numbering: 1  /  1.1  /  1.1.1  /  1.1.1.1
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 \renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
 \renewcommand{\theparagraph}{\thesubsubsection.\arabic{paragraph}}
 
 % =====================================================================
-%  SUMÁRIO (TOC) — título "Sumário" à direita + regra; leaders pontilhados
+%  TABLE OF CONTENTS — right-aligned title + rule; dotted leaders
 % =====================================================================
-\renewcommand{\contentsname}{\lg@sumario}
+\renewcommand{\contentsname}{\lg@toc}
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\bfseries\fontsize{22}{26}\selectfont}
 \renewcommand{\cftaftertoctitle}{\par\vspace{2pt}%
   {\color{ruleblack}\hrule height 0.5pt}\vspace{6pt}}
-% Nível 1: negrito 12pt
+% Level 1: bold 12pt
 \renewcommand{\cftsecfont}{\bfseries\fontsize{12}{15}\selectfont}
 \renewcommand{\cftsecpagefont}{\bfseries\fontsize{12}{15}\selectfont}
 \renewcommand{\cftsecleader}{\bfseries\cftdotfill{\cftdotsep}}
-% Níveis 2 e 3: normal 10pt
+% Levels 2 and 3: normal 10pt
 \renewcommand{\cftsubsecfont}{\fontsize{10}{13}\selectfont}
 \renewcommand{\cftsubsecpagefont}{\fontsize{10}{13}\selectfont}
 \renewcommand{\cftsubsubsecfont}{\fontsize{10}{13}\selectfont}
 \renewcommand{\cftsubsubsecpagefont}{\fontsize{10}{13}\selectfont}
-% Recuos do TOC começando na margem (ind left=0)
+% TOC indents starting at the margin (ind left=0)
 \setlength{\cftsecindent}{0pt}
 \setlength{\cftsubsecindent}{1.2em}
 \setlength{\cftsubsubsecindent}{2.4em}
 \setlength{\cftbeforesecskip}{4pt}
 \renewcommand{\cftdotsep}{1.2}
-% mostra pontilhado também no nível 1
+% show dotted leaders also at level 1
 \setcounter{tocdepth}{3}
 
-% Comando de conveniência para o sumário (reseta leftskip)
-\newcommand{\sumario}{{\leftskip=0pt\relax\pagestyle{plain}\thispagestyle{plain}\tableofcontents}\clearpage}
+% Convenience command for TOC (resets leftskip)
+\newcommand{\maketoc}{{\leftskip=0pt\relax\pagestyle{plain}\thispagestyle{plain}\tableofcontents}\clearpage}
 
 % =====================================================================
-%  CAPA
+%  COVER
 % =====================================================================
-% \setguidetitle{...}  -> título grande da capa (e default do header)
+% \setguidetitle{...}  -> large cover title (and default header)
 \newcommand{\setguidetitle}[1]{\renewcommand{\lg@guidetitle}{#1}}
 \newcommand{\lg@covertext}{Huawei Technologies CO., LTD}
 \newcommand{\setcovertext}[1]{\renewcommand{\lg@covertext}{#1}}
@@ -283,51 +282,51 @@
   \clearpage}
 
 % =====================================================================
-%  CORPO — reinicia numeração de páginas
+%  BODY — resets page numbering
 % =====================================================================
 \newcommand{\startbody}{\clearpage\pagestyle{fancy}\thispagestyle{fancy}\setcounter{page}{1}}
 
 % =====================================================================
-%  BLOCO DE OBJETIVOS / PRÉ-REQUISITOS  (encerrado por regra 1.5pt)
+%  OBJECTIVES / PREREQUISITES BLOCK  (closed by 1.5pt rule)
 % =====================================================================
-% Uso:
-%   \begin{objetivos}
-%     \objgeral{...}
-%     \prerequisitos
+% Usage:
+%   \begin{objectives}
+%     \generalobjective{...}
+%     \prerequisites
 %       \item ...
-%   \end{objetivos}
-\newcommand{\lg@rotulo}[1]{\textbf{#1}}
-\newcommand{\objgeral}[1]{\par\lg@rotulo{\lg@objgerallabel} #1\par}
-\newcommand{\objpratica}[1]{\par\lg@rotulo{\lg@objpraticalabel} #1\par}
-\newcommand{\passoapasso}{\par\lg@rotulo{\lg@passoapassolabel}\par}
-\newcommand{\prerequisitos}{\par\lg@rotulo{\lg@prerequisitoslabel}\par}
+%   \end{objectives}
+\newcommand{\lg@label}[1]{\textbf{#1}}
+\newcommand{\generalobjective}[1]{\par\lg@label{\lg@generalobjectivelabel} #1\par}
+\newcommand{\objective}[1]{\par\lg@label{\lg@objectivelabel} #1\par}
+\newcommand{\stepbystep}{\par\lg@label{\lg@stepbysteplabel}\par}
+\newcommand{\prerequisites}{\par\lg@label{\lg@prerequisiteslabel}\par}
 
-\newenvironment{objetivos}
+\newenvironment{objectives}
   {\par\medskip}
   {\par\vspace{4pt}%
    {\leftskip=0pt\relax\noindent{\color{ruleblack}\rule{\linewidth}{1.5pt}}}%
    \par\vspace{10pt}}
 
 % =====================================================================
-%  LISTAS  (bullets e numeradas, no estilo do documento)
+%  LISTS  (bullets and numbered, in document style)
 % =====================================================================
 \setlist[itemize]{leftmargin=1.6em,topsep=2pt,itemsep=2pt,parsep=0pt}
 \setlist[enumerate]{leftmargin=1.8em,topsep=2pt,itemsep=2pt,parsep=0pt}
 
 % =====================================================================
-%  CÓDIGO  (fancyvrb + fvextra — clean PDF copy-paste)
+%  CODE  (fancyvrb + fvextra — clean PDF copy-paste)
 % =====================================================================
 % No-op keys for language hints ([bash], [python], etc.) — ignored,
 % kept for backward compatibility with existing documents.
 \newcommand{\lg@deflangkey}[1]{\define@key{FV}{#1}[unused]{}}
 \forcsvlist{\lg@deflangkey}{bash,sh,shell,python,Python,json,yaml,xml,html,javascript,js,sql,text,ini,conf}
 
-% Bloco de código: fundo #F6F8FA, sem borda, recuo à esquerda
-% Usa fancyvrb (não listings) para copy-paste limpo no PDF.
-% listings processa caractere por caractere → xdvipdfmx escreve cada
-% um como operação de texto separada → leitores de PDF inserem espaços.
-% fancyvrb typeseta linha por linha → texto contíguo no PDF → copy limpo.
-\DefineVerbatimEnvironment{codigo}{Verbatim}
+% Code block: #F6F8FA background, no border, left indented
+% Uses fancyvrb (not listings) for clean copy-paste in PDF.
+% listings processes character by character -> xdvipdfmx writes each
+% one as a separate text operation -> PDF readers insert spaces.
+% fancyvrb typesets line by line -> contiguous text in PDF -> clean copy.
+\DefineVerbatimEnvironment{code}{Verbatim}
 {fontsize=\fontsize{10}{13}\selectfont, formatcom=\codefont\color{codetext},
  frame=none,
  backgroundcolor=codebg,
@@ -337,8 +336,8 @@
  breakanywheresymbolpre={}, breakanywheresymbolpost={},
 }
 
-% Bloco de código a partir de arquivo externo
-\newcommand{\codigoarquivo}[2][]{%
+% Code block from external file
+\newcommand{\codefile}[2][]{%
   \VerbatimInput[fontsize=\fontsize{10}{13}\selectfont,
    formatcom=\codefont\color{codetext},
    frame=none,
@@ -349,19 +348,19 @@
    breakanywheresymbolpre={}, breakanywheresymbolpost={}]{#2}%
 }
 
-% Código inline: \code{...}
-\newcommand{\code}[1]{{\codefont\fontsize{10}{12}\selectfont\color{codetext}#1}}
-% Parâmetro/arquivo citado no texto (itálico)
+% Inline code: \inlinecode{...}
+\newcommand{\inlinecode}[1]{{\codefont\fontsize{10}{12}\selectfont\color{codetext}#1}}
+% File/parameter name in text (italic)
 \newcommand{\param}[1]{\textit{#1}}
 
 % =====================================================================
-%  IMAGENS  — sempre centralizadas horizontalmente
+%  IMAGES  — always horizontally centered
 % =====================================================================
-% \imagem[largura]{arquivo}   (sem legenda)
-% Limita por largura E altura, mantendo proporção (keepaspectratio).
-% Imagens horizontais: limitadas pela largura (0.65\linewidth).
-% Imagens verticais: limitadas pela altura (0.4\textheight).
-\newcommand{\imagem}[2][0.65\linewidth]{%
+% \image[width]{file}   (no caption)
+% Limits by width AND height, keeping aspect ratio (keepaspectratio).
+% Horizontal images: limited by width (0.65\linewidth).
+% Vertical images: limited by height (0.4\textheight).
+\newcommand{\image}[2][0.65\linewidth]{%
   \IfFileExists{#2}{}{\ClassWarning{guide}{Image "#2" not found.
     Check the path (relative to TEXINPUTS) and that the file exists.}}%
   \par\medskip
@@ -369,8 +368,8 @@
    \includegraphics[width=#1,height=0.4\textheight,keepaspectratio]{#2}\par}%
   \medskip}
 
-% \imagemc[largura]{arquivo}{legenda}  (com legenda numerada — Figura N)
-\newcommand{\imagemc}[3][0.65\linewidth]{%
+% \imagecap[width]{file}{caption}  (with numbered caption — Figure N)
+\newcommand{\imagecap}[3][0.65\linewidth]{%
   \IfFileExists{#2}{}{\ClassWarning{guide}{Image "#2" not found.
     Check the path (relative to TEXINPUTS) and that the file exists.}}%
   \par\medskip
@@ -379,10 +378,10 @@
    \vspace{2pt}\captionof{figure}{#3}\par}%
   \medskip}
 
-% \imagemplaceholder{caminho}{descrição}
-% Mostra um box tracejado indicando onde o usuário deve colocar a imagem.
-% O usuário adiciona o arquivo manualmente no caminho indicado.
-\newcommand{\imagemplaceholder}[2]{%
+% \imageplaceholder{path}{description}
+% Shows a dashed box indicating where the user should place the image.
+% The user adds the file manually at the indicated path.
+\newcommand{\imageplaceholder}[2]{%
   \par\medskip
   \begin{tcolorbox}[
     colback=codebg, colframe=warningfg,
@@ -394,25 +393,25 @@
     {\codefont\color{codetext}\fontsize{11}{13}\selectfont
      [ Image placeholder ]}\\[6pt]
     {\footnotesize\color{codetext}
-     \textbf{File:} \code{#1}}\\[4pt]
+     \textbf{File:} \inlinecode{#1}}\\[4pt]
     {\footnotesize\color{codetext}
      \textbf{Description:} #2}\\[6pt]
     {\footnotesize\itshape\color{warningfg}
      Place the image file at the path above, then replace this command with
-     \code{\textbackslash imagem\{#1\}} or
-     \code{\textbackslash imagemc\{#1\}\{caption\}}.}
+     \inlinecode{\textbackslash image\{#1\}} or
+     \inlinecode{\textbackslash imagecap\{#1\}\{caption\}}.}
   \end{tcolorbox}
   \par\medskip}
 
 % =====================================================================
-%  NOTA / OBSERVAÇÃO  (texto em itálico)
+%  NOTE  (italic text)
 % =====================================================================
-\newcommand{\nota}[1]{\par\medskip\textit{#1}\par\medskip}
+\newcommand{\note}[1]{\par\medskip\textit{#1}\par\medskip}
 
-% Link textual azul (sem sublinhado), preservando destino clicável
+% Blue text link (no underline), preserving clickable destination
 \newcommand{\weblink}[2]{\href{#1}{\textcolor{linkblue}{#2}}}
 
-% Menu path: \menu{VPC, Security Groups} -> **VPC** → **Security Groups**
+% Menu path: \menu{VPC, Security Groups} -> **VPC** -> **Security Groups**
 % Uses etoolbox's \forcsvlist (loaded by tcolorbox[most])
 \newtoks\lg@menutoks
 \newif\iflg@menufirst
@@ -429,34 +428,34 @@
   \lg@menutoks=\expandafter{\the\lg@menutoks\textbf{#1}}}
 
 % =====================================================================
-%  CAIXAS DE AVISO  (callout boxes: aviso, dica, info)
+%  CALLOUT BOXES  (warning, tip, infobox)
 % =====================================================================
-% Uso:
-%   \begin{aviso} ... \end{aviso}   — atenção / cuidado (âmbar)
-%   \begin{dica}  ... \end{dica}    — sugestão / dica (verde)
-%   \begin{infobox}  ... \end{infobox}  — informação adicional (azul)
+% Usage:
+%   \begin{warning} ... \end{warning}   — caution / warning (amber)
+%   \begin{tip}     ... \end{tip}       — suggestion / tip (green)
+%   \begin{infobox} ... \end{infobox}   — additional info (blue)
 \newcommand{\lg@callout}[3]{%
   \newtcolorbox{#1}{colback=#2, colframe=#3,
     boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
     left=8pt, right=8pt, top=6pt, bottom=6pt,
     before skip=6pt, after skip=6pt, breakable, enhanced jigsaw}}
-\lg@callout{aviso}{warningbg}{warningfg}
-\lg@callout{dica}{tipbg}{tipfg}
+\lg@callout{warning}{warningbg}{warningfg}
+\lg@callout{tip}{tipbg}{tipfg}
 \lg@callout{infobox}{infobg}{infofg}
 
 % =====================================================================
-%  ETIQUETA / BADGE  (rótulo colorido inline)
+%  BADGE  (inline colored label)
 % =====================================================================
-% Uso: \badge{Novo}  -> rótulo vermelho com texto branco
+% Usage: \badge{New}  -> red label with white text
 \newcommand{\badge}[1]{%
   \colorbox{huaweired}{\textcolor{white}{\footnotesize\bfseries\strut~#1~}}}
 
 % =====================================================================
-%  CHANGELOG / VERSIONAMENTO
+%  CHANGELOG / VERSIONING
 % =====================================================================
-% Uso:
-%   \setdocversion{1.0.0}       % mostra "v1.0.0" na capa
-%   \setdocdate{2026-08-05}     % opcional; padrão = \today
+% Usage:
+%   \setdocversion{1.0.0}       % shows "v1.0.0" on cover
+%   \setdocdate{2026-08-05}     % optional; default = \today
 %
 %   \begin{changelog}
 %     \changelogentry{1.0.0}{2026-08-05}{

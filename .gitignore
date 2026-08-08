@@ -23,8 +23,12 @@
 *.dvi
 *.ps
 *.listing
-# compiled output
+# compiled output (ignored by default)
 *.pdf
+# Keep sample and setup-guide PDFs for validation
+!examples/guide/pt/main.pdf
+!examples/guide/en/main.pdf
+!examples/setup-guide/setup-guide.pdf
 # editor / os cruft
 .DS_Store
 *.swp

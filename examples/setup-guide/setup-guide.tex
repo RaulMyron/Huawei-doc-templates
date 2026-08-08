@@ -3,7 +3,7 @@
 %  Compile with XeLaTeX:
 %      xelatex setup-guide.tex   (run 2x for the TOC)
 % =====================================================================
-\documentclass[english]{guide}
+\documentclass{guide}
 
 % --- Document configuration -----------------------------------------
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
@@ -17,7 +17,7 @@
 \makecover
 
 % ---- TABLE OF CONTENTS ---------------------------------------------
-\sumario
+\maketoc
 
 % ---- BODY (restarts page numbering at 1) ---------------------------
 \startbody
@@ -27,8 +27,8 @@
 % =====================================================================
 \section{Provision an ECS Instance on Huawei Cloud}
 
-\begin{objetivos}
-  \objgeral{Provision an Elastic Cloud Server (ECS) on Huawei Cloud that will
+\begin{objectives}
+  \generalobjective{Provision an Elastic Cloud Server (ECS) on Huawei Cloud that will
   host a complete coding stack environment: the
   \weblink{https://github.com/wallacelw/oh-my-coding-maas-gateway}{oh-my-coding-maas-gateway}
   (a LiteLLM-based proxy with load balancing, virtual keys, and Grafana
@@ -36,38 +36,38 @@
   OpenCode as the primary one. By the end of this chapter you will have a
   running ECS instance with a public IP accessible over SSH.}
 
-  \prerequisitos
+  \prerequisites
   \begin{itemize}
     \item Active Huawei Cloud account with IAM credentials.
     \item Permission to create security groups, ECS instances, and EIPs.
     \item A key pair created in the Console, or permission to create one.
     \item A web browser (Chrome, Firefox, or Edge).
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \begin{infobox}
-This guide assumes the \code{sa-brazil-1} region. Adjust the region if your
+This guide assumes the \inlinecode{sa-brazil-1} region. Adjust the region if your
 account is registered elsewhere.
 \end{infobox}
 
 \subsection{Create the security group (sg-xgate)}
 
-\objpratica{Create a security group that allows SSH access on port 4444 from
+\objective{Create a security group that allows SSH access on port 4444 from
 specific Huawei internal IPs only.}
 
 \begin{infobox}
-We use port \code{4444} instead of the standard SSH port \code{22} because
+We use port \inlinecode{4444} instead of the standard SSH port \inlinecode{22} because
 the Huawei corporate proxy blocks outbound connections on port 22. Port
-\code{4444} is allowed through the proxy and works reliably for SSH.
+\inlinecode{4444} is allowed through the proxy and works reliably for SSH.
 \end{infobox}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item In the Console, go to \menu{VPC, Security Groups}
         and click \textbf{Create Security Group}.
-  \item Name it \code{sg-xgate} and add the following inbound rules:
+  \item Name it \inlinecode{sg-xgate} and add the following inbound rules:
 
-  \begin{codigo}
+  \begin{code}
 Rule 1:
   Protocol:    TCP
   Port:        4444
@@ -85,26 +85,26 @@ Rule 3:
   Port:        4444
   Source:      119.8.193.3/32
   Description: SSH for Huawei internal user 3
-  \end{codigo}
+  \end{code}
 
   \item Click \textbf{OK} to create the security group.
 \end{enumerate}
 
-\begin{dica}
-Each \code{/32} rule restricts access to exactly one IP address. Only the
+\begin{tip}
+Each \inlinecode{/32} rule restricts access to exactly one IP address. Only the
 three listed Huawei internal IPs can reach the ECS on port 4444 --- no other
 inbound traffic is allowed.
-\end{dica}
+\end{tip}
 
 \subsection{Create the ECS instance}
 
-\objpratica{Launch a single ECS instance using the Console wizard, using the
+\objective{Launch a single ECS instance using the Console wizard, using the
 security group created above.}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Log in to the \weblink{https://console.huaweicloud.com/}{Huawei Cloud
-        Console} and select the \code{sa-brazil-1} region in the top-right
+        Console} and select the \inlinecode{sa-brazil-1} region in the top-right
         corner.
 
   \item Open the service catalog and select \textbf{Elastic Cloud Server
@@ -112,7 +112,7 @@ security group created above.}
 
   \item Click \textbf{Create ECS} and fill in the basic configuration:
 
-  \begin{codigo}
+  \begin{code}
 Name:           dev-server-01
 Flavor:         ac8.xlarge.2 (4 vCPU, 8 GB RAM) — recommended
 Image:          Ubuntu 24.04 Server 64bit
@@ -120,29 +120,29 @@ Disk:           100 GB General Purpose SSD
 VPC:            vpc-default
 Subnet:         subnet-default
 Security Group: sg-xgate (port 4444, Huawei internal IPs only)
-  \end{codigo}
+  \end{code}
 
   \item Under \textbf{Billing Mode}, select \textbf{Pay-per-use}.
 
-  \begin{dica}
+  \begin{tip}
   Pay-per-use bills by the hour with no long-term commitment. You only pay
   for the time the instance is running. This is ideal for development and
   testing --- stop the instance when not in use to reduce costs.
-  \end{dica}
+  \end{tip}
 
   \item Under \textbf{EIP} settings, configure the public IP:
 
-  \begin{codigo}
+  \begin{code}
 EIP:            Auto-assign
 Billing:        Pay by traffic
 Bandwidth:      1000 Mbit/s
 Release:        Yes — release EIP when ECS is deleted
-  \end{codigo}
+  \end{code}
 
   \item Under \textbf{Login Configuration}, select \textbf{Key pair} as the
         authentication method. If you do not yet have a key pair, click
         \textbf{Create Key Pair} to generate one inside Huawei Cloud and
-        download the \code{.pem} file.
+        download the \inlinecode{.pem} file.
 
   \begin{infobox}
   The key pair is the primary access method. Later, you can set a root
@@ -155,11 +155,11 @@ Release:        Yes — release EIP when ECS is deleted
 
   \badge{Important}
 
-  \begin{aviso}
+  \begin{warning}
   The EIP is auto-assigned and configured to be released when the ECS is
   deleted. If you need a fixed IP that persists across stop/start cycles,
   allocate a dedicated EIP and bind it manually after creation.
-  \end{aviso}
+  \end{warning}
 \end{enumerate}
 
 \subsection{Verify the instance}
@@ -172,30 +172,30 @@ will use to connect in the next chapters.
 % =====================================================================
 \section{Configure ECS for Remote Access}
 
-\begin{objetivos}
-  \objgeral{Prepare the ECS instance for remote access by setting a root
+\begin{objectives}
+  \generalobjective{Prepare the ECS instance for remote access by setting a root
   password via the Console and changing the SSH port from 22 to 4444. This
   is required because the Huawei corporate proxy blocks outbound connections
   on port 22.}
 
-  \prerequisitos
+  \prerequisites
   \begin{itemize}
     \item Chapter 1 completed — ECS instance running with a public IP.
     \item Access to the Huawei Cloud Console.
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \subsection{Set the root password}
 
-\objpratica{Use the Console to reset the root password of the ECS instance.}
+\objective{Use the Console to reset the root password of the ECS instance.}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item In the Console, navigate to \textbf{Elastic Cloud Server} and click
-        on the instance \code{dev-server-01}.
+        on the instance \inlinecode{dev-server-01}.
   \item In the ECS details page, click \menu{More, Reset Password}.
 
-  \imagemc{assets/ecs-reset-password.png}{Reset Password option in the ECS
+  \imagecap{assets/ecs-reset-password.png}{Reset Password option in the ECS
     details page.}
 
   \item Enter a strong root password and confirm. Click \textbf{OK}.
@@ -203,55 +203,55 @@ will use to connect in the next chapters.
         to \textbf{Running}.
 \end{enumerate}
 
-\begin{aviso}
+\begin{warning}
 Choose a strong password (12+ characters, mixed case, digits, symbols).
 This password enables remote login directly from the Console and serves as
 a second access method alongside the SSH key pair.
-\end{aviso}
+\end{warning}
 
 \subsection{Change the SSH port to 4444}
 
-\objpratica{Log in via the Console remote login, edit \code{sshd\_config},
+\objective{Log in via the Console remote login, edit \inlinecode{sshd\_config},
 and change the SSH port from 22 to 4444.}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item In the ECS details page, click \textbf{Remote Login} (top-right
         corner). A browser-based terminal opens.
 
-  \imagemc{assets/ecs-remote-login.png}{Remote Login button in the ECS
+  \imagecap{assets/ecs-remote-login.png}{Remote Login button in the ECS
     details page.}
-  \item Log in as \code{root} using the password set in the previous
+  \item Log in as \inlinecode{root} using the password set in the previous
         subsection.
   \item Open the SSH daemon configuration file:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 sudo vim /etc/ssh/sshd_config
-  \end{codigo}
+  \end{code}
 
-  \item Find the line \code{Port 22} (or \code{\#Port 22}) and change it
+  \item Find the line \inlinecode{Port 22} (or \inlinecode{\#Port 22}) and change it
         to:
 
-  \begin{codigo}
+  \begin{code}
 Port 4444
-  \end{codigo}
+  \end{code}
 
-  \item Save and exit vim (\code{:wq}).
+  \item Save and exit vim (\inlinecode{:wq}).
   \item Restart the SSH daemon (or reboot the ECS):
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 sudo systemctl restart sshd
-  \end{codigo}
+  \end{code}
 
-  \begin{dica}
+  \begin{tip}
   Alternatively, restart the ECS from the Console. The SSH daemon will
   start automatically on port 4444 after reboot.
-  \end{dica}
+  \end{tip}
 \end{enumerate}
 
 \begin{infobox}
-After this change, SSH connections must use \code{Port 4444} explicitly.
-The security group \code{sg-xgate} (created in Chapter 1) already allows
+After this change, SSH connections must use \inlinecode{Port 4444} explicitly.
+The security group \inlinecode{sg-xgate} (created in Chapter 1) already allows
 inbound TCP 4444 from the authorized Huawei internal IPs.
 \end{infobox}
 
@@ -267,11 +267,11 @@ proceeding to the next chapter:
     \toprule
     \textbf{Step} & \textbf{What to check} & \textbf{Expected result} \\
     \midrule
-    Security group & \code{sg-xgate} exists with TCP 4444 rules & 3 inbound rules \\
-    ECS running    & Instance \code{dev-server-01} status       & \textbf{Running} \\
+    Security group & \inlinecode{sg-xgate} exists with TCP 4444 rules & 3 inbound rules \\
+    ECS running    & Instance \inlinecode{dev-server-01} status       & \textbf{Running} \\
     Root password  & Remote Login works with password            & Shell prompt \\
-    SSH port       & \code{sshd\_config} has \code{Port 4444}    & Config saved \\
-    SSH restart    & \code{sshd} restarted or ECS rebooted       & Service active \\
+    SSH port       & \inlinecode{sshd\_config} has \inlinecode{Port 4444}    & Config saved \\
+    SSH restart    & \inlinecode{sshd} restarted or ECS rebooted       & Service active \\
     \bottomrule
   \end{tabular}
   \caption{Pre-SSH verification checklist.}
@@ -282,89 +282,89 @@ proceeding to the next chapter:
 % =====================================================================
 \section{Connect via SSH with Proxy for VS Code}
 
-\begin{objetivos}
-  \objgeral{Configure VS Code Remote-SSH to connect to the ECS instance
-  through the Huawei corporate proxy (xgate) using \code{connect.exe} from
+\begin{objectives}
+  \generalobjective{Configure VS Code Remote-SSH to connect to the ECS instance
+  through the Huawei corporate proxy (xgate) using \inlinecode{connect.exe} from
   Git for Windows.}
 
-  \prerequisitos
+  \prerequisites
   \begin{itemize}
     \item Chapter 2 completed — ECS configured with root password and SSH
           on port 4444.
     \item VS Code installed on your local Windows machine.
-    \item The private key file (\code{.pem}) downloaded from Huawei Cloud.
+    \item The private key file (\inlinecode{.pem}) downloaded from Huawei Cloud.
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \begin{infobox}
 \textbf{Premises:}
 \begin{itemize}
   \item The proxy is \textbf{xgate} (Huawei corporate proxy) at
-        \code{proxy.huawei.com:8080}.
-  \item SSH runs on port \code{4444} (configured in Chapter 2).
-  \item Login as \code{root} using the key pair from Chapter 1.
-  \item \code{connect.exe} is used instead of \code{ncat.exe} --- it ships
+        \inlinecode{proxy.huawei.com:8080}.
+  \item SSH runs on port \inlinecode{4444} (configured in Chapter 2).
+  \item Login as \inlinecode{root} using the key pair from Chapter 1.
+  \item \inlinecode{connect.exe} is used instead of \inlinecode{ncat.exe} --- it ships
         with Git for Windows, so no extra installation is needed.
 \end{itemize}
 \end{infobox}
 
 \subsection{Install the Remote-SSH extension}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Open VS Code on your local Windows machine.
   \item Install the \textbf{Remote - SSH} extension (publisher: Microsoft):
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 code --install-extension ms-vscode-remote.remote-ssh
-  \end{codigo}
+  \end{code}
 \end{enumerate}
 
 \subsection{Install Git for Windows}
 
-\objpratica{Install Git for Windows, which provides \code{connect.exe} ---
-the proxy tunnel tool used by SSH \code{ProxyCommand}.}
+\objective{Install Git for Windows, which provides \inlinecode{connect.exe} ---
+the proxy tunnel tool used by SSH \inlinecode{ProxyCommand}.}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Download the Git for Windows installer from
         \weblink{https://git-scm.com/download/win}{git-scm.com/download/win}.
   \item Run the installer with the default settings. Click \textbf{Next}
         through each step --- the defaults are correct for our use case.
-  \item After installation, verify that \code{connect.exe} is available:
+  \item After installation, verify that \inlinecode{connect.exe} is available:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 "C:\Program Files\Git\mingw64\bin\connect.exe" --help
-  \end{codigo}
+  \end{code}
 
   \item If the command above shows help text, the installation is correct.
         If not, check whether you installed 32-bit Git (the path would be
-        \code{mingw32} instead of \code{mingw64}).
+        \inlinecode{mingw32} instead of \inlinecode{mingw64}).
 \end{enumerate}
 
 \begin{infobox}
-\code{connect.exe} is included with Git for Windows and supports HTTP
-proxy tunneling via the \code{-H} flag. It is a lightweight alternative to
-\code{ncat.exe} (from Nmap) and requires no separate installation.
+\inlinecode{connect.exe} is included with Git for Windows and supports HTTP
+proxy tunneling via the \inlinecode{-H} flag. It is a lightweight alternative to
+\inlinecode{ncat.exe} (from Nmap) and requires no separate installation.
 \end{infobox}
 
 \subsection{Configure the SSH config file}
 
-\objpratica{Create an SSH config entry that tunnels through the Huawei proxy
-using \code{connect.exe} from Git.}
+\objective{Create an SSH config entry that tunnels through the Huawei proxy
+using \inlinecode{connect.exe} from Git.}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Open or create the SSH config file on your Windows machine:
 
-  \begin{codigo}
+  \begin{code}
 notepad %USERPROFILE%\.ssh\config
-  \end{codigo}
+  \end{code}
 
-  \item Add the following configuration (replace \code{<EIP>} with the
-        ECS public IP and \code{<host-name>} with a name of your choice):
+  \item Add the following configuration (replace \inlinecode{<EIP>} with the
+        ECS public IP and \inlinecode{<host-name>} with a name of your choice):
 
-  \begin{codigo}
+  \begin{code}
 Host <host-name>
     HostName <EIP>
     User root
@@ -373,39 +373,39 @@ Host <host-name>
     ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -H proxy.huawei.com:8080 %h %p
     ServerAliveInterval 60
     ServerAliveCountMax 3
-  \end{codigo}
+  \end{code}
 
   \begin{infobox}
-  Adjust the \code{IdentityFile} path to match the location where you saved
-  the \code{.pem} key file. The \code{connect.exe} path assumes a 64-bit Git
-  installation --- if you use 32-bit Git, change \code{mingw64} to
-  \code{mingw32}.
+  Adjust the \inlinecode{IdentityFile} path to match the location where you saved
+  the \inlinecode{.pem} key file. The \inlinecode{connect.exe} path assumes a 64-bit Git
+  installation --- if you use 32-bit Git, change \inlinecode{mingw64} to
+  \inlinecode{mingw32}.
   \end{infobox}
 \end{enumerate}
 
-\begin{dica}
-The \code{ServerAliveInterval} and \code{ServerAliveCountMax} settings keep
+\begin{tip}
+The \inlinecode{ServerAliveInterval} and \inlinecode{ServerAliveCountMax} settings keep
 the connection alive through the proxy, which may drop idle connections.
-\end{dica}
+\end{tip}
 
 \subsection{Connect to the ECS via VS Code}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
-  \item Press \code{F1}, type \textbf{Remote-SSH: Connect to Host...}, and
+  \item Press \inlinecode{F1}, type \textbf{Remote-SSH: Connect to Host...}, and
         select your host name from the list.
 
   \item VS Code opens a new window connected to the remote instance. Click
-        \textbf{Open Folder} and select \code{/root} (or your working
+        \textbf{Open Folder} and select \inlinecode{/root} (or your working
         directory).
 
   \item Verify the connection by opening a terminal in VS Code
-        (\code{Ctrl+`}) and running:
+        (\inlinecode{Ctrl+`}) and running:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 uname -a
 df -h
-  \end{codigo}
+  \end{code}
 \end{enumerate}
 
 % =====================================================================
@@ -413,38 +413,38 @@ df -h
 % =====================================================================
 \section{Install the MaaS Coding Gateway}
 
-\begin{objetivos}
-  \objgeral{Install the oh-my-coding-maas-gateway on the ECS instance.
+\begin{objectives}
+  \generalobjective{Install the oh-my-coding-maas-gateway on the ECS instance.
   This is a self-hosted LiteLLM proxy that routes Huawei ModelArts MaaS
   models to coding tools (opencode, Codex CLI, Claude Code, Pi agent) with
   load balancing, virtual keys, and Prometheus + Grafana observability.}
 
-  \prerequisitos
+  \prerequisites
   \begin{itemize}
     \item Chapter 3 completed — VS Code connected to the ECS via Remote-SSH.
     \item Docker and Docker Compose available (the installer handles this).
     \item A Huawei ModelArts MaaS API key.
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \begin{infobox}
 The gateway repository is at
 \weblink{https://github.com/wallacelw/oh-my-coding-maas-gateway}{wallacelw/oh-my-coding-maas-gateway}.
-It supports 4 models: \code{glm-5.2}, \code{glm-5.1},
-\code{deepseek-v4-pro}, and \code{deepseek-v4-flash}.
+It supports 4 models: \inlinecode{glm-5.2}, \inlinecode{glm-5.1},
+\inlinecode{deepseek-v4-pro}, and \inlinecode{deepseek-v4-flash}.
 \end{infobox}
 
 \subsection{Run the bootstrap installer}
 
-\objpratica{Install the gateway using the one-command bootstrap script.}
+\objective{Install the gateway using the one-command bootstrap script.}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item In the VS Code remote terminal, run the bootstrap script:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 curl -fsSL https://raw.githubusercontent.com/wallacelw/oh-my-coding-maas-gateway/main/scripts/bootstrap.sh | bash
-  \end{codigo}
+  \end{code}
 
   \item The installer will:
     \begin{itemize}
@@ -460,146 +460,146 @@ curl -fsSL https://raw.githubusercontent.com/wallacelw/oh-my-coding-maas-gateway
 
   \badge{Important}
 
-  \begin{aviso}
+  \begin{warning}
   Estimated time: \textasciitilde5 min for a fresh install, \textasciitilde2 min
-  for an upgrade. If you are behind a proxy, ensure \code{http\_proxy} and
-  \code{https\_proxy} environment variables are set before running the script.
-  \end{aviso}
+  for an upgrade. If you are behind a proxy, ensure \inlinecode{http\_proxy} and
+  \inlinecode{https\_proxy} environment variables are set before running the script.
+  \end{warning}
 \end{enumerate}
 
 \subsection{Verify the installation}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Check that the proxy is running:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 curl http://localhost:4000/health
-  \end{codigo}
+  \end{code}
 
-  \item Open the Grafana dashboard at \code{http://localhost:3000} to
+  \item Open the Grafana dashboard at \inlinecode{http://localhost:3000} to
         monitor usage and metrics.
 
-  \item Open the LiteLLM Admin UI at \code{http://localhost:4000/ui} to
+  \item Open the LiteLLM Admin UI at \inlinecode{http://localhost:4000/ui} to
         manage virtual keys and model routing.
 
   \item Launch your coding tool:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 opencode          # or:  codex  or:  claude --bare  or:  pi
-  \end{codigo}
+  \end{code}
 \end{enumerate}
 
-\begin{dica}
+\begin{tip}
 To upgrade the gateway later, re-run the same bootstrap command. It detects
 existing installs, compares versions, and pulls updates — all secrets and
 data are preserved.
-\end{dica}
+\end{tip}
 
 % =====================================================================
 %  Chapter 5 — Install the Huawei Project
 % =====================================================================
 \section{Install the Huawei Document Templates Project}
 
-\begin{objetivos}
-  \objgeral{Clone the Huawei document templates repository on the ECS
+\begin{objectives}
+  \generalobjective{Clone the Huawei document templates repository on the ECS
   instance, run the setup script, and verify that the LaTeX toolchain and
   the coding agent skill are ready for use. The script assumes a fresh
   Ubuntu install --- it installs all dependencies from scratch and
   configures VS Code at the user level.}
 
-  \prerequisitos
+  \prerequisites
   \begin{itemize}
     \item Chapter 3 completed — MaaS gateway installed and running.
-    \item Git installed (\code{sudo apt install git}).
+    \item Git installed (\inlinecode{sudo apt install git}).
     \item The repository URL for the Huawei document templates project.
     \item A fresh Ubuntu 24.04 instance (no prior LaTeX installation
           required).
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \begin{infobox}
-The \code{install.sh} script is idempotent --- it is safe to run multiple
+The \inlinecode{install.sh} script is idempotent --- it is safe to run multiple
 times. It merges VS Code settings rather than overwriting them, and
-\code{apt-get install} skips packages that are already present.
+\inlinecode{apt-get install} skips packages that are already present.
 \end{infobox}
 
 \subsection{Clone and set up the project}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Clone the repository:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 cd ~
 git clone <repo-url> Huawei-doc-templates
 cd Huawei-doc-templates
-  \end{codigo}
+  \end{code}
 
   \item Run the setup script (installs XeLaTeX, latexmk, fonts, the coding
         agent skill, and configures VS Code LaTeX Workshop at the user
         level):
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 ./install.sh
-  \end{codigo}
+  \end{code}
 
-  \begin{aviso}
-  The script runs \code{sudo apt-get install} for TeX Live packages. If you
+  \begin{warning}
+  The script runs \inlinecode{sudo apt-get install} for TeX Live packages. If you
   do not have sudo access, ask your administrator to install the packages
-  listed in \code{install.sh}.
-  \end{aviso}
+  listed in \inlinecode{install.sh}.
+  \end{warning}
 
   \item Verify the LaTeX toolchain:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 xelatex --version
 latexmk --version
-  \end{codigo}
+  \end{code}
 \end{enumerate}
 
 \subsection{Compile the sample guides}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item Compile the Portuguese sample:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 cd examples/guide/pt
 latexmk main.tex
-  \end{codigo}
+  \end{code}
 
   \item Compile the English sample:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 cd ../en
 latexmk main.tex
-  \end{codigo}
+  \end{code}
 
   \item Verify the PDFs were generated:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 ls -l examples/guide/pt/main.pdf
 ls -l examples/guide/en/main.pdf
-  \end{codigo}
+  \end{code}
 \end{enumerate}
 
 \subsection{Create your first guide with the skill}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item In the VS Code remote terminal, launch your coding agent:
 
-  \begin{codigo}[bash]
+  \begin{code}[bash]
 cd ~/Huawei-doc-templates
 opencode          # or: codex, claude --bare, pi
-  \end{codigo}
+  \end{code}
 
   \item Run the guide skill:
 
-  \begin{codigo}
+  \begin{code}
 /skill huawei-template-guide
-  \end{codigo}
+  \end{code}
 
   \item The skill will ask for:
     \begin{itemize}
@@ -609,16 +609,16 @@ opencode          # or: codex, claude --bare, pi
       \item \textbf{Location} — where to create the project folder
     \end{itemize}
 
-  \item The skill generates the \code{.tex} file, creates a
-        \code{.latexmkrc} with the correct \code{TEXINPUTS}, compiles the
+  \item The skill generates the \inlinecode{.tex} file, creates a
+        \inlinecode{.latexmkrc} with the correct \inlinecode{TEXINPUTS}, compiles the
         document, and reports the page count.
 
   \badge{Ready}
 \end{enumerate}
 
 \begin{infobox}
-The skill is auto-discovered via \code{opencode.json} which registers
-\code{templates/} as a skill discovery path. No manual skill installation
+The skill is auto-discovered via \inlinecode{opencode.json} which registers
+\inlinecode{templates/} as a skill discovery path. No manual skill installation
 is needed when working inside the repo.
 \end{infobox}
 
@@ -628,70 +628,70 @@ The template provides commands for common guide elements:
 
 Headings (automatic numbering, H1 starts on a new page):
 
-\begin{codigo}
+\begin{code}
 \section{Chapter Title}          % H1: giant number + title + rule
 \subsection{Section Title}        % H2
 \subsubsection{Subsection Title}  % H3
-\end{codigo}
+\end{code}
 
 Objectives block (closes with a horizontal rule):
 
-\begin{codigo}
-\begin{objetivos}
-  \objgeral{...}
-  \prerequisitos
+\begin{code}
+\begin{objectives}
+  \generalobjective{...}
+  \prerequisites
   \begin{itemize}
     \item ...
   \end{itemize}
-\end{objetivos}
-\end{codigo}
+\end{objectives}
+\end{code}
 
 Callout boxes and inline commands:
 
-\begin{codigo}
-\begin{aviso} ... \end{aviso}     % amber warning box
-\begin{dica}  ... \end{dica}      % green tip box
+\begin{code}
+\begin{warning} ... \end{warning}     % amber warning box
+\begin{tip}  ... \end{tip}      % green tip box
 \begin{infobox} ... \end{infobox} % blue info box
-\end{codigo}
+\end{code}
 
-\begin{codigo}
-\code{inline code}                % inline monospace
-\imagem{assets/screenshot.png}    % centered image
-\nota{Italic observation.}        % note paragraph
+\begin{code}
+\inlinecode{inline code}                % inline monospace
+\image{assets/screenshot.png}    % centered image
+\note{Italic observation.}        % note paragraph
 \weblink{https://...}{link text}  % blue clickable link
 \badge{New}                       % inline red label
-\end{codigo}
+\end{code}
 
 % =====================================================================
 %  Chapter 6 — Clean Up
 % =====================================================================
 \section{Clean Up}
 
-\begin{objetivos}
-  \objgeral{Remove the resources created in this guide to avoid ongoing
+\begin{objectives}
+  \generalobjective{Remove the resources created in this guide to avoid ongoing
   charges on your Huawei Cloud account.}
-\end{objetivos}
+\end{objectives}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item In the Console, navigate to \textbf{Elastic Cloud Server}.
-  \item Select the instance \code{dev-server-01}, click \textbf{More} and
+  \item Select the instance \inlinecode{dev-server-01}, click \textbf{More} and
         choose \textbf{Delete}.
   \item Confirm deletion. Optionally release the EIP if it was dedicated.
   \item Navigate to \menu{VPC, Security Groups},
-        select \code{sg-xgate}, and delete it.
-  \item Remove the SSH config entry from \code{\textasciitilde/.ssh/config}.
+        select \inlinecode{sg-xgate}, and delete it.
+  \item Remove the SSH config entry from \inlinecode{\textasciitilde/.ssh/config}.
 \end{enumerate}
 
-\begin{aviso}
+\begin{warning}
 If you used Terraform to provision the infrastructure, run
-\code{terraform destroy} instead to remove all resources declared in the
+\inlinecode{terraform destroy} instead to remove all resources declared in the
 configuration.
-\end{aviso}
+\end{warning}
 
-\nota{This guide was generated using the \code{guide.cls} template. For the
+\note{This guide was generated using the \inlinecode{guide.cls} template. For the
 full command reference, see the template's README.md or run
-\code{/skill huawei-template-guide} in your coding agent.}
+\inlinecode{/skill huawei-template-guide} in your coding agent.}
 
 % =====================================================================
 %  Changelog
@@ -700,29 +700,29 @@ full command reference, see the template's README.md or run
 
 \begin{changelog}
   \changelogentry{2.1.0}{2026-08-06}{
-    \item Updated ECS flavor to \code{ac8.xlarge.2} (4 vCPU, 8 GB RAM).
+    \item Updated ECS flavor to \inlinecode{ac8.xlarge.2} (4 vCPU, 8 GB RAM).
     \item Updated OS image to Ubuntu 24.04 Server 64bit.
     \item Increased disk size to 100 GB.
     \item Recommended pay-per-use billing mode.
     \item EIP auto-assigned: pay by traffic, 1000 Mbit/s, release with ECS.
     \item Key pair authentication (created in Huawei Cloud); root password
           can be set later as a second access method.
-    \item Security group \code{sg-xgate} now created \textbf{before} the ECS
+    \item Security group \inlinecode{sg-xgate} now created \textbf{before} the ECS
           instance.
     \item Replaced SSH port 22 with port 4444 (Huawei proxy blocks port 22).
     \item Restricted SSH access to three specific Huawei internal IPs
-          (\code{119.8.89.193}, \code{119.8.89.3}, \code{119.8.193.3}).
-    \item Added \code{Port 4444} to SSH config examples.
+          (\inlinecode{119.8.89.193}, \inlinecode{119.8.89.3}, \inlinecode{119.8.193.3}).
+    \item Added \inlinecode{Port 4444} to SSH config examples.
   }
   \changelogentry{2.0.0}{2026-08-05}{
     \item Replaced OpenCode with oh-my-coding-maas-gateway as the default
           coding environment.
     \item Added changelog and versioning support to the template
-          (\code{\textbackslash setdocversion}, \code{\textbackslash setdocdate},
-          \code{changelog} environment).
-    \item Renamed \code{info} environment to \code{infobox} to avoid
+          (\inlinecode{\textbackslash setdocversion}, \inlinecode{\textbackslash setdocdate},
+          \inlinecode{changelog} environment).
+    \item Renamed \inlinecode{info} environment to \inlinecode{infobox} to avoid
           package name collisions.
-    \item Fixed \code{\textbackslash codigoarquivo} implementation for
+    \item Fixed \inlinecode{\textbackslash codigoarquivo} implementation for
           external file code blocks.
   }
   \changelogentry{1.0.0}{2026-08-05}{

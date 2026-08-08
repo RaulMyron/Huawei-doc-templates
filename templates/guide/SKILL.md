@@ -12,8 +12,8 @@ Create, edit, and compile Huawei Cloud guide documents using the
 
 Use this skill when the task is to **write, extend, or fix a Huawei Cloud
 guide**. The output is a PDF compiled from LaTeX. Content defaults to
-Portuguese ("Guia"); pass the `english` class option for English
-labels. Do **not** use this for general LaTeX documents — the formatting is
+English; pass the `portuguese` class option for Portuguese labels
+("Guia"). Do **not** use this for general LaTeX documents — the formatting is
 hard-coded to the Huawei house style.
 
 ---
@@ -22,7 +22,7 @@ hard-coded to the Huawei house style.
 
 1. **Ask for the essentials** (if not already provided):
    - **Title** — e.g. "Provisioning an ECS Instance"
-   - **Language** — Portuguese (default) or English
+   - **Language** — English (default) or Portuguese
    - **Project name** — used as the folder name (e.g. `ecs-provisioning`)
    - **Location** — where to create the project folder (default: current
      workspace). The skill should ask the user; do not assume `samples/`.
@@ -87,7 +87,7 @@ templates/guide/
     ├── huawei-logo-cover.png    # cover logo
     ├── exemplo-menu.png         # sample image
     ├── exemplo-login.png        # sample image
-    └── example-script.sh        # example code file for \codigoarquivo
+    └── example-script.sh        # example code file for \codefile
 
 # Samples live in examples/guide/ (not here):
 examples/guide/
@@ -107,36 +107,36 @@ the user asks.
 
 ## Document skeleton
 
-### Portuguese (default)
+### English (default)
 
 ```latex
 \documentclass{guide}
 
-\setguidetitle{Guia: <topic>}
+\setguidetitle{Guide: <topic>}
 \setheadertitle{Huawei Cloud -- <short title>}
 \setcovertext{Huawei Technologies CO., LTD}
 \setdocversion{1.0.0}
 
 \begin{document}
 \makecover
-\sumario
+\maketoc
 \startbody
 
 \section{<chapter title>}
 
-\begin{objetivos}
-  \objgeral{<general objective>}
-  \prerequisitos
+\begin{objectives}
+  \generalobjective{<general objective>}
+  \prerequisites
   \begin{itemize}
     \item <prerequisite 1>
     \item <prerequisite 2>
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 
 \subsection{<section title>}
-\objpratica{<objective>}
+\objective{<objective}
 
-\passoapasso
+\stepbystep
 \begin{enumerate}
   \item <step 1>
   \item <step 2>
@@ -145,13 +145,13 @@ the user asks.
 \end{document}
 ```
 
-### English
+### Portuguese
 
-Same skeleton but with `\documentclass[english]{guide}`. Labels switch
-automatically: *Contents*, *General Objective:*, *Objective:*,
-*Prerequisites:*, *Step by step:*, *Page*.
+Same skeleton but with `\documentclass[portuguese]{guide}`. Labels switch
+automatically: *Sumário*, *Objetivo Geral:*, *Objetivo:*,
+*Pré-requisitos:*, *Passo a passo:*, *Página*.
 
-Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
+Body order is fixed: `\makecover` → `\maketoc` → `\startbody` → sections.
 
 ---
 
@@ -174,7 +174,7 @@ Body order is fixed: `\makecover` → `\sumario` → `\startbody` → sections.
 | Command | Purpose |
 |---|---|
 | `\makecover` | Render the cover. Call right after `\begin{document}`. |
-| `\sumario` | Render the TOC ("Sumário" / "Contents", right-aligned, dotted leaders) and page-break. |
+| `\maketoc` | Render the TOC ("Contents" / "Sumário", right-aligned, dotted leaders) and page-break. |
 | `\startbody` | Mark body start; **resets page numbering to 1** and restores header (logo + title). |
 
 ### Headings — use standard section commands (template restyles them)
@@ -192,24 +192,24 @@ Numbering is automatic: `1` / `1.1` / `1.1.1` / `1.1.1.1`.
 
 ### Objectives / prerequisites block
 ```latex
-\begin{objetivos}
-  \objgeral{<general objective>}
-  \objpratica{<objective>}
-  \prerequisitos
+\begin{objectives}
+  \generalobjective{<general objective>}
+  \objective{<objective>}
+  \prerequisites
   \begin{itemize}
     \item ...
   \end{itemize}
-\end{objetivos}
+\end{objectives}
 ```
-Closes with a 1.5pt horizontal rule. `\objpratica` and `\passoapasso` also
-work outside `objetivos` (e.g. inside a subsection).
+Closes with a 1.5pt horizontal rule. `\objective` and `\stepbystep` also
+work outside `objectives` (e.g. inside a subsection).
 
 | Command | Produces |
 |---|---|
-| `\objgeral{...}` | **"Objetivo Geral:"** / **"General Objective:"** (bold label) + text. |
-| `\objpratica{...}` | **"Objetivo:"** / **"Objective:"** + text. |
-| `\prerequisitos` | **"Pré-requisitos:"** / **"Prerequisites:"** label (put a list after). |
-| `\passoapasso` | **"Passo a passo:"** / **"Step by step:"** label (put a numbered list after). |
+| `\generalobjective{...}` | **"General Objective:"** / **"Objetivo Geral:"** (bold label) + text. |
+| `\objective{...}` | **"Objective:"** / **"Objetivo:"** + text. |
+| `\prerequisites` | **"Prerequisites:"** / **"Pré-requisitos:"** label (put a list after). |
+| `\stepbystep` | **"Step by step:"** / **"Passo a passo:"** label (put a numbered list after). |
 
 ### Lists
 Use standard `itemize` / `enumerate` — indent and spacing are already set by the
@@ -218,14 +218,14 @@ class. Do not pass `enumitem` options unless asked.
 ### Code
 | Command | Result |
 |---|---|
-| `\begin{codigo} ... \end{codigo}` | Code block: `#F6F8FA` bg, Cascadia Code 10pt, `#1F2328` text, left-indented, no border. **Verbatim** — `_{}^\` are literal, no escaping. Clean copy-paste from PDF. |
-| `\begin{codigo}[bash] ... \end{codigo}` | Same; the `[bash]` hint is accepted for backward compatibility but ignored (no syntax highlighting). |
-| `\codigoarquivo[linguagem]{arquivo}` | Code block from an external file. |
-| `\code{...}` | Inline monospace code. **Standard LaTeX escaping rules apply** here. |
+| `\begin{code} ... \end{code}` | Code block: `#F6F8FA` bg, Cascadia Code 10pt, `#1F2328` text, left-indented, no border. **Verbatim** — `_{}^\` are literal, no escaping. Clean copy-paste from PDF. |
+| `\begin{code}[bash] ... \end{code}` | Same; the `[bash]` hint is accepted for backward compatibility but ignored (no syntax highlighting). |
+| `\codefile[linguagem]{arquivo}` | Code block from an external file. |
+| `\inlinecode{...}` | Inline monospace code. **Standard LaTeX escaping rules apply** here. |
 | `\param{...}` | Filename/parameter in italic (e.g. `\param{provider.tf}`). |
 
-**Gotcha:** inside `codigo`, write code literally — no escaping. In running text
-use `\code{...}` and escape LaTeX specials normally.
+**Gotcha:** inside `code`, write code literally — no escaping. In running text
+use `\inlinecode{...}` and escape LaTeX specials normally.
 
 ### Images (always horizontally centered)
 
@@ -233,21 +233,21 @@ use `\code{...}` and escape LaTeX specials normally.
 image when the user explicitly asks for one.
 
 **Workflow when a user requests an image:**
-1. The AI inserts `\imagemplaceholder{assets/filename.png}{description}` at the
+1. The AI inserts `\imageplaceholder{assets/filename.png}{description}` at the
    desired location in the `.tex` file.
 2. The AI creates the `assets/` folder in the project directory (if needed) and
    tells the user the exact path to place the file.
 3. The user manually adds the image file at that path.
-4. The AI replaces `\imagemplaceholder` with `\imagem` or `\imagemc` once the
+4. The AI replaces `\imageplaceholder` with `\image` or `\imagecap` once the
    file is in place.
 
 | Command | Result |
 |---|---|
-| `\imagem{file}` | Centered image, default width `0.65\linewidth`, max height `0.4\textheight` (`keepaspectratio`). |
-| `\imagem[0.6\linewidth]{file}` | Centered image, custom width. |
-| `\imagemc{file}{caption}` | Centered image with **numbered** caption ("Figure 1: ..."). Same size limits. |
-| `\imagemc[0.6\linewidth]{file}{caption}` | With custom width. |
-| `\imagemplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the image file is not yet available. |
+| `\image{file}` | Centered image, default width `0.65\linewidth`, max height `0.4\textheight` (`keepaspectratio`). |
+| `\image[0.6\linewidth]{file}` | Centered image, custom width. |
+| `\imagecap{file}{caption}` | Centered image with **numbered** caption ("Figure 1: ..."). Same size limits. |
+| `\imagecap[0.6\linewidth]{file}{caption}` | With custom width. |
+| `\imageplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the image file is not yet available. |
 
 ### Tables
 
@@ -279,7 +279,7 @@ loads `booktabs` and `array` for professional-looking tables.
 ### Notes & links
 | Command | Result |
 |---|---|
-| `\nota{...}` | Italic observation paragraph. |
+| `\note{...}` | Italic observation paragraph. |
 | `\weblink{url}{text}` | Blue (`#0000FF`), no underline, clickable. |
 | `\menu{A, B, C}` | Menu path: **A** → **B** → **C** (bold items joined by arrows). |
 | `\href{url}{text}` | Standard `hyperref` link (also blue via `urlcolor`). |
@@ -288,8 +288,8 @@ loads `booktabs` and `array` for professional-looking tables.
 ### Callout boxes
 | Environment | Color | Use |
 |---|---|---|
-| `\begin{aviso} ... \end{aviso}` | Amber (`#FFF8E1` bg, `#F57C00` border) | Warning / caution — potential pitfalls. |
-| `\begin{dica} ... \end{dica}` | Green (`#E8F5E9` bg, `#2E7D32` border) | Tip / suggestion — best practices. |
+| `\begin{warning} ... \end{warning}` | Amber (`#FFF8E1` bg, `#F57C00` border) | Warning / caution — potential pitfalls. |
+| `\begin{tip} ... \end{tip}` | Green (`#E8F5E9` bg, `#2E7D32` border) | Tip / suggestion — best practices. |
 | `\begin{infobox} ... \end{infobox}` | Blue (`#E3F2FD` bg, `#1565C0` border) | Informational note — helpful context. |
 
 All boxes are breakable across pages and have a 3pt left border.
@@ -297,7 +297,7 @@ All boxes are breakable across pages and have a 3pt left border.
 ### Badge
 | Command | Result |
 |---|---|
-| `\badge{...}` | Inline red label with white text (e.g. `\badge{Novo}`). |
+| `\badge{...}` | Inline red label with white text (e.g. `\badge{New}`). |
 
 ### Changelog / Versioning
 | Command | Purpose |
@@ -326,10 +326,10 @@ Example:
 ## Class options
 
 ```latex
-\documentclass[english,indentbody,notime]{guide}
+\documentclass[portuguese,indentbody,notime]{guide}
 ```
-- `english` — switches all predefined labels to English and loads `babel` with
-  `english`. Default off (Portuguese / `brazilian`).
+- `portuguese` — switches all predefined labels to Portuguese and loads `babel`
+  with `brazilian`. Default off (English).
 - `indentbody` — indents all running text by `\contentindent` (0.6cm). Default
   off (text flush to the left margin).
 - `notime` — hides the compilation time on the cover page. Default off
@@ -390,7 +390,7 @@ The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
   `\setheaderlogo{path}` / `\setcoverlogo{path}` in the preamble.
 - **Colors:** edit the `\definecolor` block at the top of `guide.cls`.
 - **Sizes/spacing:** each concern is in a commented section of
-  `guide.cls` (`TÍTULOS`, `CÓDIGO`, `CABEÇALHO`, etc.) — find the section,
+  `guide.cls` (`TITLES`, `CODE`, `HEADER AND FOOTER`, etc.) — find the section,
   edit there.
 
 ---
@@ -400,8 +400,8 @@ The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
    `latexmk` (handles it via `.latexmkrc`).
 2. Edit `.tex` files for content; touch `guide.cls` only for look-and-feel
    changes the user explicitly requested.
-3. Keep body order: `\makecover` → `\sumario` → `\startbody` → sections.
-4. Inside `codigo`, write literal code. In prose, use `\code{...}` with normal
+3. Keep body order: `\makecover` → `\maketoc` → `\startbody` → sections.
+4. Inside `code`, write literal code. In prose, use `\inlinecode{...}` with normal
    escaping.
 5. After edits, compile and check the PDF (TOC + page numbers need the
    second pass).

@@ -93,14 +93,16 @@
     Install the font for full fidelity.}}
 
 % Main font: HarmonyOS Sans (required) -> Liberation Sans (sole fallback)
+% AutoFakeSlant: HarmonyOS Sans has no italic; synthesize one from upright.
 \IfFontExistsTF{HarmonyOS Sans}
-  {\setmainfont{HarmonyOS Sans}}
+  {\setmainfont{HarmonyOS Sans}[AutoFakeSlant=0.2]}
    {\lg@warnfont{HarmonyOS Sans}{Liberation Sans}%
     \setmainfont{Liberation Sans}}
 
 % Code font: Cascadia Code (required) -> DejaVu Sans Mono (sole fallback)
+% AutoFakeSlant: Cascadia Code has no italic; synthesize one from upright.
 \IfFontExistsTF{Cascadia Code}
-  {\newfontfamily\consolasfont{Cascadia Code}[Ligatures=NoCommon]}
+  {\newfontfamily\consolasfont{Cascadia Code}[Ligatures=NoCommon, AutoFakeSlant=0.2]}
   {\lg@warnfont{Cascadia Code}{DejaVu Sans Mono}%
    \newfontfamily\consolasfont{DejaVu Sans Mono}[Ligatures=NoCommon]}
 \newcommand{\codefont}{\consolasfont}

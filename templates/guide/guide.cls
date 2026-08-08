@@ -14,6 +14,8 @@
 %%                   (default: off)
 %%    notime      -> hides the compilation time on the cover.
 %%                   (default: show time)
+%%    nochangelog -> suppresses the changelog section entirely.
+%%                   (default: show changelog)
 %%    <any>       -> passed to the article class.
 %% =====================================================================
 \NeedsTeXFormat{LaTeX2e}
@@ -119,6 +121,9 @@
   \newcommand{\lg@stepbysteplabel}{Passo a passo:}
   \newcommand{\lg@pagelabel}{Página}
   \newcommand{\lg@guidetitle}{Guia}
+  \newcommand{\lg@warninglabel}{Importante}
+  \newcommand{\lg@tiplabel}{Dica}
+  \newcommand{\lg@infolabel}{Informação}
 \else
   \newcommand{\lg@toc}{Contents}
   \newcommand{\lg@generalobjectivelabel}{General Objective:}
@@ -127,6 +132,9 @@
   \newcommand{\lg@stepbysteplabel}{Step by step:}
   \newcommand{\lg@pagelabel}{Page}
   \newcommand{\lg@guidetitle}{Guide}
+  \newcommand{\lg@warninglabel}{Important}
+  \newcommand{\lg@tiplabel}{Tip}
+  \newcommand{\lg@infolabel}{Info}
 \fi
 
 % =====================================================================
@@ -174,14 +182,14 @@
 % =====================================================================
 \setcounter{secnumdepth}{4}
 
-% --- H1: giant number (72pt) + 22pt bold right-aligned title + rule
-\titleformat{\section}
-  {\normalfont\bfseries\fontsize{22}{26}\selectfont}
-  {\makebox[0pt][l]{\fontsize{72}{72}\selectfont\thesection}}
+% --- H1: big number (56pt) left-aligned + 18pt bold right-aligned title + rule
+\titleformat{\section}[block]
+  {\normalfont\bfseries\fontsize{18}{22}\selectfont}
+  {\fontsize{56}{56}\selectfont\thesection}
   {0pt}
-  {\raggedleft\hspace*{1.6cm}}          % push title to the right
-  [\vspace{2pt}{\color{huaweired}\titlerule[1.5pt]}\vspace{18pt}]
-\titlespacing*{\section}{0pt}{0pt}{40pt} % before 0 / after 40pt
+  {\hfill}
+  [\vspace{2pt}{\color{huaweired}\titlerule[1.5pt]}\vspace{14pt}]
+\titlespacing*{\section}{0pt}{0pt}{30pt} % before 0 / after 30pt
 % Each \section (chapter) starts on a new page
 \let\lg@origsection\section
 \renewcommand{\section}{\clearpage\lg@origsection}
@@ -381,7 +389,7 @@
   \medskip}
 
 % \imageplaceholder{path}{description}
-% Shows a dashed box indicating where the user should place the image.
+% Shows a placeholder box indicating where the user should place the image.
 % The user adds the file manually at the indicated path.
 \newcommand{\imageplaceholder}[2]{%
   \par\medskip
@@ -436,14 +444,15 @@
 %   \begin{warning} ... \end{warning}   — caution / warning (amber)
 %   \begin{tip}     ... \end{tip}       — suggestion / tip (green)
 %   \begin{infobox} ... \end{infobox}   — additional info (blue)
-\newcommand{\lg@callout}[3]{%
+\newcommand{\lg@callout}[5]{%
   \newtcolorbox{#1}{colback=#2, colframe=#3,
+    before upper={\textbf{\color{#4}#5}\par\smallskip},
     boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
     left=8pt, right=8pt, top=6pt, bottom=6pt,
     before skip=6pt, after skip=6pt, breakable, enhanced jigsaw}}
-\lg@callout{warning}{warningbg}{warningfg}
-\lg@callout{tip}{tipbg}{tipfg}
-\lg@callout{infobox}{infobg}{infofg}
+\lg@callout{warning}{warningbg}{warningfg}{huaweired}{\lg@warninglabel}
+\lg@callout{tip}{tipbg}{tipfg}{tipfg}{\lg@tiplabel}
+\lg@callout{infobox}{infobg}{infofg}{infofg}{\lg@infolabel}
 
 % =====================================================================
 %  BADGE  (inline colored label)

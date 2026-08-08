@@ -194,7 +194,7 @@ Body order is fixed: `\makecover` → `\maketoc` → `\startbody` → sections.
 ### Headings — use standard section commands (template restyles them)
 | Command | Result |
 |---|---|
-| `\section{...}` | H1: giant 72pt chapter number + 22pt bold right-aligned title + red rule. New page. In TOC. |
+| `\section{...}` | H1: 56pt chapter number (left) + 18pt bold right-aligned title + red rule. New page. In TOC. |
 | `\subsection{...}` | H2: 18pt regular, left-aligned (`1.1`). |
 | `\subsubsection{...}` | H3: 16pt regular (`1.1.1`). |
 | `\paragraph{...}` | H4: 14pt regular (`1.1.1.1`). |
@@ -307,11 +307,13 @@ loads `booktabs` and `array` for professional-looking tables.
 ### Callout boxes
 | Environment | Color | Use |
 |---|---|---|
-| `\begin{warning} ... \end{warning}` | Amber (`#FFF8E1` bg, `#F57C00` border) | Warning / caution — potential pitfalls. |
-| `\begin{tip} ... \end{tip}` | Green (`#E8F5E9` bg, `#2E7D32` border) | Tip / suggestion — best practices. |
-| `\begin{infobox} ... \end{infobox}` | Blue (`#E3F2FD` bg, `#1565C0` border) | Informational note — helpful context. |
+| `\begin{warning} ... \end{warning}` | Amber bg, red **"Important"** label | Warning / caution — potential pitfalls. |
+| `\begin{tip} ... \end{tip}` | Green bg, green **"Tip"** label | Tip / suggestion — best practices. |
+| `\begin{infobox} ... \end{infobox}` | Blue bg, blue **"Info"** label | Informational note — helpful context. |
 
-All boxes are breakable across pages and have a 3pt left border.
+All boxes are breakable across pages and have a 3pt left border. Labels are
+language-aware (e.g. "Importante" in Portuguese) and appear as bold colored
+text at the top of the box content.
 
 ### Badge
 | Command | Result |
@@ -419,7 +421,7 @@ rendered, but the content remains in the `.tex` file for future reference.
 - Page: A4 · margins top/bottom 3cm, left/right 2cm.
 - Body: HarmonyOS Sans 10.5pt, ~14pt leading, 4pt between paragraphs, no first-line
   indent, `\frenchspacing`.
-- H1: 22pt bold + 72pt chapter number + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
+- H1: 18pt bold right-aligned + 56pt number left-aligned + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
 - Code: Cascadia Code 10pt on `#F6F8FA`.
 - Links: `#0000FF`, no underline.
 

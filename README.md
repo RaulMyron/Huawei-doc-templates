@@ -59,10 +59,15 @@ cd examples/setup-guide && latexmk setup-guide.tex   # setup guide
 ### Using the Makefile
 
 ```bash
-make samples    # compile PT + EN samples
-make examples   # compile setup-guide, copy PDF to repo root
-make            # all of the above
-make clean      # remove all build artifacts
+make pt              # compile Portuguese sample only
+make en              # compile English sample only
+make setup-guide     # compile setup guide only
+make samples         # compile PT + EN samples
+make examples        # compile setup-guide, copy PDF to repo root
+make                 # all of the above
+make project DIR=examples/my-guide   # compile a specific project (auto-detects .tex)
+make clean           # remove all build artifacts
+make clean-pt        # clean specific project
 ```
 
 ## Timezone

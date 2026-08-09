@@ -101,8 +101,10 @@
 
 % Code font: Cascadia Code (required) -> DejaVu Sans Mono (sole fallback)
 % AutoFakeSlant: Cascadia Code has no italic; synthesize one from upright.
+% Contextuals=NoAlternate: disable calt (programming ligatures like //, =>, ==)
+%   which break PDF copy-paste (ligated glyphs get wrong ToUnicode mappings).
 \IfFontExistsTF{Cascadia Code}
-  {\newfontfamily\consolasfont{Cascadia Code}[Ligatures=NoCommon, AutoFakeSlant=0.2]}
+  {\newfontfamily\consolasfont{Cascadia Code}[Ligatures=NoCommon, Contextuals=NoAlternate, AutoFakeSlant=0.2]}
   {\lg@warnfont{Cascadia Code}{DejaVu Sans Mono}%
    \newfontfamily\consolasfont{DejaVu Sans Mono}[Ligatures=NoCommon]}
 \newcommand{\codefont}{\consolasfont}

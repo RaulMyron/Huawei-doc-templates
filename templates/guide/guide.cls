@@ -47,7 +47,6 @@
 \RequirePackage{enumitem}
 \RequirePackage{fancyvrb}
 \RequirePackage{fvextra}
-\RequirePackage{accsupp}
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{ragged2e}
 \RequirePackage{needspace}
@@ -343,20 +342,6 @@
 % kept for backward compatibility with existing documents.
 \newcommand{\lg@deflangkey}[1]{\define@key{FV}{#1}[unused]{}}
 \forcsvlist{\lg@deflangkey}{bash,sh,shell,python,Python,json,yaml,xml,html,javascript,js,sql,text,ini,conf}
-
-% --- Copy-paste preservation via PDF /ActualText ---
-% Wrap each Verbatim line in a /Span <</ActualText(...)>> BDC marked-content
-% sequence so PDF viewers return the verbatim text (with leading spaces)
-% for copy-paste instead of glyph-position-based extraction which loses
-% indentation.  \detokenize preserves leading spaces as catcode-12 tokens.
-\let\guide@origFVline\FV@ListProcessLine@i
-\def\FV@ListProcessLine@i#1{%
-  \hbox{%
-    \BeginAccSupp{method=escape,ActualText=\detokenize{#1}}%
-    \FancyVerbFormatLine{#1}%
-    \EndAccSupp{}%
-  }%
-}
 
 % Code block: #F6F8FA background, no border, left indented
 % Uses fancyvrb (not listings) for clean copy-paste in PDF.

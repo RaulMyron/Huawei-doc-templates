@@ -10,7 +10,7 @@
 % --- Configuração do documento --------------------------------------
 \setguidetitle{Guia: Acessar o Console da Huawei Cloud}
 \setheadertitle{Huawei Cloud -- Guia de acesso ao Console}
-\setdocversion{1.1.4}
+\setdocversion{1.2.0}
 \setdocdate{2026-08-05}
 \setcovertext{Huawei Technologies CO., LTD}
 
@@ -69,7 +69,7 @@ avançadas, consulte a documentação oficial da Huawei Cloud.
   \item Acesse a \weblink{https://www.huaweicloud.com/intl/en-us/}{Huawei Cloud}
         e, no canto superior direito, clique em \textbf{Console}.
 
-  \imagecap{assets/exemplo-login.png}{Tela de login do Console.}
+  \imagecap[width=0.5\linewidth]{assets/exemplo-login.png}{Tela de login do Console.}
 
   \item Informe o nome de usuário e a senha da sua conta IAM e clique em
         \textbf{Log In}. Se a conta tiver autenticação em dois fatores habilitada,
@@ -79,7 +79,7 @@ avançadas, consulte a documentação oficial da Huawei Cloud.
         superior esquerdo, abra o catálogo de serviços clicando no ícone de
         menu e navegue até \menu{Console, Elastic Cloud Server}.
 
-  \image{assets/exemplo-menu.png}
+  \image[width=0.8\linewidth]{assets/exemplo-menu.png}
 
   \item No canto superior direito, selecione a região em que seus recursos
         serão criados (por exemplo, \inlinecode{sa-brazil-1}).
@@ -224,6 +224,11 @@ as alterações.
 \section{Histórico de versões}
 
 \begin{changelog}
+  \changelogentry{1.2.0}{2026-08-09}{
+    \item Adicionadas opções de tamanho (key-value) para \inlinecode{\textbackslash image}
+          e \inlinecode{\textbackslash imagecap} — \inlinecode{width} e
+          \inlinecode{height} podem ser definidos independentemente.
+  }
   \changelogentry{1.1.4}{2026-08-09}{
     \item Corrigida cópia de indentação em blocos de código — adicionados
           marcadores \texttt{/ActualText} para preservar espaços iniciais.

@@ -282,10 +282,12 @@ image when the user explicitly asks for one.
 
 | Command | Result |
 |---|---|
-| `\image{file}` | Centered image, default width `0.65\linewidth`, max height `0.4\textheight` (`keepaspectratio`). |
-| `\image[0.6\linewidth]{file}` | Centered image, custom width. |
-| `\imagecap{file}{caption}` | Centered image with **numbered** caption ("Figure 1: ..."). Same size limits. |
-| `\imagecap[0.6\linewidth]{file}{caption}` | With custom width. |
+| `\image{file}` | Centered image, default `width=0.65\linewidth`, `height=0.4\textheight` (`keepaspectratio`). |
+| `\image[width=0.8\linewidth]{file}` | Custom width, default height. |
+| `\image[height=0.3\textheight]{file}` | Custom height, default width. |
+| `\image[width=0.9\linewidth, height=0.5\textheight]{file}` | Both custom. |
+| `\imagecap{file}{caption}` | Centered image with **numbered** caption ("Figure 1: ..."). Same options as `\image`. |
+| `\imagecap[width=0.8\linewidth]{file}{caption}` | Custom width with caption. |
 | `\imageplaceholder{path}{description}` | Dashed placeholder box showing where to put the image. Use when the image file is not yet available. |
 
 **Caption best practice:** do **not** include "Figure N" or "Table N" in the

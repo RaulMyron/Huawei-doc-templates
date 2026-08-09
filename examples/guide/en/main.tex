@@ -15,7 +15,7 @@
 \setguidetitle{Guide: Getting Started with Huawei Cloud ECS}
 \setheadertitle{Huawei Cloud -- ECS Quick Start Guide}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{1.1.5}
+\setdocversion{1.2.0}
 \setdocdate{2026-08-05}
 \setheaderlogo{common-assets/huawei-logo-header.png}
 \setcoverlogo{common-assets/huawei-logo-cover.png}
@@ -73,7 +73,7 @@ consult the official Huawei Cloud documentation.
   \item In the Console, open the service catalog and navigate to
         \menu{Console, Elastic Cloud Server}.
 
-  \imagecap{assets/exemplo-menu.png}{Service catalog in the Console.}
+  \imagecap[width=0.8\linewidth]{assets/exemplo-menu.png}{Service catalog in the Console.}
 
   \item Click \textbf{Create ECS} and fill in the basic configuration:
 
@@ -91,7 +91,7 @@ Security Group: sg-ssh (allows inbound TCP 22)
         earlier. Click \textbf{Create Now} and wait for the status to change
         to \textbf{Running}.
 
-  \image{assets/exemplo-login.png}
+  \image[width=0.5\linewidth]{assets/exemplo-login.png}
 
   \note{The instance is assigned a public IP (EIP). If you need a fixed IP,
     allocate a dedicated EIP and bind it after creation.}
@@ -264,6 +264,11 @@ Use \inlinecode{terraform validate} to check syntax before applying changes.
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{1.2.0}{2026-08-09}{
+    \item Added key-value sizing options to \inlinecode{\textbackslash image} and
+          \inlinecode{\textbackslash imagecap} — \inlinecode{width} and
+          \inlinecode{height} can now be set independently.
+  }
   \changelogentry{1.1.5}{2026-08-09}{
     \item Fixed PDF copy-paste of indentation in code blocks — added
           \texttt{/ActualText} markers so PDF viewers preserve leading spaces.

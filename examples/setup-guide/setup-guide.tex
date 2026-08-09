@@ -9,7 +9,7 @@
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
 \setheadertitle{Huawei Cloud -- ECS + SSH + MaaS Gateway Setup}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{2.2.5}
+\setdocversion{2.3.0}
 
 \begin{document}
 
@@ -193,7 +193,7 @@ will use to connect in the next chapters.
         on the instance \inlinecode{dev-server-01}.
   \item In the ECS details page, click \menu{More, Reset Password}.
 
-  \imagecap{assets/ecs-reset-password.png}{Reset Password option in the ECS
+  \imagecap[width=0.75\linewidth]{assets/ecs-reset-password.png}{Reset Password option in the ECS
     details page.}
 
   \item Enter a strong root password and confirm. Click \textbf{OK}.
@@ -217,7 +217,7 @@ and change the SSH port from 22 to 4444.}
   \item In the ECS details page, click \textbf{Remote Login} (top-right
         corner). A browser-based terminal opens.
 
-  \imagecap{assets/ecs-remote-login.png}{Remote Login button in the ECS
+  \imagecap[width=0.75\linewidth]{assets/ecs-remote-login.png}{Remote Login button in the ECS
     details page.}
   \item Log in as \inlinecode{root} using the password set in the previous
         subsection.
@@ -696,6 +696,11 @@ full command reference, see the template's README.md or run
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{2.3.0}{2026-08-09}{
+    \item Added key-value sizing options to \inlinecode{\textbackslash image} and
+          \inlinecode{\textbackslash imagecap} — \inlinecode{width} and
+          \inlinecode{height} can now be set independently.
+  }
   \changelogentry{2.2.5}{2026-08-09}{
     \item Fixed PDF copy-paste of indentation in code blocks — added
           \texttt{/ActualText} markers so PDF viewers preserve leading spaces.

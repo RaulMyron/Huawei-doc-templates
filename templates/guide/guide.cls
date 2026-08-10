@@ -379,8 +379,8 @@
 %  IMAGES  — always horizontally centered, with key-value sizing options
 % =====================================================================
 % Key-value options for image sizing:
-%   width  — horizontal size (default 0.65\linewidth)
-%   height — vertical size   (default 0.4\textheight)
+%   width  — horizontal size (default 0.9\linewidth)
+%   height — vertical size   (default 0.5\textheight)
 % Both are upper bounds; keepaspectratio preserves the image's aspect ratio.
 \define@key{guideimg}{width}{\def\guide@img@width{#1}}
 \define@key{guideimg}{height}{\def\guide@img@height{#1}}
@@ -390,8 +390,8 @@
 %          \image[height=0.3\textheight]{assets/tall-chart.png}
 %          \image[width=0.9\linewidth, height=0.5\textheight]{assets/big.png}
 \newcommand{\image}[2][]{%
-  \def\guide@img@width{0.65\linewidth}%
-  \def\guide@img@height{0.4\textheight}%
+  \def\guide@img@width{0.9\linewidth}%
+  \def\guide@img@height{0.5\textheight}%
   \setkeys{guideimg}{#1}%
   \IfFileExists{#2}{}{\ClassWarning{guide}{Image "#2" not found.
     Check the path (relative to TEXINPUTS) and that the file exists.}}%
@@ -404,8 +404,8 @@
 % Same options as \image.  Do not include "Figure N" in the caption —
 % the class adds it automatically.
 \newcommand{\imagecap}[3][]{%
-  \def\guide@img@width{0.65\linewidth}%
-  \def\guide@img@height{0.4\textheight}%
+  \def\guide@img@width{0.9\linewidth}%
+  \def\guide@img@height{0.5\textheight}%
   \setkeys{guideimg}{#1}%
   \IfFileExists{#2}{}{\ClassWarning{guide}{Image "#2" not found.
     Check the path (relative to TEXINPUTS) and that the file exists.}}%

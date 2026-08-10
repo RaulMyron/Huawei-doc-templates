@@ -282,7 +282,7 @@ image when the user explicitly asks for one.
 
 | Command | Result |
 |---|---|
-| `\image{file}` | Centered image, default `width=0.65\linewidth`, `height=0.4\textheight` (`keepaspectratio`). |
+| `\image{file}` | Centered image, default `width=0.9\linewidth`, `height=0.5\textheight` (`keepaspectratio`). |
 | `\image[width=0.8\linewidth]{file}` | Custom width, default height. |
 | `\image[height=0.3\textheight]{file}` | Custom height, default width. |
 | `\image[width=0.9\linewidth, height=0.5\textheight]{file}` | Both custom. |

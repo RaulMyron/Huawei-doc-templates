@@ -220,7 +220,7 @@ Body order is fixed: `\makecover` → `\maketoc` → `\startbody` → sections.
 ### Headings — use standard section commands (template restyles them)
 | Command | Result |
 |---|---|
-| `\section{...}` | H1: 56pt chapter number (left) + 27pt bold right-aligned title + red rule. New page. In TOC. |
+| `\section{...}` | H1: 56pt chapter number (left) + 20pt bold right-aligned title + red rule. New page. In TOC. |
 | `\subsection{...}` | H2: 18pt regular, left-aligned (`1.1`). |
 | `\subsubsection{...}` | H3: 16pt regular (`1.1.1`). |
 | `\paragraph{...}` | H4: 14pt regular (`1.1.1.1`). |
@@ -457,7 +457,7 @@ rendered, but the content remains in the `.tex` file for future reference.
 - Page: A4 · margins top/bottom 3cm, left/right 2cm.
 - Body: HarmonyOS Sans 10.5pt, ~14pt leading, 4pt between paragraphs, no first-line
   indent, `\frenchspacing`.
-- H1: 27pt bold right-aligned + 56pt number left-aligned + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
+- H1: 20pt bold right-aligned + 56pt number left-aligned + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
 - Code: Cascadia Code 10pt on `#F6F8FA`.
 - Links: `#0000FF`, no underline.
 

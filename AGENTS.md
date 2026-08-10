@@ -42,6 +42,8 @@ approval. Changing them breaks existing documents and reproducibility.
 - Time comes from TeX's `\time` primitive (HH:MM, respects TZ env).
 - Both are shown on the cover page by default. Pass `[notime]` class option
   to hide the time.
+- `[nochangelog]` also hides version, date, and time on the cover page
+  (see L12).
 - `\setdocdate{...}` can override the date, but time is always compilation
   time (when shown).
 
@@ -85,6 +87,7 @@ approval. Changing them breaks existing documents and reproducibility.
 ### L12. Changelog can be disabled with `[nochangelog]`
 - The `nochangelog` class option makes `changelog` and `\changelogentry`
   no-ops (content stays in `.tex` but nothing is rendered).
+- It also hides version, date, and time on the cover page (see L5).
 - Use when the changelog grows too large for the PDF.
 - Default: changelog is shown.
 

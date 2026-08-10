@@ -27,7 +27,7 @@ load `babel` with `brazilian` instead.
 | `portuguese` | Switches all predefined labels to Portuguese; loads `babel` with `brazilian`. Default off (English). |
 | `indentbody` | Indents all running text by `\contentindent` (0.6 cm). Default off (text flush to the left margin). |
 | `notime` | Hides the compilation time (HH:MM) on the cover page. Default off (time is shown). |
-| `nochangelog` | Suppresses the changelog section entirely (no-ops). Use when it grows too large. Default off (changelog is shown). |
+| `nochangelog` | Suppresses the changelog section entirely (no-ops) and hides version, date, and time on the cover page. Use when it grows too large. Default off (changelog is shown). |
 
 ### Label translations
 
@@ -77,7 +77,7 @@ and environments (`\generalobjective`, `\prerequisites`, `\stepbystep`, `code`,
 | Code font | Cascadia Code, 10 pt |
 | Body leading | ~14 pt |
 | Space between paragraphs | 4 pt |
-| H1 title | 18 pt bold right-aligned + 56 pt number left-aligned + 1.5 pt rule |
+| H1 title | 27 pt bold right-aligned + 56 pt number left-aligned + 1.5 pt rule |
 | H2 / H3 / H4 titles | 18 / 16 / 14 pt, regular |
 | Code background | `#F6F8FA` |
 | Code text color | `#1F2328` |

@@ -14,7 +14,8 @@
 %%                   (default: off)
 %%    notime      -> hides the compilation time on the cover.
 %%                   (default: show time)
-%%    nochangelog -> suppresses the changelog section entirely.
+%%    nochangelog -> suppresses the changelog section entirely
+%%                   and hides version/date/time on the cover page.
 %%                   (default: show changelog)
 %%    <any>       -> passed to the article class.
 %% =====================================================================

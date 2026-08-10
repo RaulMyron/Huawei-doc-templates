@@ -147,6 +147,7 @@ the user asks.
 \setheadertitle{Huawei Cloud -- <short title>}
 \setcovertext{Huawei Technologies CO., LTD}
 \setdocversion{1.0.0}
+\setdocdate{\today}
 
 \begin{document}
 \makecover
@@ -219,7 +220,7 @@ Body order is fixed: `\makecover` → `\maketoc` → `\startbody` → sections.
 ### Headings — use standard section commands (template restyles them)
 | Command | Result |
 |---|---|
-| `\section{...}` | H1: 56pt chapter number (left) + 18pt bold right-aligned title + red rule. New page. In TOC. |
+| `\section{...}` | H1: 56pt chapter number (left) + 27pt bold right-aligned title + red rule. New page. In TOC. |
 | `\subsection{...}` | H2: 18pt regular, left-aligned (`1.1`). |
 | `\subsubsection{...}` | H3: 16pt regular (`1.1.1`). |
 | `\paragraph{...}` | H4: 14pt regular (`1.1.1.1`). |
@@ -261,6 +262,7 @@ class. Do not pass `enumitem` options unless asked.
 | `\begin{code}[bash] ... \end{code}` | Same; the `[bash]` hint is accepted for backward compatibility but ignored (no syntax highlighting). |
 | `\codefile[language]{file}` | Code block from an external file. |
 | `\inlinecode{...}` | Inline monospace code. **Standard LaTeX escaping rules apply** here. |
+| `\codefont` | Selects the monospace font (Cascadia Code with fallback). Used internally by `code` and `\inlinecode`; available for advanced customization. |
 | `\param{...}` | Filename/parameter in italic (e.g. `\param{provider.tf}`). |
 
 **Gotcha:** inside `code`, write code literally — no escaping. In running text
@@ -426,7 +428,8 @@ rendered, but the content remains in the `.tex` file for future reference.
   off (text flush to the left margin).
 - `notime` — hides the compilation time on the cover page. Default off
   (time is shown).
-- `nochangelog` — suppresses the changelog section entirely. The `changelog`
+- `nochangelog` — suppresses the changelog section entirely and hides version,
+  date, and time on the cover page. The `changelog`
   environment and `\changelogentry` calls become no-ops (content stays in the
   `.tex` file but nothing is rendered). Use when the changelog grows too large.
   Default off (changelog is shown).
@@ -454,7 +457,7 @@ rendered, but the content remains in the `.tex` file for future reference.
 - Page: A4 · margins top/bottom 3cm, left/right 2cm.
 - Body: HarmonyOS Sans 10.5pt, ~14pt leading, 4pt between paragraphs, no first-line
   indent, `\frenchspacing`.
-- H1: 18pt bold right-aligned + 56pt number left-aligned + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
+- H1: 27pt bold right-aligned + 56pt number left-aligned + 1.5pt red rule. H2/H3/H4: 18/16/14pt regular.
 - Code: Cascadia Code 10pt on `#F6F8FA`.
 - Links: `#0000FF`, no underline.
 

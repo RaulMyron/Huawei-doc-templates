@@ -194,9 +194,9 @@
 % =====================================================================
 \setcounter{secnumdepth}{4}
 
-% --- H1: big number (56pt) left-aligned + 18pt bold right-aligned title + rule
+% --- H1: big number (56pt) left-aligned + 27pt bold right-aligned title + rule
 \titleformat{\section}[block]
-  {\normalfont\bfseries\fontsize{18}{22}\selectfont}
+  {\normalfont\bfseries\fontsize{27}{33}\selectfont}
   {\fontsize{56}{56}\selectfont\thesection}
   {0pt}
   {\hfill}
@@ -299,7 +299,7 @@
     \fontsize{16}{20}\selectfont \lg@covertext\par}%
    \vspace{0.5cm}%
    {\centering
-    \fontsize{12}{14}\selectfont \lg@covermeta\par}%
+    \fontsize{12}{14}\selectfont \if@changelog\lg@covermeta\fi\par}%
    \endgroup
   \clearpage}
 

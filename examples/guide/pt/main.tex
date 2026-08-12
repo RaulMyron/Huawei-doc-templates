@@ -10,7 +10,7 @@
 % --- Configuração do documento --------------------------------------
 \setguidetitle{Guia: Acessar o Console da Huawei Cloud}
 \setheadertitle{Huawei Cloud -- Guia de acesso ao Console}
-\setdocversion{1.4.1}
+\setdocversion{1.5.2}
 \setdocdate{\today}
 \setcovertext{Huawei Technologies CO., LTD}
 
@@ -30,6 +30,10 @@ Este documento exemplifica o uso do template \inlinecode{guide.cls} para guias
 da Huawei Cloud. Ele demonstra todos os comandos e ambientes disponíveis:
 capa, sumário, objetivos, blocos de código, imagens, callouts, badge,
 changelog e o comando \inlinecode{\textbackslash menu} para caminhos de menu.
+
+Verificação de acentuação (PT-BR): á à â ã ç é ê í ó ô õ ú,
+Á À Â Ã Ç É Ê Í Ó Ô Õ Ú. Exemplos: São Paulo, análise, distribuída,
+avô, avó, Histórico, Órgão, Índice, Útil.
 \end{infobox}
 
 % =====================================================================
@@ -114,18 +118,13 @@ identificador da região escolhida aqui, por exemplo \inlinecode{sa-brazil-1}.
 
 A tabela abaixo lista as regiões suportadas para o Brasil e América Latina:
 
-\begin{table}[h]
-  \centering
-  \small
-  \begin{tabular}{|l|l|l|}
-    \rowcolor{huaweired}
-    \thd{Região} & \thd{Localidade} & \thd{Código} \\
-    \midrule
+\begin{table}[H]
+  \begin{hutable}{|l|l|l|}
+    \rowcolor{huaweired} \thd{Região} & \thd{Localidade} & \thd{Código} \\
     \tbody
     São Paulo & Brasil & \inlinecode{sa-brazil-1} \\
     Santiago  & Chile & \inlinecode{la-south-2} \\
-    \bottomrule
-  \end{tabular}
+  \end{hutable}
   \caption{Regiões disponíveis na Huawei Cloud.}
 \end{table}
 
@@ -224,6 +223,16 @@ as alterações.
 \section{Histórico de versões}
 
 \begin{changelog}
+  \changelogentry{1.5.2}{2026-08-12}{
+    \item Adicionada linha de verificação de acentuação PT-BR no infobox do exemplo (exercita todos os acentos do português).
+  }
+  \changelogentry{1.5.1}{2026-08-12}{
+    \item Correção de centralização e preenchimento de cor das linhas do \texttt{hutable}: uso de \texttt{\textbackslash hline} para que o \texttt{colortbl} preencha as cores até as bordas.
+  }
+  \changelogentry{1.5.0}{2026-08-12}{
+    \item Novo ambiente \texttt{hutable}: tabelas com grade completa, cabeçalho vermelho Huawei e linhas alternadas.
+    \item Floats agora usam \texttt{[H]} como posicionamento padrão, então tabelas e figuras aparecem na ordem do código-fonte.
+  }
   \changelogentry{1.4.1}{2026-08-10}{
     \item Título da seção H1 reduzido de 27pt para 20pt.
   }

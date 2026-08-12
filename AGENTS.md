@@ -98,6 +98,16 @@ approval. Changing them breaks existing documents and reproducibility.
 - Skills create new document folders inside `documents/` by default.
 - Samples and examples stay in `examples/`; `documents/` is for user work.
 
+### L14. Floats default to [H] (in-source order, no drifting)
+- The class loads `float` and sets `\fps@figure`/`\fps@table` to `H`, so
+  `figure` and `table` floats appear exactly where declared, in source order.
+- This matches the inline-figure design (`\image`/`\imagecap` are non-floating).
+- Users may still override a single float with an explicit `[h]`, `[t]`, `[b]`,
+  or `[p]`; the default only applies when no placement is given.
+- Tables use the `hutable` environment (full-grid, Huawei-red header, alternating
+  body rows). Do not reintroduce raw `tabular` + manual `\midrule`/`\bottomrule`
+  in samples — use `hutable`.
+
 ---
 
 ## Project structure

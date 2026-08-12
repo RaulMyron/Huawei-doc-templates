@@ -1,7 +1,7 @@
 # Huawei Cloud Guide — LaTeX Template
 
 A LaTeX template that produces a Huawei Cloud guide PDF: cover page, header,
-table of contents, giant chapter numbers, objectives box, code blocks,
+table of contents, giant chapter numbers, objectives box, code blocks, tables,
 callout boxes, badges, colors, spacing, and fonts.
 
 > **Setup:** see the [root README](../../README.md) for installation,

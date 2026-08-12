@@ -64,6 +64,14 @@
 \captionsetup[figure]{font={small}, labelfont=bf, labelsep=colon}
 \captionsetup[table]{font={small}, labelfont=bf, labelsep=colon}
 
+% Float placement: force [H] (here, exactly) as the default for figure and
+% table floats so they appear in source order and never drift to a later page.
+% Requires the float package, which defines the H specifier.  Users can still
+% override a single float with an explicit [h], [t], [b], or [p].
+\RequirePackage{float}
+\renewcommand{\fps@figure}{H}
+\renewcommand{\fps@table}{H}
+
 % =====================================================================
 %  COLORS
 % =====================================================================
@@ -83,8 +91,56 @@
 \arrayrulecolor{huaweired}
 % Table header cell: white bold text (for use with \rowcolor{huaweired})
 \newcommand{\thd}[1]{\textcolor{white}{\textbf{#1}}}
-% Table body: start alternating row colors (white / light gray)
+% Table body: start alternating row colors (white / light gray).
+% Used inside hutable, right after the header row's \\.
 \newcommand{\tbody}{\rowcolors{2}{white}{codebg}}
+
+% =====================================================================
+%  TABLES — hutable environment
+%  Full-grid tables: red rules on all four sides and between every row,
+%  Huawei-red header bar (white bold text), and alternating white / light-gray
+%  body rows.
+%
+%  Usage:
+%    \begin{table}[H]
+%      \begin{hutable}{|l|l|l|}
+%        \rowcolor{huaweired} \thd{Col A} & \thd{Col B} & \thd{Col C} \\
+%        \tbody
+%        row 1 & value & value \\
+%        row 2 & value & value \\
+%      \end{hutable}
+%      \caption{Caption text.}
+%    \end{table}
+%
+%  - \centering\small is applied automatically (do not add it yourself).
+%  - Do not add \hline, \midrule, or \bottomrule — the environment draws the
+%    full grid (red rules on all four sides and between every row) for you.
+%  - Header row: \rowcolor{huaweired} + \thd{...} per cell (white bold on red),
+%    ended by \\.
+%  - After the header \\, add \tbody to start alternating body row colors
+%    (white / light gray).
+%  - Body rows: plain cells, black text on alternating white / codebg rows.
+%  - Every row MUST end with \\ (including the last) so the bottom border draws.
+%
+%  Implementation: a scoped redefinition of \@arraycr inserts an \hline after
+%  each row break to form the horizontal grid.  \hline (not booktabs \midrule)
+%  is required so colortbl \rowcolor fills the row background cleanly up to the
+%  rule — \midrule's \aboverulesep/\belowrulesep padding leaves uncolored gaps.
+%  The redefinition is local to the environment (begingroup/endgroup), so it
+%  does not affect other tabulars.  \par is emitted inside the centered group so
+%  the tabular is horizontally centered.
+\newenvironment{hutable}[1]{%
+  \par\medskip
+  \begingroup
+    \centering\small
+    \let\lg@arraycr\@arraycr
+    \def\@arraycr{\lg@arraycr\hline}%
+    \begin{tabular}{#1}\hline
+}{%
+    \end{tabular}\par
+  \endgroup
+  \medskip
+}
 
 % =====================================================================
 %  FONTS  (with automatic fallback if brand fonts are missing)

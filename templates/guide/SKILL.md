@@ -28,7 +28,7 @@ project context:
 2. **`README.md`** (repo root) — project setup, compilation instructions,
    install steps, and project layout. Needed to understand the toolchain and
    folder conventions.
-3. **`AGENTS.md`** (repo root) — locked decisions (L1–L13), file editing
+3. **`AGENTS.md`** (repo root) — locked decisions (L1–L14), file editing
    rules, versioning workflow, and project standards. These are mandatory
    constraints that must not be violated.
 
@@ -193,6 +193,21 @@ automatically: *Sumário*, *Objetivo Geral:*, *Objetivo:*,
 
 Body order is fixed: `\makecover` → `\maketoc` → `\startbody` → sections.
 
+**Accent verification (PT-BR).** The Portuguese sample includes a diacritic
+test line in its first `infobox` that exercises every Portuguese accent
+(`á à â ã ç é ê í ó ô õ ú`, `Á À Â Ã Ç É Ê Í Ó Ô Õ Ú`). After compiling the
+sample, confirm no glyphs are missing:
+
+```sh
+latexmk main.tex                       # from examples/guide/pt/
+grep -i "Missing character" main.log   # must produce no output
+```
+
+XeLaTeX emits `Missing character: There is no <glyph>` for any code point the
+active font lacks. The brand fonts (HarmonyOS Sans, fallback Liberation Sans)
+provide full PT-BR coverage; a custom font that drops a diacritic will surface
+here. Run this check after every sample compile — the grep is the only extra step.
+
 ---
 
 ---
@@ -299,33 +314,39 @@ screen.}` produces "Figure 1: Console login screen.".
 
 ### Tables
 
-Tables use a Huawei-branded style with a red header bar. The class loads
-`booktabs`, `array`, and `colortbl` (via `xcolor[table]`). Table rules are
+Tables use a Huawei-branded full-grid style via the `hutable` environment:
+red rules on all four sides and between every row, a Huawei-red header bar
+with white bold text, and alternating white / light-gray body rows. The class
+loads `booktabs`, `array`, and `colortbl` (via `xcolor[table]`); rules are
 colored in Huawei red and caption labels ("Table N:") are bold black.
 
+**Float placement:** `figure` and `table` floats default to `[H]` (here,
+exactly) so they appear in source order and never drift. Wrap `hutable` in a
+`table` float for the caption. Users may still override with `[h]`, `[t]`,
+`[b]`, or `[p]` per float.
+
 **Rules:**
-- Header row: `\rowcolor{huaweired}` + `\thd{...}` for each cell (white bold on red).
-- Use `\midrule` after the header, `\bottomrule` at the bottom (both red).
-- Add `\tbody` after `\midrule` to enable alternating row colors (white / light gray).
-- No `\toprule` — the red header bar is the top border.
-- No `\hline` — use `booktabs` rules only.
+- Use `hutable` (not raw `tabular`) — it applies `\centering\small`, the full
+  grid, and the top border automatically.
+- Header row: `\rowcolor{huaweired}` + `\thd{...}` per cell (white bold on red),
+  ended by `\\`.
+- After the header `\\`, add `\tbody` to start alternating body row colors
+  (white / light gray).
+- Body rows: plain cells, black text on alternating white / light-gray rows.
+- Every row MUST end with `\\` (including the last) so the bottom border draws.
+- Do not add `\midrule`, `\bottomrule`, `\centering`, or `\small` — `hutable`
+  handles them. Do not include "Table N" in the caption — the class adds it.
 - Column spec uses `|` for vertical borders, e.g. `{|l|l|l|}`.
-- Use `\centering` + `\small` inside a `table` float.
-- Do not include "Table N" in the caption text — the class adds it.
+- `hutable` uses `\hline` (red via `\arrayrulecolor`) for all horizontal rules — `\hline` is required so `colortbl` `\rowcolor` fills the row background cleanly (booktabs `\midrule` leaves uncolored gaps). Do not add `\hline`, `\midrule`, or `\bottomrule` inside `hutable`.
 
 ```latex
-\begin{table}[h]
-  \centering
-  \small
-  \begin{tabular}{|l|l|l|}
-    \rowcolor{huaweired}
-    \thd{Column A} & \thd{Column B} & \thd{Column C} \\
-    \midrule
+\begin{table}[H]
+  \begin{hutable}{|l|l|l|}
+    \rowcolor{huaweired} \thd{Column A} & \thd{Column B} & \thd{Column C} \\
     \tbody
     Row 1 & Value & Value \\
     Row 2 & Value & Value \\
-    \bottomrule
-  \end{tabular}
+  \end{hutable}
   \caption{Table caption.}
 \end{table}
 ```

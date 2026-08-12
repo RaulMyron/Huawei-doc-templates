@@ -91,7 +91,7 @@ extension, open the repo root, and save any `.tex` file to auto-compile.
 
 | Template | Skill | Description |
 |---|---|---|
-| [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, callout boxes, badges, changelog. English (default) and Portuguese. |
+| [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, tables, callout boxes, badges, changelog. English (default) and Portuguese. |
 
 See [`templates/guide/SKILL.md`](templates/guide/SKILL.md) for the full command
 and environment reference.

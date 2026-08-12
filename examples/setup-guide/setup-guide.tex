@@ -9,7 +9,7 @@
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
 \setheadertitle{Huawei Cloud -- ECS + SSH + MaaS Gateway Setup}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{2.5.1}
+\setdocversion{2.6.1}
 
 \begin{document}
 
@@ -258,21 +258,16 @@ inbound TCP 4444 from the authorized Huawei internal IPs.
 Use the table below to confirm all steps were completed successfully before
 proceeding to the next chapter:
 
-\begin{table}[h]
-  \centering
-  \small
-  \begin{tabular}{|l|l|l|}
-    \rowcolor{huaweired}
-    \thd{Step} & \thd{What to check} & \thd{Expected result} \\
-    \midrule
+\begin{table}[H]
+  \begin{hutable}{|l|l|l|}
+    \rowcolor{huaweired} \thd{Step} & \thd{What to check} & \thd{Expected result} \\
     \tbody
     Security group & \inlinecode{sg-xgate} exists with TCP 4444 rules & 3 inbound rules \\
     ECS running    & Instance \inlinecode{dev-server-01} status       & \textbf{Running} \\
     Root password  & Remote Login works with password            & Shell prompt \\
     SSH port       & \inlinecode{sshd\_config} has \inlinecode{Port 4444}    & Config saved \\
     SSH restart    & \inlinecode{sshd} restarted or ECS rebooted       & Service active \\
-    \bottomrule
-  \end{tabular}
+  \end{hutable}
   \caption{Pre-SSH verification checklist.}
 \end{table}
 
@@ -696,6 +691,13 @@ full command reference, see the template's README.md or run
 \section{Changelog}
 
 \begin{changelog}
+  \changelogentry{2.6.1}{2026-08-12}{
+    \item Fix \texttt{hutable} centering and row-color fill (switched to \texttt{\textbackslash hline} for \texttt{colortbl} compatibility).
+  }
+  \changelogentry{2.6.0}{2026-08-12}{
+    \item Switched verification table to the new \texttt{hutable} full-grid style.
+    \item Floats now default to \texttt{[H]} placement (in-source order).
+  }
   \changelogentry{2.5.1}{2026-08-10}{
     \item H1 section title size reduced from 27pt to 20pt.
   }

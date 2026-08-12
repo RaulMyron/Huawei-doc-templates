@@ -85,8 +85,11 @@ approval. Changing them breaks existing documents and reproducibility.
 - See `SKILL.md` "Versioning workflow" for the full procedure.
 
 ### L12. Changelog can be disabled with `[nochangelog]`
+- The `changelog` environment emits its own section heading (language-aware:
+  "Changelog" / "Histórico de versões"); do not add a `\section` before it.
 - The `nochangelog` class option makes `changelog` and `\changelogentry`
-  no-ops (content stays in `.tex` but nothing is rendered).
+  no-ops, suppressing the heading AND entries in one switch (content stays
+  in `.tex` but nothing is rendered).
 - It also hides version, date, and time on the cover page (see L5).
 - Use when the changelog grows too large for the PDF.
 - Default: changelog is shown.

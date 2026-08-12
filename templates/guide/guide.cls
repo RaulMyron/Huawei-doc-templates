@@ -193,6 +193,7 @@
   \newcommand{\lg@warninglabel}{Importante}
   \newcommand{\lg@tiplabel}{Dica}
   \newcommand{\lg@infolabel}{Informação}
+  \newcommand{\lg@changelogtitle}{Histórico de versões}
 \else
   \newcommand{\lg@toc}{Contents}
   \newcommand{\lg@generalobjectivelabel}{General Objective:}
@@ -204,6 +205,7 @@
   \newcommand{\lg@warninglabel}{Important}
   \newcommand{\lg@tiplabel}{Tip}
   \newcommand{\lg@infolabel}{Info}
+  \newcommand{\lg@changelogtitle}{Changelog}
 \fi
 
 % =====================================================================
@@ -561,7 +563,12 @@
 %       \item Draft
 %     }
 %   \end{changelog}
+%
+%  The environment emits the section heading (language-aware: "Changelog" /
+%  "Histórico de versões") automatically -- do not add a \section before it.
+%  [nochangelog] suppresses the heading and all entries in one switch.
 \newenvironment{changelog}{%
+  \section{\lg@changelogtitle}%
   \par\medskip
   \thispagestyle{plain}\pagestyle{plain}%
   \noindent{\color{ruleblack}\rule{\linewidth}{0.5pt}}\par

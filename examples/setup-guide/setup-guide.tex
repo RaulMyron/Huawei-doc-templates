@@ -9,7 +9,7 @@
 \setguidetitle{Guide: Environment Setup for Huawei Cloud Development}
 \setheadertitle{Huawei Cloud -- ECS + SSH + MaaS Gateway Setup}
 \setcovertext{Huawei Technologies CO., LTD}
-\setdocversion{2.6.1}
+\setdocversion{2.7.0}
 
 \begin{document}
 
@@ -688,9 +688,10 @@ full command reference, see the template's README.md or run
 % =====================================================================
 %  Changelog
 % =====================================================================
-\section{Changelog}
-
 \begin{changelog}
+  \changelogentry{2.7.0}{2026-08-12}{
+    \item The \texttt{changelog} environment now emits its own section heading; \texttt{[nochangelog]} suppresses the heading and entries in one switch.
+  }
   \changelogentry{2.6.1}{2026-08-12}{
     \item Fix \texttt{hutable} centering and row-color fill (switched to \texttt{\textbackslash hline} for \texttt{colortbl} compatibility).
   }

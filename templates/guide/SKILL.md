@@ -175,7 +175,6 @@ the user asks.
 \end{enumerate}
 
 % --- Changelog (after all sections, before \end{document}) ---
-\section{Changelog}
 \begin{changelog}
   \changelogentry{1.0.0}{2026-08-08}{
     \item Initial version.
@@ -381,7 +380,7 @@ text at the top of the box content.
 |---|---|
 | `\setdocversion{1.0.0}` | Sets the version shown on the cover page. |
 | `\setdocdate{2026-08-05}` | Sets the date shown on the cover page. **Optional** — defaults to `\today` if omitted. |
-| `\begin{changelog} ... \end{changelog}` | Version history block (framed with horizontal rules). |
+| `\begin{changelog} ... \end{changelog}` | Version history block with auto-emitted section heading (framed with horizontal rules). Do not add a `\section` before it. |
 | `\changelogentry{version}{date}{items}` | One entry inside `changelog`. `items` is an `itemize` body. |
 
 Example:
@@ -449,11 +448,7 @@ rendered, but the content remains in the `.tex` file for future reference.
   off (text flush to the left margin).
 - `notime` — hides the compilation time on the cover page. Default off
   (time is shown).
-- `nochangelog` — suppresses the changelog section entirely and hides version,
-  date, and time on the cover page. The `changelog`
-  environment and `\changelogentry` calls become no-ops (content stays in the
-  `.tex` file but nothing is rendered). Use when the changelog grows too large.
-  Default off (changelog is shown).
+- `nochangelog` — suppresses the changelog section entirely (heading + entries) and hides version, date, and time on the cover page. The `changelog` environment emits its own heading, so this one option hides everything. Default off (changelog is shown).
 
 ---
 
@@ -530,3 +525,7 @@ The project's `.latexmkrc` sets `TEXINPUTS` to the template directory so
    (see Versioning workflow above). Recompile to produce the updated PDF.
 7. If a font is missing, the class warns and falls back — the build still
    succeeds; surface the warning to the user but do not block.
+8. For Portuguese (`[portuguese]`) documents, after compiling run
+   `grep -i "Missing character" main.log` — it must be empty. The pt sample's
+   first `infobox` exercises every PT-BR diacritic, so any missing glyph surfaces
+   here (see "Accent verification (PT-BR)" above).

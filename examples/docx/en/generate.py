@@ -9,38 +9,46 @@ from huawei_docx import *
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def main():
-    doc = new_report()
+    replacements = {
+        'PROBLEM_DESCRIPTION':
+            'At the Brazil site of HCS 8.5.1, the default enterprise project '
+            'is not displayed on the ECS creation page. This prevents users '
+            'from selecting the correct enterprise project when provisioning '
+            'new ECS instances.',
+        'ROOT_CAUSE_ANALYSIS':
+            '1. Analyzed the permissions of the user who cannot view the '
+            'default enterprise project\n'
+            '2. Verified the auth_action field behavior in version 8.5.1\n'
+            '3. Confirmed the Server Administrator role lacks fine-grained '
+            'action permissions',
+        'ROOT_CAUSE':
+            'In version 8.5.1, the fine-grained permission scenario was '
+            'optimized. When an ECS is provisioned, only enterprise projects '
+            'with the appropriate permissions are listed. The Server '
+            'Administrator role does not include ECS FullAccess.',
+        'TRIGGER_CONDITION':
+            'Occurs when a user with only the Server Administrator role '
+            'attempts to create an ECS instance in HCS 8.5.1.',
+        'IMPACT':
+            'To grant ECS FullAccess to a user, you need to modify the user '
+            'group permission. This permission is the ECS administrator '
+            'permission and is included in the Server Administrator permission.',
+        'BACKUP_DATA': 'N/A — no data modification required.',
+        'WORKAROUND':
+            '1. Log in to the tenant plane and find the user group associated '
+            'with the affected user\n'
+            '2. Add the ECS FullAccess permission to the user group\n'
+            '3. Verify the permission is applied correctly',
+        'VERIFICATION':
+            'Log in to the tenant page again, go to the ECS page, create an '
+            'ECS, and verify the enterprise project list is now displayed.',
+        'ROLLBACK': 'Remove the ECS FullAccess permission from the user group.',
+        'CLEANUP': 'No cleanup required.',
+        'VERSION': 'HCS 8.5.1',
+        'SCENARIO': 'Standard Scenario',
+    }
 
-    add_heading(doc, "Problem Description and Impact", level=1)
-    add_paragraph(doc,
-        "At the Brazil site of HCS 8.5.1, the default enterprise project "
-        "is not displayed on the ECS creation page. This prevents users "
-        "from selecting the correct enterprise project when provisioning "
-        "new ECS instances.")
-
-    add_heading(doc, "Affected Versions", level=1)
-    add_table(doc,
-        ["Version", "Installation Scenario", "Affected"],
-        [
-            ["HCS 8.5.1", "Standard Scenario", "Yes"],
-            ["HCS 8.5.0", "Standard Scenario", "No"],
-            ["HCS 8.6.0", "Standard Scenario", "Fixed"],
-        ])
-
-    add_heading(doc, "Workaround", level=1)
-    add_paragraph(doc,
-        "Grant ECS FullAccess permission to the user group associated "
-        "with the affected user. This restores the enterprise project "
-        "list on the ECS creation page.")
-
-    add_callout(doc, 'warning',
-        "Applying this workaround modifies user group permissions. "
-        "Review the impact before proceeding.")
-
-    add_callout(doc, 'tip',
-        "Back up the current permission configuration before making "
-        "any changes. This allows a quick rollback if needed.")
-
+    doc = create_analysis_report(replacements)
     path = save_report(doc, os.path.join(OUT_DIR, "sample-report.docx"))
     print(f"Saved: {path}")
 

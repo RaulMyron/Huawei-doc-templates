@@ -335,6 +335,12 @@ def add_callout(doc, kind, text):
 
 # ── Placeholder replacement ─────────────────────────────────────────
 
+import re
+
+# Pattern to match {{PLACEHOLDER}} markers
+_PLACEHOLDER_RE = re.compile(r'\{\{(\w+)\}\}')
+
+
 def fill_section(doc, placeholder, text):
     """Replace a placeholder text in the template with actual content.
 
@@ -372,6 +378,187 @@ def fill_section(doc, placeholder, text):
                         paragraph.add_run(new_text)
                     count += 1
     return count
+
+
+def fill_template(doc, replacements):
+    """Fill placeholder markers in a template document.
+
+    Placeholders in the document use the ``{{NAME}}`` format. This function
+    finds all occurrences in paragraphs and table cells, and replaces them
+    with the corresponding values from the replacements dict.
+
+    For multi-line values (containing ``\\n``), the first line replaces the
+    placeholder in the current paragraph, and subsequent lines are inserted
+    as new paragraphs immediately after it.
+
+    Args:
+        doc: python-docx Document object.
+        replacements: dict mapping placeholder names (without the ``{{}}``
+            delimiters) to text values, e.g.::
+
+                {
+                    'PROBLEM_DESCRIPTION': 'The customer reports...',
+                    'ROOT_CAUSE': 'The issue is caused by...',
+                    'WORKAROUND': '1. Log in to...\\n2. Navigate to...',
+                }
+
+    Returns:
+        The total number of placeholders replaced.
+    """
+    count = 0
+
+    # Process paragraphs (iterate in reverse so insertions don't shift indices)
+    paragraphs = doc.paragraphs
+    for i in range(len(paragraphs) - 1, -1, -1):
+        para = paragraphs[i]
+        matches = list(_PLACEHOLDER_RE.finditer(para.text))
+        if not matches:
+            continue
+
+        # Collect all placeholder names in this paragraph
+        for match in matches:
+            name = match.group(1)
+            if name not in replacements:
+                continue
+
+            replacement = replacements[name]
+            placeholder_str = match.group(0)
+
+            # Handle multi-line: split on \n
+            lines = replacement.split('\n')
+            first_line = lines[0]
+
+            # Replace in runs
+            _replace_in_paragraph(para, placeholder_str, first_line)
+            count += 1
+
+            # Insert additional lines as new paragraphs after current one
+            if len(lines) > 1:
+                # Get the XML element of the current paragraph
+                current_elem = para._element
+                parent = current_elem.getparent()
+                insert_after = current_elem
+                for extra_line in lines[1:]:
+                    # Clone the paragraph element for consistent formatting
+                    new_para_elem = copy.deepcopy(current_elem)
+                    # Clear its text and set the new line
+                    for r_elem in new_para_elem.findall(qn('w:r')):
+                        new_para_elem.remove(r_elem)
+                    # Create a new run with the text
+                    # Copy run properties from original first run if available
+                    r_elem = parse_xml(f'<w:r {nsdecls("w")}><w:t xml:space="preserve">{_xml_escape(extra_line)}</w:t></w:r>')
+                    # Try to copy rPr from original paragraph's first run
+                    orig_runs = current_elem.findall(qn('w:r'))
+                    if orig_runs:
+                        orig_rPr = orig_runs[0].find(qn('w:rPr'))
+                        if orig_rPr is not None:
+                            r_elem.insert(0, copy.deepcopy(orig_rPr))
+                    new_para_elem.append(r_elem)
+                    # Insert after the current position
+                    insert_after.addnext(new_para_elem)
+                    insert_after = new_para_elem
+
+    # Process table cells
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for para in cell.paragraphs:
+                    matches = list(_PLACEHOLDER_RE.finditer(para.text))
+                    if not matches:
+                        continue
+                    for match in matches:
+                        name = match.group(1)
+                        if name not in replacements:
+                            continue
+                        replacement = replacements[name]
+                        placeholder_str = match.group(0)
+                        # For table cells, replace newlines with spaces
+                        # (multi-line in cells is problematic)
+                        cell_text = replacement.replace('\n', ' ')
+                        _replace_in_paragraph(para, placeholder_str, cell_text)
+                        count += 1
+
+    return count
+
+
+def _replace_in_paragraph(para, placeholder, text):
+    """Replace a placeholder string in a paragraph's runs.
+
+    Handles the case where the placeholder may span multiple runs by
+    consolidating runs when needed.
+
+    Args:
+        para: Paragraph object.
+        placeholder: The placeholder string (e.g. '{{PROBLEM_DESCRIPTION}}').
+        text: The replacement text.
+    """
+    # First try simple per-run replacement
+    for run in para.runs:
+        if placeholder in run.text:
+            run.text = run.text.replace(placeholder, text)
+            return
+
+    # Placeholder spans multiple runs — consolidate
+    if placeholder in para.text:
+        full_text = para.text.replace(placeholder, text)
+        # Clear all runs and set text in first run
+        for run in para.runs:
+            run.text = ''
+        if para.runs:
+            para.runs[0].text = full_text
+        else:
+            para.add_run(full_text)
+
+
+def _xml_escape(text):
+    """Escape special XML characters in text.
+
+    Args:
+        text: Plain text string.
+
+    Returns:
+        XML-safe string.
+    """
+    return (text
+            .replace('&', '&amp;')
+            .replace('<', '&lt;')
+            .replace('>', '&gt;')
+            .replace('"', '&quot;')
+            .replace("'", '&apos;'))
+
+
+def create_analysis_report(replacements, template_path=None):
+    """Create a complete analysis report from the template.
+
+    Loads the analysis report template, fills all placeholder markers with
+    the provided values, and returns the document ready for saving.
+
+    Args:
+        replacements: dict of placeholder name → text values. Supported
+            placeholders::
+
+                PROBLEM_DESCRIPTION  — Problem Description and Impact section
+                ROOT_CAUSE_ANALYSIS — Root Cause Analysis section
+                ROOT_CAUSE          — Root Cause section
+                TRIGGER_CONDITION   — Trigger Condition section
+                IMPACT              — 5.1 Impact subsection
+                BACKUP_DATA         — 5.2 Back up data subsection
+                WORKAROUND          — 5.3 Workaround subsection
+                VERIFICATION        — 5.4 Verification subsection
+                ROLLBACK            — 5.5 Rollback Operation subsection
+                CLEANUP             — 5.6 Cleanup Operation subsection
+                VERSION             — Version info table cell
+                SCENARIO            — Installation Scenario table cell
+
+        template_path: optional custom template path. Defaults to the
+            bundled ``analysis-report-template.docx``.
+
+    Returns:
+        Document object ready to save with :func:`save_report`.
+    """
+    doc = load_template(template_path)
+    fill_template(doc, replacements)
+    return doc
 
 
 # ── Save / export ───────────────────────────────────────────────────

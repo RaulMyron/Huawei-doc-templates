@@ -79,8 +79,36 @@ overrides in the generator unless the user asks.
 
 ## Template structure
 
-The bundled `analysis-report-template.docx` is a Huawei Cloud analysis
-report template with these sections:
+The bundled `analysis-report-template.docx` is a **generalized** Huawei Cloud
+analysis report template. It preserves all styles, formatting, headers,
+footers, copyright, and safety pages, but replaces specific incident content
+with `{{PLACEHOLDER}}` markers that are filled at generation time.
+
+### Standard analysis report sections
+
+| # | Section | Placeholder | Description |
+|---|---|---|---|
+| 1 | Problem Description and Impact | `{{PROBLEM_DESCRIPTION}}` | What went wrong and its impact |
+| 2 | Root Cause Analysis | `{{ROOT_CAUSE_ANALYSIS}}` | Step-by-step analysis |
+| 3 | Root Cause | `{{ROOT_CAUSE}}` | The identified root cause |
+| 4 | Trigger Condition | `{{TRIGGER_CONDITION}}` | When the issue occurs |
+| 5 | Workaround and Impact | (container section) | |
+| 5.1 | Impact | `{{IMPACT}}` | Impact of the workaround |
+| 5.2 | Back up data before the workaround | `{{BACKUP_DATA}}` | Backup steps (or N/A) |
+| 5.3 | Workaround | `{{WORKAROUND}}` | Step-by-step workaround |
+| 5.4 | Verification after the workaround | `{{VERIFICATION}}` | How to verify the fix |
+| 5.5 | Rollback Operation | `{{ROLLBACK}}` | How to undo the workaround |
+| 5.6 | Cleanup Operation | `{{CLEANUP}}` | Post-fix cleanup steps |
+
+### Version info table placeholders
+
+| Cell | Placeholder | Example |
+|---|---|---|
+| Detailed version | `{{VERSION}}` | `HCS 8.5.1` |
+| Installation Scenario | `{{SCENARIO}}` | `Standard Scenario` |
+| Trigger Condition | `{{TRIGGER_CONDITION}}` | (also in table) |
+
+### Other template content (preserved, not placeholder-driven)
 
 | Section | Content |
 |---|---|
@@ -88,16 +116,22 @@ report template with these sections:
 | Copyright | Copyright notice |
 | Company info | Huawei Technologies Co., Ltd. address and website |
 | Safety | Safety statement and vulnerability handling process |
-| Version info | Detailed version, installation scenario, management scale |
+| Management Scale | "Irrelevant to the scale of management" |
 | Contents | Auto-generated table of contents |
-| Problem Description and Impact | Heading 1 section |
-| Root Cause Analysis | Heading 1 section |
-| Root Cause | Heading 1 section |
-| Trigger Condition | Heading 1 section |
-| Workaround and Impact | Heading 1 section with subsections for impact, backup, workaround, verification, rollback, cleanup |
 
-Use `fill_section(doc, placeholder, text)` to replace placeholders in the
-template, or `add_heading` / `add_paragraph` to append new content.
+### When to use this template vs. the LaTeX guide
+
+- **DOCX analysis report** — formal incident/issue reports with the standard
+  6-section structure (problem → root cause → trigger → workaround). Best for
+  customer-facing analysis reports.
+- **LaTeX guide** (`huawei-template-guide`) — informal, legible guides with
+  custom section structure, code blocks, images, and step-by-step instructions.
+  Best for training materials and how-to guides.
+
+Use `create_analysis_report(replacements)` to fill all placeholders at once,
+or `fill_template(doc, replacements)` for partial filling. You can also use
+`add_heading` / `add_paragraph` / `add_table` / `add_callout` to append
+additional content after filling.
 
 ---
 
@@ -109,6 +143,8 @@ template, or `add_heading` / `add_paragraph` to append new content.
 |---|---|---|
 | `load_template` | `load_template(template_path=None)` | Document object from template |
 | `new_report` | `new_report(template_path=None)` | Document object (alias for `load_template`) |
+| `create_analysis_report` | `create_analysis_report(replacements, template_path=None)` | Document with placeholders filled |
+| `fill_template` | `fill_template(doc, replacements)` | Number of replacements made |
 | `save_report` | `save_report(doc, filepath)` | Absolute path to saved `.docx` |
 | `to_pdf` | `to_pdf(docx_path)` | Path to generated `.pdf` |
 
@@ -164,23 +200,22 @@ from huawei_docx import *
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def main():
-    doc = new_report()
+    replacements = {
+        'PROBLEM_DESCRIPTION': 'Describe the problem and its impact.',
+        'ROOT_CAUSE_ANALYSIS': '1. First analysis step\n2. Second step',
+        'ROOT_CAUSE': 'The identified root cause.',
+        'TRIGGER_CONDITION': 'When this condition is met, the issue occurs.',
+        'IMPACT': 'Impact of applying the workaround.',
+        'BACKUP_DATA': 'N/A — no data modification required.',
+        'WORKAROUND': '1. Step one\n2. Step two\n3. Step three',
+        'VERIFICATION': 'How to verify the fix worked.',
+        'ROLLBACK': 'How to undo the workaround.',
+        'CLEANUP': 'No cleanup required.',
+        'VERSION': 'HCS 8.5.1',
+        'SCENARIO': 'Standard Scenario',
+    }
 
-    add_heading(doc, "Problem Description", level=1)
-    add_paragraph(doc, "Describe the problem and its impact here.")
-
-    add_heading(doc, "Root Cause", level=1)
-    add_paragraph(doc, "Explain the root cause.")
-
-    add_heading(doc, "Affected Versions", level=1)
-    add_table(doc, ["Version", "Affected"], [
-        ["HCS 8.5.1", "Yes"],
-        ["HCS 8.5.0", "No"],
-    ])
-
-    add_callout(doc, 'warning', "Applying the workaround requires tenant plane access.")
-    add_callout(doc, 'tip', "Back up data before applying any workaround.")
-
+    doc = create_analysis_report(replacements)
     path = save_report(doc, os.path.join(OUT_DIR, "report.docx"))
     print(f"Saved: {path}")
 
@@ -207,8 +242,11 @@ PDF export requires LibreOffice (`soffice`) installed and available on PATH.
 
 1. Import `huawei_docx` at the top of `generate.py` (use `sys.path.insert`
    to point to `templates/docx/`).
-2. Use `new_report()` to start from the template.
-3. Add content with `add_heading`, `add_paragraph`, `add_table`, `add_callout`.
-4. Use `fill_section()` to replace template placeholders.
+2. Use `create_analysis_report(replacements)` to create a report from the
+   template with all placeholders filled in one call.
+3. Alternatively, use `new_report()` + `fill_template(doc, replacements)` for
+   partial or incremental filling.
+4. Use `add_heading`, `add_paragraph`, `add_table`, `add_callout` to append
+   additional content beyond the standard sections.
 5. Save with `save_report()`.
 6. Run `python3 generate.py` and verify the output.

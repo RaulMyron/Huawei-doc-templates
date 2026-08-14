@@ -51,6 +51,9 @@ approval. Changing them breaks existing documents and reproducibility.
 - Every document lives in its own folder with its own `.latexmkrc`.
 - Never scatter `.tex` files directly in the workspace root.
 - The `.latexmkrc` sets `TEXINPUTS` pointing to `templates/guide/`.
+- Multi-artifact projects (guide + slides + report) should use the layout
+  documented in `documents/README.md`. The tool does not enforce this layout
+  — it is a recommended convention.
 
 ### L7. Skill prefix: `huawei-template-`
 - All skills are named `huawei-template-<name>` (e.g. `huawei-template-guide`).

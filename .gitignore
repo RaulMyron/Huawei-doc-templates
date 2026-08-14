@@ -35,5 +35,9 @@
 # User documents — ignore everything in documents/ except README.md
 documents/*
 !documents/README.md
+# Multi-artifact project outputs
+documents/*/slides/out/
+documents/*/report/out/
+documents/*/sources/
 *.pem
 *cred*

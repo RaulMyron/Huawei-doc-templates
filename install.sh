@@ -147,6 +147,19 @@ $SUDO apt-get install -y \
 
 log_done "TeX Live packages installed"
 
+# ── Install Python packages for PPT/DOCX generation ──
+log_step "Installing Python packages for PPT and DOCX generation"
+log_desc "python-pptx, python-docx, lxml, libreoffice (for PDF export)"
+
+$SUDO apt-get install -y \
+    python3-pptx \
+    python3-docx \
+    python3-lxml \
+    libreoffice \
+    2>&1 | tail -3
+
+log_done "Python packages and LibreOffice installed"
+
 # ── Update fvextra for backgroundcolor support ──
 # fvextra >= 1.5 introduced the backgroundcolor option (TeX Live 2024+).
 # TeX Live 2023 ships an older version without it, so we download from CTAN.

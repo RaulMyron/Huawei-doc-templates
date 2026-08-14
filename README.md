@@ -92,11 +92,13 @@ extension, open the repo root, and save any `.tex` file to auto-compile.
 | Template | Skill | Description |
 |---|---|---|
 | [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, tables, callout boxes, badges, changelog. English (default) and Portuguese. |
-| `ppt` *(planned)* | `/skill huawei-template-ppt` | PPTX slide deck — Huawei-branded presentation template. |
-| `docx` *(planned)* | `/skill huawei-template-docx` | DOCX report — Huawei-branded document template. |
+| [`ppt`](templates/ppt/) | `/skill huawei-template-ppt` | PPTX slide deck — Huawei-branded presentation template with reusable `huawei_ppt.py` library (text boxes, tables, callouts, title/chapter/content slides). PDF export via LibreOffice. |
+| [`docx`](templates/docx/) | `/skill huawei-template-docx` | DOCX report — Huawei-branded analysis report template with reusable `huawei_docx.py` library (headings, tables, callouts, template filling). PDF export via LibreOffice. |
 
-See [`templates/guide/SKILL.md`](templates/guide/SKILL.md) for the full command
-and environment reference.
+See [`templates/guide/SKILL.md`](templates/guide/SKILL.md),
+[`templates/ppt/SKILL.md`](templates/ppt/SKILL.md), and
+[`templates/docx/SKILL.md`](templates/docx/SKILL.md) for the full command
+and environment references.
 
 ## Project layout
 

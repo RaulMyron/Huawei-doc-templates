@@ -1,28 +1,39 @@
 # Makefile — build convenience for Huawei Document Templates
 # Usage:
-#   make                 — compile all documents (samples + examples)
-#   make samples         — compile PT and EN samples only
+#   make                 — compile all documents (all samples + examples)
+#   make samples         — compile LaTeX PT and EN samples only
 #   make examples        — compile setup-guide only
-#   make pt              — compile Portuguese sample only
-#   make en              — compile English sample only
+#   make pt / en         — compile specific LaTeX sample
+#   make ppt-samples     — generate PPT sample decks (PT + EN)
+#   make docx-samples    — generate DOCX sample reports (PT + EN)
 #   make setup-guide     — compile setup guide only
-#   make project DIR=examples/my-guide — compile a specific project (auto-detects .tex)
+#   make project DIR=examples/my-guide — compile a specific LaTeX project
+#   make slides DIR=examples/my-slides  — generate PPT deck (runs generate.py)
+#   make docx DIR=examples/my-report    — generate DOCX report (runs generate.py)
 #   make clean           — remove all build artifacts
-#   make clean-pt / clean-en / clean-setup-guide — clean specific targets
 #   make clean-project DIR=examples/my-guide — clean a specific project
 
-.PHONY: all samples examples pt en setup-guide project
+.PHONY: all samples examples pt en setup-guide project slides docx
+.PHONY: ppt-samples ppt-pt ppt-en docx-samples docx-pt docx-en
 .PHONY: clean clean-samples clean-examples clean-pt clean-en clean-setup-guide clean-project
 
 PT_DIR   = examples/guide/pt
 EN_DIR   = examples/guide/en
 SG_DIR   = examples/setup-guide
+PPT_PT   = examples/ppt/pt
+PPT_EN   = examples/ppt/en
+DOCX_PT  = examples/docx/pt
+DOCX_EN  = examples/docx/en
 
-all: samples examples
+all: samples examples ppt-samples docx-samples
 
 samples: pt en
 
 examples: setup-guide
+
+ppt-samples: ppt-pt ppt-en
+
+docx-samples: docx-pt docx-en
 
 # ── Per-project targets ──
 pt:
@@ -34,6 +45,20 @@ en:
 setup-guide:
 	cd $(SG_DIR) && latexmk setup-guide.tex
 	cp $(SG_DIR)/setup-guide.pdf setup-guide.pdf
+
+# ── PPT sample targets ──
+ppt-pt:
+	cd $(PPT_PT) && python3 generate.py
+
+ppt-en:
+	cd $(PPT_EN) && python3 generate.py
+
+# ── DOCX sample targets ──
+docx-pt:
+	cd $(DOCX_PT) && python3 generate.py
+
+docx-en:
+	cd $(DOCX_EN) && python3 generate.py
 
 # ── Generic project target (auto-detects the .tex file) ──
 # Usage: make project DIR=examples/my-guide
@@ -49,6 +74,18 @@ project:
 		echo "Compiling $(DIR)/$(FILE)"; \
 		cd $(DIR) && latexmk $(FILE); \
 	fi
+
+# ── Generic slides target (runs generate.py) ──
+# Usage: make slides DIR=documents/my-project/slides
+slides:
+	@if [ -z "$(DIR)" ]; then echo "Usage: make slides DIR=<path-with-generate.py>"; exit 1; fi
+	@cd $(DIR) && python3 generate.py
+
+# ── Generic docx target (runs generate.py) ──
+# Usage: make docx DIR=documents/my-project/report
+docx:
+	@if [ -z "$(DIR)" ]; then echo "Usage: make docx DIR=<path-with-generate.py>"; exit 1; fi
+	@cd $(DIR) && python3 generate.py
 
 # ── Clean targets ──
 clean: clean-samples clean-examples

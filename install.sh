@@ -84,7 +84,7 @@ echo -e "${C_BOLD}${C_CYAN}║  ${_banner_text}  ║${C_RESET}"
 echo -e "${C_BOLD}${C_CYAN}╚${_banner_border}╝${C_RESET}"
 echo ""
 
-echo -e "  ${C_BOLD}What:${C_RESET}  LaTeX templates for Huawei Cloud guides (XeLaTeX + latexmk)"
+echo -e "  ${C_BOLD}What:${C_RESET}  Huawei Cloud document templates (LaTeX + PPTX + DOCX)"
 echo ""
 echo -e "  ${C_BOLD}Installs:${C_RESET}"
 log_dim "• XeLaTeX + latexmk + LaTeX packages"

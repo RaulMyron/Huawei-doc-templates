@@ -1,8 +1,8 @@
 # Huawei Document Templates
 
-A collection of LaTeX templates for Huawei Cloud documents. Each template
-lives under `templates/<name>/` and is self-contained: class file, samples,
-skill, assets, and build config. Documents compile to PDF via XeLaTeX.
+A collection of Huawei Cloud document templates (LaTeX guides, PPTX slide
+decks, DOCX reports). Each template lives under `templates/<name>/` and is
+self-contained: class/template file, samples, skill, assets, and build config.
 
 ## Quick start
 
@@ -92,6 +92,8 @@ extension, open the repo root, and save any `.tex` file to auto-compile.
 | Template | Skill | Description |
 |---|---|---|
 | [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, tables, callout boxes, badges, changelog. English (default) and Portuguese. |
+| `ppt` *(planned)* | `/skill huawei-template-ppt` | PPTX slide deck — Huawei-branded presentation template. |
+| `docx` *(planned)* | `/skill huawei-template-docx` | DOCX report — Huawei-branded document template. |
 
 See [`templates/guide/SKILL.md`](templates/guide/SKILL.md) for the full command
 and environment reference.
@@ -139,12 +141,14 @@ and environment reference.
 ## Adding a new template
 
 1. Create `templates/<name>/` with:
-   - `<name>.cls` — the LaTeX class file
+   - Engine-specific files (detected by file presence):
+     - `.cls` + `.latexmkrc` → LaTeX engine (build with `latexmk`)
+     - `.pptx` template + generator `.py` → PPT engine (build with `python3` + `soffice`)
+     - `.docx` template + generator `.py` → DOCX engine (build with `python3`)
    - `SKILL.md` — skill definition (YAML frontmatter: `name: huawei-template-<name>`,
-     `description: ...`)
-   - `README.md` — brief template-specific docs
-   - `.latexmkrc` — latexmk config (XeLaTeX)
-   - `common-assets/` — logos, sample images
+     `description: ...`) — **always required**
+   - `README.md` — brief template-specific docs — **always required**
+   - `common-assets/` — logos, sample images — **always required**
 2. Add samples in `examples/<name>/pt/` and `examples/<name>/en/`.
 3. Add a row to the Templates table above.
 4. `install.sh` will auto-discover and install the skill on next run.

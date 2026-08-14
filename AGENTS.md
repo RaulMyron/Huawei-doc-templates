@@ -8,9 +8,9 @@ changes.
 
 ## Project overview
 
-A collection of LaTeX templates for Huawei Cloud documents. Each template
-lives under `templates/<name>/` and is self-contained: class file, samples,
-skill, assets, and build config. Documents compile to PDF via XeLaTeX.
+A collection of Huawei Cloud document templates (LaTeX guides, PPTX slide
+decks, DOCX reports). Each template lives under `templates/<name>/` and is
+self-contained: class/template file, samples, skill, assets, and build config.
 
 ---
 
@@ -56,6 +56,7 @@ approval. Changing them breaks existing documents and reproducibility.
 - All skills are named `huawei-template-<name>` (e.g. `huawei-template-guide`).
 - The prefix is set in the SKILL.md frontmatter `name` field.
 - `install.sh` extracts the name from frontmatter, not from the directory.
+- This prefix applies to **all engines** (LaTeX, PPT, DOCX), not just LaTeX.
 
 ### L8. Font fallback chain
 - Main font: HarmonyOS Sans -> Liberation Sans (sole fallback).
@@ -70,6 +71,7 @@ approval. Changing them breaks existing documents and reproducibility.
   `linkblue` (`#0000FF`), `ruleblack` (`#000000`).
 - Callout colors: `warningbg/fg` (amber), `tipbg/fg` (green), `infobg/fg` (blue).
 - Do not change these values. They match the Huawei house style.
+- These brand colors apply to PPT and DOCX generators as well.
 
 ### L10. Body order is fixed
 - `\makecover` -> `\maketoc` -> `\startbody` -> sections -> `changelog` -> `\end{document}`.
@@ -206,11 +208,13 @@ at the repo root registers `templates/` as a discovery path.
 ### Steps
 
 1. **Create the template directory** `templates/<name>/` with:
-   - `<name>.cls` — the LaTeX class file
-   - `SKILL.md` — the skill definition (see format below)
-   - `README.md` — human-readable documentation
-   - `.latexmkrc` — latexmk config (XeLaTeX, TZ=America/Sao_Paulo default)
-   - `common-assets/` — logos, sample images
+   - Engine-specific files (pick one):
+     - `.cls` + `.latexmkrc` → **LaTeX engine** (build with `latexmk`)
+     - `.pptx` template + generator `.py` → **PPT engine** (build with `python3` + `soffice` for PDF)
+     - `.docx` template + generator `.py` → **DOCX engine** (build with `python3`)
+   - `SKILL.md` — the skill definition (see format below) — **always required**
+   - `README.md` — human-readable documentation — **always required**
+   - `common-assets/` — logos, sample images — **always required**
    - Samples live in `examples/<name>/pt/` and `examples/<name>/en/` (see below)
 
 2. **SKILL.md format** — must start with YAML frontmatter:
@@ -292,6 +296,9 @@ at the repo root registers `templates/` as a discovery path.
   feature must be demonstrated in both samples.
 - **`install.sh`** — reads skill name from SKILL.md frontmatter. Do not
   hardcode skill names in the script.
+- **PPT/DOCX template files** — follow the same self-contained convention as
+  LaTeX templates: each template directory contains its engine-specific files,
+  SKILL.md, README.md, and common-assets/.
 
 ---
 

@@ -278,6 +278,79 @@ else
     log_dim "Project-level discovery also works via opencode.json (skills.paths)"
 fi
 
+# ── Configure opencode model context (glm-5.2: 200k vs 1M) ──
+log_step "Configuring opencode model context"
+
+OPENCODE_CONFIG="$HOME/.config/opencode/opencode.json"
+
+if [[ -f "$OPENCODE_CONFIG" ]]; then
+    log_desc "glm-5.2 context window selection"
+    echo ""
+    echo -e "  ${C_BOLD}Choose context window for glm-5.2:${C_RESET}"
+    echo -e "    ${C_CYAN}1)${C_RESET} 200K context  (198,000 tokens — current/default on most APIs)"
+    echo -e "    ${C_CYAN}2)${C_RESET} 1M context    (1,000,000 tokens — requires API access enabled)"
+    echo ""
+
+    if [[ "$AUTO_YES" != true ]]; then
+        echo -e "  ${C_BOLD}Selection [1/2]:${C_RESET} " | tr -d '\n'
+        read -r ctx_choice
+    else
+        ctx_choice="2"
+    fi
+
+    case "$ctx_choice" in
+        1)
+            CTX_VAL=198000
+            IN_VAL=192000
+            CTX_LABEL="200K"
+            ;;
+        2)
+            CTX_VAL=1000000
+            IN_VAL=1000000
+            CTX_LABEL="1M"
+            ;;
+        *)
+            CTX_VAL=198000
+            IN_VAL=192000
+            CTX_LABEL="200K"
+            log_warn "Invalid choice — defaulting to 200K"
+            ;;
+    esac
+
+    python3 - "$OPENCODE_CONFIG" "$CTX_VAL" "$IN_VAL" <<'PYEOF'
+import json, sys
+
+config_path = sys.argv[1]
+ctx_limit = int(sys.argv[2])
+in_limit = int(sys.argv[3])
+
+with open(config_path, "r") as f:
+    cfg = json.load(f)
+
+updated = []
+for prov_name, prov in cfg.get("provider", {}).items():
+    models = prov.get("models", {})
+    if "glm-5.2" in models:
+        models["glm-5.2"]["limit"]["context"] = ctx_limit
+        models["glm-5.2"]["limit"]["input"] = in_limit
+        updated.append(prov_name)
+
+if updated:
+    with open(config_path, "w") as f:
+        json.dump(cfg, f, indent=2)
+        f.write("\n")
+    print(f"  \033[32m✓\033[0m glm-5.2 context set to {ctx_limit:,} in: {', '.join(updated)}")
+else:
+    print("  \033[33m⚠\033[0m  glm-5.2 not found in any provider — skipping")
+PYEOF
+
+    log_done "opencode glm-5.2 configured: ${CTX_LABEL} context"
+    log_dim "Restart opencode for the change to take effect"
+else
+    log_warn "opencode config not found at $OPENCODE_CONFIG — skipping model config"
+    log_dim "Install opencode first, then re-run this script"
+fi
+
 # ── Fix system-wide latexmk default ──
 log_step "Fixing system-wide latexmk default (/etc/LatexMk)"
 
@@ -436,6 +509,7 @@ printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Code font:"          "Cascadia Code →
 printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Skill:"              "/skill huawei-template-guide"
 printf "  ${C_DIM}%-24s${C_RESET} %s\n" "VS Code:"            "LaTeX Workshop (local + remote, -cd -xelatex)"
 printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Timezone:"           "America/Sao_Paulo (GMT-3, overridable)"
+printf "  ${C_DIM}%-24s${C_RESET} %s\n" "Model context:"      "glm-5.2 (200K or 1M — choose during install)"
 echo ""
 echo -e "  ${C_BOLD}Next steps:${C_RESET}"
 log_dim "1. Open this project in opencode"

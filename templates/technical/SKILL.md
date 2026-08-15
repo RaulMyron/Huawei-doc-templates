@@ -1,28 +1,34 @@
 ---
-name: huawei-template-docx
-description: Create or edit Huawei Cloud DOCX reports using the analysis report template. Use when the user wants to create a report, analysis report, or DOCX document for Huawei Cloud. Triggers on keywords like huawei-template-docx, huawei report, analysis report, relatório, docx.
+name: huawei-template-technical
+description: Create or edit Huawei Cloud technical reports using the technical report template (DOCX engine). Use when the user wants to create a report, technical report, analysis report, or DOCX document for Huawei Cloud. Triggers on keywords like huawei-template-technical, huawei report, technical report, analysis report, relatório técnico, docx.
 ---
 
-# Huawei Cloud DOCX — Skill
+# Huawei Cloud Technical Report — Skill
 
-Create and generate Huawei Cloud DOCX reports (`.docx`) using the
-`huawei_docx` Python library and the bundled Huawei analysis report template.
+Create and generate Huawei Cloud technical reports (`.docx`) using the
+`huawei_technical` Python library and the bundled Huawei technical report
+template.
 
 ## When to use
 
-Use this skill when the task is to **create a Huawei Cloud analysis report
+Use this skill when the task is to **create a Huawei Cloud technical report
 or DOCX document**. The output is a `.docx` file (and optionally a `.pdf`
 via LibreOffice). Do **not** use this for general DOCX files — the formatting
 is hard-coded to the Huawei house style (AGENTS.md L9).
+
+> **Note:** This template was renamed from "analysis report" to "technical
+> report". The skill name changed from `huawei-template-docx` to
+> `huawei-template-technical`. The function `create_analysis_report()` is
+> kept as a backward-compatibility alias for `create_technical_report()`.
 
 ---
 
 ## Quick start — creating a new report
 
 1. **Ask for the essentials** (if not already provided):
-   - **Title** — e.g. "ECS Creation Page Analysis Report"
+   - **Title** — e.g. "ECS Creation Page Technical Report"
    - **Language** — English (default) or Portuguese
-   - **Project name** — used as the folder name (e.g. `ecs-analysis`)
+   - **Project name** — used as the folder name (e.g. `ecs-technical`)
 
 2. **Create a self-contained project folder** at `documents/<project-name>/`:
    - Inside the folder, create:
@@ -39,9 +45,9 @@ is hard-coded to the Huawei house style (AGENTS.md L9).
 ## Hard requirements
 
 - **Python 3.8+** with `python-docx >= 1.1` and `lxml >= 4.9`.
-  Install with: `pip install -r templates/docx/requirements.txt`
+  Install with: `pip install -r templates/technical/requirements.txt`
 - **LibreOffice** (optional) — needed only for PDF export via `to_pdf()`.
-- **The bundled template** — `templates/docx/common-assets/analysis-report-template.docx`
+- **The bundled template** — `templates/technical/common-assets/technical-report-template.docx`
   must be present. It provides the styles, sections, and page layout.
 
 ---
@@ -49,13 +55,13 @@ is hard-coded to the Huawei house style (AGENTS.md L9).
 ## Project layout (this directory)
 
 ```
-templates/docx/
-├── huawei_docx.py              # the library — all formatting helpers live here
-├── SKILL.md                    # this file (opencode skill)
-├── README.md                   # human docs (brief)
-├── requirements.txt            # Python dependencies
+templates/technical/
+├── huawei_technical.py             # the library — all formatting helpers live here
+├── SKILL.md                        # this file (opencode skill)
+├── README.md                       # human docs (brief)
+├── requirements.txt                # Python dependencies
 └── common-assets/
-    └── analysis-report-template.docx  # brand DOCX template (styles + layout)
+    └── technical-report-template.docx  # brand DOCX template (styles + layout)
 
 # Each document has its own folder:
 documents/
@@ -64,7 +70,7 @@ documents/
     └── assets/                 # project-specific images
 
 # Samples:
-examples/docx/
+examples/technical/
 ├── en/
 │   └── generate.py             # English sample
 └── pt/
@@ -72,19 +78,19 @@ examples/docx/
 ```
 
 **Rule of thumb:** content/structure goes in `generate.py`; look-and-feel
-goes in `huawei_docx.py` and the template. Do not inline formatting
+goes in `huawei_technical.py` and the template. Do not inline formatting
 overrides in the generator unless the user asks.
 
 ---
 
 ## Template structure
 
-The bundled `analysis-report-template.docx` is a **generalized** Huawei Cloud
-analysis report template. It preserves all styles, formatting, headers,
+The bundled `technical-report-template.docx` is a **generalized** Huawei Cloud
+technical report template. It preserves all styles, formatting, headers,
 footers, copyright, and safety pages, but replaces specific incident content
 with `{{PLACEHOLDER}}` markers that are filled at generation time.
 
-### Standard analysis report sections
+### Standard technical report sections
 
 | # | Section | Placeholder | Description |
 |---|---|---|---|
@@ -121,14 +127,14 @@ with `{{PLACEHOLDER}}` markers that are filled at generation time.
 
 ### When to use this template vs. the LaTeX guide
 
-- **DOCX analysis report** — formal incident/issue reports with the standard
+- **DOCX technical report** — formal incident/issue reports with the standard
   6-section structure (problem → root cause → trigger → workaround). Best for
-  customer-facing analysis reports.
+  customer-facing technical/analysis reports.
 - **LaTeX guide** (`huawei-template-guide`) — informal, legible guides with
   custom section structure, code blocks, images, and step-by-step instructions.
   Best for training materials and how-to guides.
 
-Use `create_analysis_report(replacements)` to fill all placeholders at once,
+Use `create_technical_report(replacements)` to fill all placeholders at once,
 or `fill_template(doc, replacements)` for partial filling. You can also use
 `add_heading` / `add_paragraph` / `add_table` / `add_callout` to append
 additional content after filling.
@@ -143,10 +149,13 @@ additional content after filling.
 |---|---|---|
 | `load_template` | `load_template(template_path=None)` | Document object from template |
 | `new_report` | `new_report(template_path=None)` | Document object (alias for `load_template`) |
-| `create_analysis_report` | `create_analysis_report(replacements, template_path=None)` | Document with placeholders filled |
+| `create_technical_report` | `create_technical_report(replacements, template_path=None)` | Document with placeholders filled |
 | `fill_template` | `fill_template(doc, replacements)` | Number of replacements made |
 | `save_report` | `save_report(doc, filepath)` | Absolute path to saved `.docx` |
 | `to_pdf` | `to_pdf(docx_path)` | Path to generated `.pdf` |
+
+> `create_analysis_report` is a backward-compatibility alias for
+> `create_technical_report`.
 
 ### Content builders
 
@@ -190,12 +199,12 @@ additional content after filling.
 
 ```python
 #!/usr/bin/env python3
-"""Generate a Huawei Cloud analysis report."""
+"""Generate a Huawei Cloud technical report."""
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 '..', '..', 'templates', 'docx'))
-from huawei_docx import *
+                                 '..', '..', 'templates', 'technical'))
+from huawei_technical import *
 
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -215,7 +224,7 @@ def main():
         'SCENARIO': 'Standard Scenario',
     }
 
-    doc = create_analysis_report(replacements)
+    doc = create_technical_report(replacements)
     path = save_report(doc, os.path.join(OUT_DIR, "report.docx"))
     print(f"Saved: {path}")
 
@@ -231,7 +240,7 @@ From the project folder:
 
 ```bash
 python3 generate.py                    # creates .docx
-python3 -c "from huawei_docx import to_pdf; to_pdf('report.docx')"  # optional PDF
+python3 -c "from huawei_technical import to_pdf; to_pdf('report.docx')"  # optional PDF
 ```
 
 PDF export requires LibreOffice (`soffice`) installed and available on PATH.
@@ -240,9 +249,9 @@ PDF export requires LibreOffice (`soffice`) installed and available on PATH.
 
 ## Agent workflow checklist
 
-1. Import `huawei_docx` at the top of `generate.py` (use `sys.path.insert`
-   to point to `templates/docx/`).
-2. Use `create_analysis_report(replacements)` to create a report from the
+1. Import `huawei_technical` at the top of `generate.py` (use `sys.path.insert`
+   to point to `templates/technical/`).
+2. Use `create_technical_report(replacements)` to create a report from the
    template with all placeholders filled in one call.
 3. Alternatively, use `new_report()` + `fill_template(doc, replacements)` for
    partial or incremental filling.

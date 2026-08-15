@@ -1,8 +1,9 @@
 # Huawei Document Templates
 
 A collection of Huawei Cloud document templates (LaTeX guides, PPTX slide
-decks, DOCX reports). Each template lives under `templates/<name>/` and is
-self-contained: class/template file, samples, skill, assets, and build config.
+decks, DOCX technical reports). Each template lives under `templates/<name>/`
+and is self-contained: class/template file, samples, skill, assets, and build
+config.
 
 ## Quick start
 
@@ -27,6 +28,13 @@ Then open the project in [opencode](https://opencode.ai) and run:
 ```
 
 to create a new guide document.
+
+**Not sure which template to use?** Run the interactive chooser:
+
+```bash
+./new-doc.sh                 # interactive — picks guide / technical / ppt
+./new-doc.sh --list          # list available templates
+```
 
 ## Requirements
 
@@ -93,12 +101,24 @@ extension, open the repo root, and save any `.tex` file to auto-compile.
 |---|---|---|
 | [`guide`](templates/guide/) | `/skill huawei-template-guide` | Huawei Cloud guide — branded cover, header, TOC, giant chapter numbers, objectives block, code blocks, tables, callout boxes, badges, changelog. English (default) and Portuguese. |
 | [`ppt`](templates/ppt/) | `/skill huawei-template-ppt` | PPTX slide deck — Huawei-branded presentation template with reusable `huawei_ppt.py` library (text boxes, tables, callouts, title/chapter/content slides). PDF export via LibreOffice. |
-| [`docx`](templates/docx/) | `/skill huawei-template-docx` | DOCX report — Huawei-branded analysis report template with reusable `huawei_docx.py` library (headings, tables, callouts, template filling). PDF export via LibreOffice. |
+| [`technical`](templates/technical/) | `/skill huawei-template-technical` | Technical report (DOCX) — Huawei-branded technical report template with reusable `huawei_technical.py` library (headings, tables, callouts, placeholder filling). PDF export via LibreOffice. |
 
 See [`templates/guide/SKILL.md`](templates/guide/SKILL.md),
 [`templates/ppt/SKILL.md`](templates/ppt/SKILL.md), and
-[`templates/docx/SKILL.md`](templates/docx/SKILL.md) for the full command
+[`templates/technical/SKILL.md`](templates/technical/SKILL.md) for the full command
 and environment references.
+
+## Choosing a template
+
+| You want to write… | Use | Why |
+|---|---|---|
+| A guide / tutorial / how-to | `guide` (LaTeX → PDF) | Custom section structure, code blocks, images, callouts, changelog. Legible and printable. |
+| An incident / root-cause / workaround report | `technical` (DOCX) | Fixed 6-section structure (problem → root cause → trigger → workaround), placeholder-driven, customer-facing. |
+| A slide deck / presentation | `ppt` (PPTX) | Branded title/chapter/content slides, tables, callouts. |
+
+The `./new-doc.sh` chooser scaffolds a self-contained project folder under
+`documents/<name>/` for any of the three. See
+[`templates/README.md`](templates/README.md) for the full overview.
 
 ## Project layout
 

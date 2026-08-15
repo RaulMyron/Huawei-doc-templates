@@ -5,6 +5,17 @@ with the templates in this project.
 
 ## Creating a new document
 
+**Easiest way — use the chooser:**
+
+```bash
+./new-doc.sh                 # interactive — picks guide / technical / ppt
+./new-doc.sh --type guide --title "ECS Setup" --lang en --name ecs-setup
+```
+
+This scaffolds a self-contained folder here with the right skeleton files.
+
+**Or use a skill directly:**
+
 1. Run the skill for the template you want to use:
    ```
    /skill huawei-template-guide
@@ -45,7 +56,7 @@ documents/<project>/
 │   ├── generate.py           # imports templates/ppt/huawei_ppt
 │   └── out/                  # generated .pptx + .pdf (gitignored)
 ├── report/
-│   ├── generate.py           # imports templates/docx/huawei_docx
+│   ├── generate.py           # imports templates/technical/huawei_technical
 │   └── out/                  # generated .docx (gitignored)
 └── sources/                  # raw reference material (gitignored)
 ```

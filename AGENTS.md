@@ -9,7 +9,7 @@ changes.
 ## Project overview
 
 A collection of Huawei Cloud document templates (LaTeX guides, PPTX slide
-decks, DOCX reports). Each template lives under `templates/<name>/` and is
+decks, DOCX technical reports). Each template lives under `templates/<name>/` and is
 self-contained: class/template file, samples, skill, assets, and build config.
 
 ---
@@ -124,6 +124,7 @@ approval. Changing them breaks existing documents and reproducibility.
 .
 +-- AGENTS.md               # this file
 +-- install.sh               # one-command setup
++-- new-doc.sh               # interactive template chooser + project scaffolder
 +-- Makefile                 # build convenience (make samples/examples/clean)
 +-- opencode.json            # skill discovery (scans templates/)
 +-- README.md                # comprehensive guide for all templates
@@ -249,7 +250,7 @@ at the repo root registers `templates/` as a discovery path.
 
 ### Skill naming rules
 - Prefix: `huawei-template-` (locked, see L7)
-- Examples: `huawei-template-guide`, `huawei-template-report`
+- Examples: `huawei-template-guide`, `huawei-template-technical`, `huawei-template-ppt`
 - The skill name in frontmatter must match the directory name under `templates/`
   minus the `huawei-template-` prefix.
 

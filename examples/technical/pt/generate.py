@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Gerar um relatório de análise DOCX de exemplo em português."""
+"""Gerar um relatório técnico de exemplo em português (DOCX)."""
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 '..', '..', '..', 'templates', 'docx'))
-from huawei_docx import *
+                                 '..', '..', '..', 'templates', 'technical'))
+from huawei_technical import *
 
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -51,7 +51,7 @@ def main():
         'SCENARIO': 'Cenário Padrão',
     }
 
-    doc = create_analysis_report(replacements)
+    doc = create_technical_report(replacements)
     path = save_report(doc, os.path.join(OUT_DIR, "sample-report.docx"))
     print(f"Saved: {path}")
 

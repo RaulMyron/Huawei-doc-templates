@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Reusable Huawei Cloud DOCX library.
+"""Reusable Huawei Cloud technical-report library (DOCX engine).
 
 Provides constants, helpers, and content builders for creating Huawei-branded
-DOCX reports using python-docx. Built on the analysis report template.
+technical reports as .docx files using python-docx. Built on the technical
+report template.
 
 Usage:
-    from huawei_docx import new_report, add_heading, add_table, add_callout, ...
+    from huawei_technical import new_report, add_heading, add_table, add_callout, ...
 
 Brand colors are locked (AGENTS.md L9). Callout names are locked (L3):
 warning, tip, infobox.
@@ -23,7 +24,7 @@ import os, subprocess, copy
 # Default template path (auto-detected relative to this file)
 _DEFAULT_TEMPLATE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-    'common-assets', 'analysis-report-template.docx'
+    'common-assets', 'technical-report-template.docx'
 )
 
 # ── Brand colors (locked — AGENTS.md L9) ────────────────────────────
@@ -65,11 +66,11 @@ BLUE_BD = INFO_BD
 # ── Template loading ────────────────────────────────────────────────
 
 def load_template(template_path=None):
-    """Load the analysis report template and return a Document object.
+    """Load the technical report template and return a Document object.
 
     Args:
         template_path: Path to the .docx template. Defaults to the bundled
-            ``common-assets/analysis-report-template.docx``.
+            ``common-assets/technical-report-template.docx``.
 
     Returns:
         A python-docx Document object loaded from the template.
@@ -80,15 +81,15 @@ def load_template(template_path=None):
 
 
 def new_report(template_path=None):
-    """Create a new document from the analysis report template.
+    """Create a new document from the technical report template.
 
-    This is the primary entry point for creating a Huawei-branded DOCX report.
-    The returned document inherits all styles, sections, and formatting from
-    the bundled template.
+    This is the primary entry point for creating a Huawei-branded technical
+    report. The returned document inherits all styles, sections, and
+    formatting from the bundled template.
 
     Args:
         template_path: Path to the .docx template. Defaults to the bundled
-            ``common-assets/analysis-report-template.docx``.
+            ``common-assets/technical-report-template.docx``.
 
     Returns:
         A python-docx Document object ready for content.
@@ -527,10 +528,10 @@ def _xml_escape(text):
             .replace("'", '&apos;'))
 
 
-def create_analysis_report(replacements, template_path=None):
-    """Create a complete analysis report from the template.
+def create_technical_report(replacements, template_path=None):
+    """Create a complete technical report from the template.
 
-    Loads the analysis report template, fills all placeholder markers with
+    Loads the technical report template, fills all placeholder markers with
     the provided values, and returns the document ready for saving.
 
     Args:
@@ -551,7 +552,7 @@ def create_analysis_report(replacements, template_path=None):
                 SCENARIO            — Installation Scenario table cell
 
         template_path: optional custom template path. Defaults to the
-            bundled ``analysis-report-template.docx``.
+            bundled ``technical-report-template.docx``.
 
     Returns:
         Document object ready to save with :func:`save_report`.
@@ -559,6 +560,12 @@ def create_analysis_report(replacements, template_path=None):
     doc = load_template(template_path)
     fill_template(doc, replacements)
     return doc
+
+
+# Backward-compatibility alias (the template was renamed from "analysis" to
+# "technical"). Existing generators that call create_analysis_report() keep
+# working without changes.
+create_analysis_report = create_technical_report
 
 
 # ── Save / export ───────────────────────────────────────────────────

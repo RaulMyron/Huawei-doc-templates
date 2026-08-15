@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generate an English sample Huawei Cloud DOCX analysis report."""
+"""Generate an English sample Huawei Cloud technical report (DOCX)."""
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 '..', '..', '..', 'templates', 'docx'))
-from huawei_docx import *
+                                 '..', '..', '..', 'templates', 'technical'))
+from huawei_technical import *
 
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -48,7 +48,7 @@ def main():
         'SCENARIO': 'Standard Scenario',
     }
 
-    doc = create_analysis_report(replacements)
+    doc = create_technical_report(replacements)
     path = save_report(doc, os.path.join(OUT_DIR, "sample-report.docx"))
     print(f"Saved: {path}")
 

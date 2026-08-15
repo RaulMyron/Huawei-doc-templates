@@ -67,7 +67,7 @@ documents/
 examples/ppt/
 ├── en/
 │   └── generate.py            # English sample
-└── pt/
+└── pt-br/
     └── generate.py            # Portuguese sample
 ```
 
@@ -102,10 +102,20 @@ overrides in the generator unless the user asks.
 | Function | Signature | Returns |
 |---|---|---|
 | `text_box` | `text_box(slide, text, left, top, width, height, size=14, color=DARK, bold=False, align=PP_ALIGN.LEFT)` | TextBox shape |
-| `set_title` | `set_title(slide, title, color=RED, size=24)` | None |
-| `add_table` | `add_table(slide, headers, rows, left=LEFT_MARGIN, top=TOP_CONTENT+0.3, col_widths=None)` | Table shape |
+| `set_title` | `set_title(slide, title, color=RED, size=24, top=0.35)` | None |
+| `add_table` | `add_table(slide, headers, rows, left=None, top=TOP_CONTENT+0.2, col_widths=None)` | Table shape |
 | `table_bottom` | `table_bottom(table_shape)` | Bottom Y in inches |
 | `callout` | `callout(slide, kind, text, left=LEFT_MARGIN, top=None, width=CONTENT_WIDTH)` | TextBox shape |
+
+### Flowchart helpers
+
+| Function | Signature | Returns |
+|---|---|---|
+| `flow_box` | `flow_box(slide, text, left, top, width=2.5, height=0.6, fill=GRAY_BG, font_color=DARK, font_size=11, bold=False)` | Shape |
+| `flow_arrow` | `flow_arrow(slide, left, top, width=0.4, height=0.4, direction='down')` | Shape |
+| `flow_decision` | `flow_decision(slide, text, left, top, width=2.0, height=1.0)` | Shape |
+| `flowchart_vertical` | `flowchart_vertical(slide, steps, left=..., top=..., box_width=2.5, box_height=0.55, gap=0.35)` | Bottom Y |
+| `flowchart_horizontal` | `flowchart_horizontal(slide, steps, left=..., top=..., box_width=2.2, box_height=0.6, gap=0.3)` | Right X |
 
 ### Callout kinds (locked — AGENTS.md L3)
 

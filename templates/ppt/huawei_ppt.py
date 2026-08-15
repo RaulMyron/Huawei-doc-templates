@@ -16,9 +16,10 @@ from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR, MSO_AUTO_SIZE
+from pptx.enum.shapes import MSO_SHAPE
 from pptx.oxml.ns import qn
 from lxml import etree
-import os, subprocess, zipfile
+import os, subprocess, zipfile, math
 
 # Default template path (auto-detected relative to this file)
 _DEFAULT_TEMPLATE = os.path.join(
@@ -34,8 +35,10 @@ SLIDE_H = 7.5    # inches
 LEFT_MARGIN = 0.8
 RIGHT_MARGIN = 0.8
 CONTENT_WIDTH = SLIDE_W - LEFT_MARGIN - RIGHT_MARGIN  # 11.7
-TOP_CONTENT = 1.5   # top position for content below title
+TOP_CONTENT = 1.7   # top position for content below title
 CENTER_X = SLIDE_W / 2  # 6.65
+FOOTER_Y = 7.0       # approximate Y of "Huawei Confidential" footer
+MAX_CONTENT_Y = 6.7  # max bottom Y for content (don't overlap footer)
 
 # ── Brand colors (locked — AGENTS.md L9) ────────────────────────────
 RED = RGBColor(0xC7, 0x00, 0x0B)
@@ -161,18 +164,20 @@ def text_box(slide, text, left, top, width, height,
     return tb
 
 
-def set_title(slide, title, color=RED, size=24):
-    """Set the slide title placeholder text and style.
+def set_title(slide, title, color=RED, size=24, top=0.35):
+    """Set the slide title placeholder text, style, and vertical position.
 
     Args:
         slide: Slide whose title placeholder to set.
         title: Title text.
         color: Font color (default RED).
         size: Font size in points (default 24).
+        top: Title top position in inches (default 0.35 — lower than template default).
     """
     for ph in slide.placeholders:
         if ph.placeholder_format.idx == 0:
             ph.text = title
+            ph.top = Inches(top)
             for p in ph.text_frame.paragraphs:
                 for r in p.runs:
                     r.font.size = Pt(size)
@@ -184,38 +189,62 @@ def set_title(slide, title, color=RED, size=24):
 # ── Table ───────────────────────────────────────────────────────────
 
 def add_table(slide, headers, rows,
-              left=None, top=TOP_CONTENT + 0.3,
+              left=None, top=TOP_CONTENT + 0.2,
               col_widths=None):
     """Add a styled table with Huawei red header, alternating rows, cell padding.
 
     The table is horizontally centered on the slide by default.
+    Column widths are auto-calculated from content if not specified.
+    Font size is reduced for tables with many columns to prevent overflow.
 
     Args:
         slide: Slide to add the table to.
         headers: List of header cell strings.
         rows: List of row lists (each row is a list of cell strings).
         left: Left position in inches (default: centered on slide).
-        top: Top position in inches (default TOP_CONTENT + 0.3).
-        col_widths: Optional list of column widths (EMU or inches).
+        top: Top position in inches (default TOP_CONTENT + 0.2).
+        col_widths: Optional list of column widths (inches or EMU).
 
     Returns:
         The table shape.
     """
     nr, nc = len(rows) + 1, len(headers)
-    if col_widths:
+
+    # Auto-calculate column widths from content if not provided
+    if not col_widths:
+        max_lens = [len(str(h)) for h in headers]
+        for row in rows:
+            for i, val in enumerate(row):
+                if i < len(max_lens):
+                    max_lens[i] = max(max_lens[i], len(str(val)))
+        # Add padding factor and normalize to CONTENT_WIDTH
+        padded = [ml + 3 for ml in max_lens]  # +3 chars padding per column
+        total = sum(padded)
+        col_widths = [Inches(CONTENT_WIDTH * p / total) for p in padded]
+
+    width = sum(col_widths)
+
+    # Prevent overflow: scale down if total width exceeds slide
+    width_in = width / 914400
+    if width_in > CONTENT_WIDTH:
+        scale = CONTENT_WIDTH / width_in
+        col_widths = [Inches(w / 914400 * scale) for w in col_widths]
         width = sum(col_widths)
-    else:
-        width = Inches(CONTENT_WIDTH)
+        width_in = width / 914400
+
     # Center the table on the slide if left is not specified
     if left is None:
-        width_in = width / 914400  # EMU to inches
         left = (SLIDE_W - width_in) / 2
+
+    # Reduce font for many columns
+    header_fs = 13 if nc <= 5 else 12 if nc <= 7 else 10
+    body_fs = 11 if nc <= 5 else 10 if nc <= 7 else 9
+
     height = Inches(0.4 * len(rows) + 0.6)
     ts = slide.shapes.add_table(nr, nc, _emu(left), _emu(top), width, height)
     tbl = ts.table
-    if col_widths:
-        for i, w in enumerate(col_widths):
-            tbl.columns[i].width = w
+    for i, w in enumerate(col_widths):
+        tbl.columns[i].width = w
 
     # Style header row
     for ci, h in enumerate(headers):
@@ -230,7 +259,7 @@ def add_table(slide, headers, rows,
         for p in c.text_frame.paragraphs:
             p.alignment = PP_ALIGN.CENTER
             for r in p.runs:
-                r.font.size = Pt(13)
+                r.font.size = Pt(header_fs)
                 r.font.bold = True
                 r.font.color.rgb = WHITE
         c.vertical_anchor = MSO_ANCHOR.MIDDLE
@@ -249,7 +278,7 @@ def add_table(slide, headers, rows,
             c.margin_bottom = Inches(0.06)
             for p in c.text_frame.paragraphs:
                 for r in p.runs:
-                    r.font.size = Pt(11)
+                    r.font.size = Pt(body_fs)
                     r.font.color.rgb = DARK
                     if ci == 0:
                         r.font.bold = True
@@ -274,10 +303,11 @@ def table_bottom(ts):
 # ── Callout boxes ───────────────────────────────────────────────────
 
 def callout(slide, kind, text, left=LEFT_MARGIN, top=None, width=CONTENT_WIDTH):
-    """Add a callout box with colored background, border, and icon prefix.
+    """Add a callout box with colored background and icon prefix.
 
     Callout names are locked (AGENTS.md L3): ``warning``, ``tip``,
-    ``infobox``.
+    ``infobox``. The box height is calculated dynamically from text length
+    and never overlaps the footer.
 
     Args:
         slide: Slide to add the callout to.
@@ -298,7 +328,17 @@ def callout(slide, kind, text, left=LEFT_MARGIN, top=None, width=CONTENT_WIDTH):
         'infobox': (BLUE_BG,  BLUE_FG,  BLUE_BD,  '\u2139'),
     }
     bg, fg, bd, icon = colors.get(kind, colors['infobox'])
-    tb = slide.shapes.add_textbox(_emu(left), _emu(top), _emu(width), Inches(1.2))
+
+    # Dynamic height: estimate lines from text length and width
+    chars_per_line = max(20, int(width * 8))  # ~8 chars per inch at 12pt
+    text_len = len(text) + 4  # account for icon prefix
+    lines = max(1, math.ceil(text_len / chars_per_line))
+    height = lines * 0.24 + 0.25  # 0.24" per line + padding
+    # Don't overlap footer
+    height = min(height, MAX_CONTENT_Y - top)
+    height = max(0.4, height)  # minimum 0.4"
+
+    tb = slide.shapes.add_textbox(_emu(left), _emu(top), _emu(width), Inches(height))
     tf = tb.text_frame
     tf.word_wrap = True
     tf.auto_size = MSO_AUTO_SIZE.NONE
@@ -322,6 +362,180 @@ def callout(slide, kind, text, left=LEFT_MARGIN, top=None, width=CONTENT_WIDTH):
     r.font.color.rgb = DARK
     r.font.bold = False
     return tb
+
+
+# ── Flowchart helpers ───────────────────────────────────────────────
+
+def flow_box(slide, text, left, top, width=2.5, height=0.6,
+             fill=GRAY_BG, font_color=DARK, font_size=11, bold=False):
+    """Add a rounded rectangle process box with centered text.
+
+    Args:
+        slide: Slide to add the box to.
+        text: Box label text.
+        left, top: Position in inches.
+        width, height: Size in inches.
+        fill: Background color (default GRAY_BG).
+        font_color: Text color (default DARK).
+        font_size: Font size in points (default 11).
+        bold: Whether text is bold (default False).
+
+    Returns:
+        The shape object.
+    """
+    shape = slide.shapes.add_shape(
+        MSO_SHAPE.ROUNDED_RECTANGLE,
+        Inches(left), Inches(top), Inches(width), Inches(height))
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = fill
+    shape.line.color.rgb = MED_GRAY
+    shape.line.width = Pt(0.75)
+    tf = shape.text_frame
+    tf.word_wrap = True
+    tf.auto_size = MSO_AUTO_SIZE.NONE
+    p = tf.paragraphs[0]
+    p.alignment = PP_ALIGN.CENTER
+    r = p.add_run()
+    r.text = text
+    r.font.size = Pt(font_size)
+    r.font.color.rgb = font_color
+    r.font.bold = bold
+    shape.vertical_anchor = MSO_ANCHOR.MIDDLE
+    return shape
+
+
+def flow_arrow(slide, left, top, width=0.4, height=0.4, direction='down'):
+    """Add an arrow connector between flowchart boxes.
+
+    Args:
+        slide: Slide to add the arrow to.
+        left, top: Position in inches.
+        width, height: Size in inches.
+        direction: 'down', 'right', 'left', or 'up'.
+
+    Returns:
+        The shape object.
+    """
+    shape_map = {
+        'down': MSO_SHAPE.DOWN_ARROW,
+        'right': MSO_SHAPE.RIGHT_ARROW,
+        'left': MSO_SHAPE.LEFT_ARROW,
+        'up': MSO_SHAPE.UP_ARROW,
+    }
+    shape = slide.shapes.add_shape(
+        shape_map.get(direction, MSO_SHAPE.DOWN_ARROW),
+        Inches(left), Inches(top), Inches(width), Inches(height))
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = MED_GRAY
+    shape.line.fill.background()  # no outline
+    return shape
+
+
+def flow_decision(slide, text, left, top, width=2.0, height=1.0):
+    """Add a diamond decision shape with centered text.
+
+    Args:
+        slide: Slide to add the decision to.
+        text: Decision question text.
+        left, top: Position in inches.
+        width, height: Size in inches.
+
+    Returns:
+        The shape object.
+    """
+    shape = slide.shapes.add_shape(
+        MSO_SHAPE.DIAMOND,
+        Inches(left), Inches(top), Inches(width), Inches(height))
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = RGBColor(0xFF, 0xF3, 0xE0)  # light amber
+    shape.line.color.rgb = AMBER_BD
+    shape.line.width = Pt(1)
+    tf = shape.text_frame
+    tf.word_wrap = True
+    tf.auto_size = MSO_AUTO_SIZE.NONE
+    p = tf.paragraphs[0]
+    p.alignment = PP_ALIGN.CENTER
+    r = p.add_run()
+    r.text = text
+    r.font.size = Pt(10)
+    r.font.color.rgb = DARK
+    r.font.bold = True
+    shape.vertical_anchor = MSO_ANCHOR.MIDDLE
+    return shape
+
+
+def flowchart_vertical(slide, steps, left=CENTER_X - 1.25, top=TOP_CONTENT + 0.2,
+                       box_width=2.5, box_height=0.55, gap=0.35):
+    """Build a vertical flowchart from a list of steps.
+
+    Each step is a dict: {'text': ..., 'type': 'box'|'decision'|'arrow', 'fill': ...}
+
+    Args:
+        slide: Slide to add the flowchart to.
+        steps: List of step dicts.
+        left: Left position of boxes in inches.
+        top: Starting top position in inches.
+        box_width: Width of each box in inches.
+        box_height: Height of each box in inches.
+        gap: Vertical gap between boxes (for arrows) in inches.
+
+    Returns:
+        Bottom Y position in inches (for chaining).
+    """
+    y = top
+    for step in steps:
+        stype = step.get('type', 'box')
+        if stype == 'arrow':
+            flow_arrow(slide, left + box_width / 2 - gap / 2, y,
+                       width=gap, height=gap, direction='down')
+            y += gap
+        elif stype == 'decision':
+            flow_decision(slide, step['text'], left - 0.25, y,
+                          width=box_width + 0.5, height=box_height + 0.3)
+            y += box_height + 0.3 + gap
+        else:
+            fill = step.get('fill', GRAY_BG)
+            bold = step.get('bold', False)
+            font_color = step.get('font_color', DARK)
+            flow_box(slide, step['text'], left, y, box_width, box_height,
+                     fill=fill, font_color=font_color, bold=bold)
+            y += box_height + gap
+    return y
+
+
+def flowchart_horizontal(slide, steps, left=LEFT_MARGIN, top=TOP_CONTENT + 0.5,
+                         box_width=2.2, box_height=0.6, gap=0.3):
+    """Build a horizontal flowchart from a list of steps.
+
+    Each step is a dict: {'text': ..., 'type': 'box'|'arrow', 'fill': ...}
+
+    Args:
+        slide: Slide to add the flowchart to.
+        steps: List of step dicts.
+        left: Starting left position in inches.
+        top: Top position in inches.
+        box_width: Width of each box in inches.
+        box_height: Height of each box in inches.
+        gap: Horizontal gap between boxes (for arrows) in inches.
+
+    Returns:
+        Right X position in inches (for chaining).
+    """
+    x = left
+    for step in steps:
+        stype = step.get('type', 'box')
+        if stype == 'arrow':
+            flow_arrow(slide, x, top + box_height / 2 - gap / 2,
+                       width=gap, height=gap, direction='right')
+            x += gap
+        else:
+            fill = step.get('fill', GRAY_BG)
+            bold = step.get('bold', False)
+            font_color = step.get('font_color', DARK)
+            flow_box(slide, step['text'], x, top, box_width, box_height,
+                     fill=fill, font_color=font_color, bold=bold)
+            x += box_width + gap
+    return x
 
 
 # ── Slide layout builders ───────────────────────────────────────────

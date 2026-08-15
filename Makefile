@@ -24,7 +24,7 @@
 PT_DIR        = examples/guide/pt
 EN_DIR        = examples/guide/en
 SG_DIR        = examples/setup-guide
-PPT_PT        = examples/ppt/pt
+PPT_PT        = examples/ppt/pt-br
 PPT_EN        = examples/ppt/en
 TECHNICAL_PT  = examples/technical/pt
 TECHNICAL_EN  = examples/technical/en

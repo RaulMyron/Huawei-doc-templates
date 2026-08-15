@@ -152,9 +152,9 @@ overrides in the generator unless the user asks.
 | `DARK` | `#1F2328` | Body text |
 | `MED_GRAY` | `#666666` | Secondary text |
 | `LIGHT_DARK` | `#4A4A4A` | Tertiary text |
-| `AMBER_BG/FG/BD` | `#FFF3CD` / `#896B00` / `#FFC107` | Warning callout |
-| `GREEN_BG/FG/BD` | `#D4EDDA` / `#155724` / `#28A745` | Tip callout |
-| `BLUE_BG/FG/BD` | `#D1ECF1` / `#0C5363` / `#17A2B8` | Infobox callout |
+| `AMBER_BG/FG/BD` | `#FDF8EE` / `#8A6D00` / `#D4A72C` | Warning callout (muted gold) |
+| `GREEN_BG/FG/BD` | `#EDF6ED` / `#2E6B2E` / `#5BA85B` | Tip callout (muted sage) |
+| `BLUE_BG/FG/BD` | `#EDF3F9` / `#1B5170` / `#4A8BB5` | Infobox callout (muted slate) |
 
 ---
 

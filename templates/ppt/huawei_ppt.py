@@ -47,16 +47,17 @@ DARK = RGBColor(0x1F, 0x23, 0x28)
 MED_GRAY = RGBColor(0x66, 0x66, 0x66)
 LIGHT_DARK = RGBColor(0x4A, 0x4A, 0x4A)
 
-# ── Callout colors (locked — AGENTS.md L3 names, L9 values) ────────
-AMBER_BG = RGBColor(0xFF, 0xF3, 0xCD)
-AMBER_FG = RGBColor(0x89, 0x6B, 0x00)
-AMBER_BD = RGBColor(0xFF, 0xC1, 0x07)
-GREEN_BG = RGBColor(0xD4, 0xED, 0xDA)
-GREEN_FG = RGBColor(0x15, 0x57, 0x24)
-GREEN_BD = RGBColor(0x28, 0xA7, 0x45)
-BLUE_BG = RGBColor(0xD1, 0xEC, 0xF1)
-BLUE_FG = RGBColor(0x0C, 0x53, 0x63)
-BLUE_BD = RGBColor(0x17, 0xA2, 0xB8)
+# ── Callout colors (corporate-muted — AGENTS.md L3 names) ──────────
+# Toned down from Bootstrap alert palette to muted, enterprise tones.
+AMBER_BG = RGBColor(0xFD, 0xF8, 0xEE)  # subtle warm white
+AMBER_FG = RGBColor(0x8A, 0x6D, 0x00)  # muted amber (icon/label)
+AMBER_BD = RGBColor(0xD4, 0xA7, 0x2C)  # muted gold border
+GREEN_BG = RGBColor(0xED, 0xF6, 0xED)  # subtle green tint
+GREEN_FG = RGBColor(0x2E, 0x6B, 0x2E)  # muted green (icon/label)
+GREEN_BD = RGBColor(0x5B, 0xA8, 0x5B)  # muted sage border
+BLUE_BG = RGBColor(0xED, 0xF3, 0xF9)  # subtle blue tint
+BLUE_FG = RGBColor(0x1B, 0x51, 0x70)  # muted blue (icon/label)
+BLUE_BD = RGBColor(0x4A, 0x8B, 0xB5)  # muted slate border
 
 
 # ── Helpers ─────────────────────────────────────────────────────────
@@ -183,15 +184,17 @@ def set_title(slide, title, color=RED, size=24):
 # ── Table ───────────────────────────────────────────────────────────
 
 def add_table(slide, headers, rows,
-              left=LEFT_MARGIN, top=TOP_CONTENT + 0.3,
+              left=None, top=TOP_CONTENT + 0.3,
               col_widths=None):
     """Add a styled table with Huawei red header, alternating rows, cell padding.
+
+    The table is horizontally centered on the slide by default.
 
     Args:
         slide: Slide to add the table to.
         headers: List of header cell strings.
         rows: List of row lists (each row is a list of cell strings).
-        left: Left position in inches (default LEFT_MARGIN).
+        left: Left position in inches (default: centered on slide).
         top: Top position in inches (default TOP_CONTENT + 0.3).
         col_widths: Optional list of column widths (EMU or inches).
 
@@ -203,6 +206,10 @@ def add_table(slide, headers, rows,
         width = sum(col_widths)
     else:
         width = Inches(CONTENT_WIDTH)
+    # Center the table on the slide if left is not specified
+    if left is None:
+        width_in = width / 914400  # EMU to inches
+        left = (SLIDE_W - width_in) / 2
     height = Inches(0.4 * len(rows) + 0.6)
     ts = slide.shapes.add_table(nr, nc, _emu(left), _emu(top), width, height)
     tbl = ts.table
@@ -295,53 +302,48 @@ def callout(slide, kind, text, left=LEFT_MARGIN, top=None, width=CONTENT_WIDTH):
     tf = tb.text_frame
     tf.word_wrap = True
     tf.auto_size = MSO_AUTO_SIZE.NONE
-    # Set background fill via XML
+    # Set background fill via XML (no border — just the fill)
     spPr = tb._element.spPr
     sf = etree.SubElement(spPr, qn('a:solidFill'))
     clr = etree.SubElement(sf, qn('a:srgbClr'))
     clr.set('val', f'{bg[0]:02X}{bg[1]:02X}{bg[2]:02X}')
-    ln = etree.SubElement(spPr, qn('a:ln'))
-    ln.set('w', '12700')
-    sf2 = etree.SubElement(ln, qn('a:solidFill'))
-    clr2 = etree.SubElement(sf2, qn('a:srgbClr'))
-    clr2.set('val', f'{bd[0]:02X}{bd[1]:02X}{bd[2]:02X}')
     # Add icon prefix + text
     p = tf.paragraphs[0]
-    # Icon run
+    # Icon run (black, bold)
     r_icon = p.add_run()
     r_icon.text = f"{icon}  "
-    r_icon.font.size = Pt(15)
-    r_icon.font.color.rgb = fg
+    r_icon.font.size = Pt(14)
+    r_icon.font.color.rgb = DARK
     r_icon.font.bold = True
-    # Text run
+    # Text run (dark, regular — corporate, readable)
     r = p.add_run()
     r.text = text
     r.font.size = Pt(12)
-    r.font.color.rgb = fg
-    r.font.bold = True
+    r.font.color.rgb = DARK
+    r.font.bold = False
     return tb
 
 
 # ── Slide layout builders ───────────────────────────────────────────
 
 def title_slide(prs, layouts, module, subtitle, tag):
-    """Title slide — NO "HUAWEI CLOUD" text (template has logo), all text WHITE.
+    """Title slide — NO "HUAWEI CLOUD" text (template has logo), all text DARK.
 
     Args:
         prs: Presentation object.
-        layouts: Layouts dict.
-        module: Main title text (large, white, centered).
-        subtitle: Subtitle text (white, centered).
-        tag: Tag line text (near-white, centered).
+        layouts: Layout dict.
+        module: Main title text (large, black, centered).
+        subtitle: Subtitle text (black, centered).
+        tag: Tag line text (medium gray, centered).
     """
     s = add_slide(prs, layouts, "Title Slide 1")
-    # Module name - centered, large, white
+    # Module name - centered, large, black (on light area of gradient)
     text_box(s, module, Inches(1.5), Inches(2.5), Inches(10.3), Inches(1.5),
-             36, WHITE, True, PP_ALIGN.CENTER)
-    # Subtitle - centered, white
+             36, DARK, True, PP_ALIGN.CENTER)
+    # Subtitle - centered, white (on darker area of gradient)
     text_box(s, subtitle, Inches(1.5), Inches(4.0), Inches(10.3), Inches(0.8),
              18, WHITE, False, PP_ALIGN.CENTER)
-    # Tag - centered, near-white
+    # Tag - centered, near-white (on darkest area of gradient)
     text_box(s, tag, Inches(1.5), Inches(5.0), Inches(10.3), Inches(0.5),
              14, NEAR_WHITE, False, PP_ALIGN.CENTER)
 

@@ -189,9 +189,9 @@ additional content after filling.
 | `WHITE` | `#FFFFFF` | White |
 | `DARK` | `#1F2328` | Body text |
 | `GRAY_BG` | `#F6F8FA` | Alternating table row background |
-| `WARNING_BG/FG/BD` | `#FFF8E1` / `#F57C00` / `#FFC107` | Warning callout |
-| `TIP_BG/FG/BD` | `#E8F5E9` / `#2E7D32` / `#28A745` | Tip callout |
-| `INFO_BG/FG/BD` | `#E3F2FD` / `#1565C0` / `#17A2B8` | Infobox callout |
+| `WARNING_BG/FG/BD` | `#FDF8EE` / `#8A6D00` / `#D4A72C` | Warning callout (muted gold) |
+| `TIP_BG/FG/BD` | `#EDF6ED` / `#2E6B2E` / `#5BA85B` | Tip callout (muted sage) |
+| `INFO_BG/FG/BD` | `#EDF3F9` / `#1B5170` / `#4A8BB5` | Infobox callout (muted slate) |
 
 ---
 

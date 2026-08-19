@@ -37,8 +37,8 @@ RIGHT_MARGIN = 0.8
 CONTENT_WIDTH = SLIDE_W - LEFT_MARGIN - RIGHT_MARGIN  # 11.7
 TOP_CONTENT = 1.7   # top position for content below title
 CENTER_X = SLIDE_W / 2  # 6.65
-FOOTER_Y = 7.0       # approximate Y of "Huawei Confidential" footer
-MAX_CONTENT_Y = 6.7  # max bottom Y for content (don't overlap footer)
+FOOTER_Y = 6.95     # Y of "Huawei Confidential" footer (in slide master)
+MAX_CONTENT_Y = 6.8  # max bottom Y for content (0.15" gap above footer)
 
 # ── Brand colors (locked — AGENTS.md L9) ────────────────────────────
 RED = RGBColor(0xC7, 0x00, 0x0B)
@@ -92,6 +92,21 @@ def clean_zip(filepath):
             zout.writestr(info, data)
 
 
+def _strip_thank_you_from_last_page(prs):
+    """Remove the 'Thank you.' TextBox from the Last Page layout (in-memory only).
+
+    The template's Last Page layout ships with a 'Thank you.' text box.  We strip
+    it once at deck creation so every Last Page slide starts clean.  The closing
+    thank-you slide re-adds the text explicitly via thank_you_slide().
+    """
+    for master in prs.slide_masters:
+        for layout in master.slide_layouts:
+            if layout.name == "Last Page":
+                for sh in list(layout.shapes):
+                    if sh.has_text_frame and "Thank you" in sh.text_frame.text:
+                        sh._element.getparent().remove(sh._element)
+
+
 def new_deck(template_path=None):
     """Create a new presentation from the Huawei template, with all slides removed.
 
@@ -106,6 +121,7 @@ def new_deck(template_path=None):
         template_path = _DEFAULT_TEMPLATE
     prs = Presentation(template_path)
     remove_all_slides(prs)
+    _strip_thank_you_from_last_page(prs)
     return prs, get_layouts(prs)
 
 
@@ -164,7 +180,7 @@ def text_box(slide, text, left, top, width, height,
     return tb
 
 
-def set_title(slide, title, color=RED, size=24, top=0.35):
+def set_title(slide, title, color=RED, size=24, top=0.55):
     """Set the slide title placeholder text, style, and vertical position.
 
     Args:
@@ -172,12 +188,13 @@ def set_title(slide, title, color=RED, size=24, top=0.35):
         title: Title text.
         color: Font color (default RED).
         size: Font size in points (default 24).
-        top: Title top position in inches (default 0.35 — lower than template default).
+        top: Title top position in inches (default 0.55 — lower than template default).
     """
     for ph in slide.placeholders:
         if ph.placeholder_format.idx == 0:
             ph.text = title
             ph.top = Inches(top)
+            ph.left = Inches(LEFT_MARGIN)
             for p in ph.text_frame.paragraphs:
                 for r in p.runs:
                     r.font.size = Pt(size)
@@ -240,11 +257,28 @@ def add_table(slide, headers, rows,
     header_fs = 13 if nc <= 5 else 12 if nc <= 7 else 10
     body_fs = 11 if nc <= 5 else 10 if nc <= 7 else 9
 
-    height = Inches(0.4 * len(rows) + 0.6)
+    # Calculate row height: fit within available space (top → MAX_CONTENT_Y)
+    available = MAX_CONTENT_Y - top
+    header_rh = 0.45
+    body_rh = 0.38
+    total_needed = header_rh + body_rh * len(rows)
+    if total_needed > available:
+        # Scale down body row height to fit
+        body_rh = max(0.22, (available - header_rh) / len(rows))
+        # Also reduce font for very tight tables
+        if body_rh < 0.30:
+            body_fs = min(body_fs, 9)
+
+    height = Inches(header_rh + body_rh * len(rows))
     ts = slide.shapes.add_table(nr, nc, _emu(left), _emu(top), width, height)
     tbl = ts.table
     for i, w in enumerate(col_widths):
         tbl.columns[i].width = w
+
+    # Set explicit row heights to prevent auto-expansion
+    tbl.rows[0].height = Inches(header_rh)
+    for ri in range(1, nr):
+        tbl.rows[ri].height = Inches(body_rh)
 
     # Style header row
     for ci, h in enumerate(headers):
@@ -254,8 +288,8 @@ def add_table(slide, headers, rows,
         c.fill.fore_color.rgb = RED
         c.margin_left = Inches(0.12)
         c.margin_right = Inches(0.12)
-        c.margin_top = Inches(0.08)
-        c.margin_bottom = Inches(0.08)
+        c.margin_top = Inches(0.04)
+        c.margin_bottom = Inches(0.04)
         for p in c.text_frame.paragraphs:
             p.alignment = PP_ALIGN.CENTER
             for r in p.runs:
@@ -274,8 +308,8 @@ def add_table(slide, headers, rows,
             c.fill.fore_color.rgb = bg
             c.margin_left = Inches(0.12)
             c.margin_right = Inches(0.12)
-            c.margin_top = Inches(0.06)
-            c.margin_bottom = Inches(0.06)
+            c.margin_top = Inches(0.03)
+            c.margin_bottom = Inches(0.03)
             for p in c.text_frame.paragraphs:
                 for r in p.runs:
                     r.font.size = Pt(body_fs)
@@ -598,14 +632,65 @@ def content_slide(prs, layouts, title):
     return s
 
 
-def last_slide(prs, layouts):
-    """Add the closing/last slide.
+def authorship_slide(prs, layouts, author="", employee_id="",
+                     version="v1.0", date=""):
+    """Back-cover authorship slide (page 2) — always English, isolated, no overlap.
+
+    Uses the Last Page layout so the Huawei copyright/slogans/logo (master shapes
+    on the right side) are inherited.  The author/version table is placed on the
+    LEFT half so it never collides with the right-side branding.  Labels are
+    hard-coded in English regardless of the active language.
+
+    Args:
+        prs: Presentation object.
+        layouts: Layouts dict.
+        author: Author name.
+        employee_id: Employee identifier.
+        version: Document version (default "v1.0").
+        date: Date string (e.g. "August 2026").
+    """
+    s = add_slide(prs, layouts, "Last Page")
+    rows = [[k, v] for k, v in [
+        ("Author", author),
+        ("Employee ID", employee_id),
+        ("Version", version),
+        ("Date", date),
+    ] if v]
+    add_table(s, ["Field", "Value"], rows,
+              col_widths=[Inches(2.0), Inches(3.8)],
+              left=Inches(0.8), top=Inches(2.5))
+
+
+def thank_you_slide(prs, layouts):
+    """Closing thank-you slide (last page) — 'Thank you.' + Huawei branding only.
+
+    No author table (that lives on the page-2 back cover).  The 'Thank you.' text
+    is re-added explicitly here because _strip_thank_you_from_last_page() removed
+    it from the shared layout.
 
     Args:
         prs: Presentation object.
         layouts: Layouts dict.
     """
-    add_slide(prs, layouts, "Last Page")
+    s = add_slide(prs, layouts, "Last Page")
+    tb = text_box(s, "Thank you.", Inches(0.66), Inches(1.53), Inches(4.29), Inches(0.93),
+                  size=48, color=DARK, bold=False, align=PP_ALIGN.LEFT)
+    for p in tb.text_frame.paragraphs:
+        for r in p.runs:
+            r.font.name = "Huawei Sans"
+
+
+def last_slide(prs, layouts):
+    """Add the closing thank-you slide (deprecated alias for thank_you_slide).
+
+    Kept for backwards compatibility.  Prefer :func:`thank_you_slide` for the
+    closing page and :func:`authorship_slide` for the page-2 back cover.
+
+    Args:
+        prs: Presentation object.
+        layouts: Layouts dict.
+    """
+    thank_you_slide(prs, layouts)
 
 
 # ── Save / export ───────────────────────────────────────────────────

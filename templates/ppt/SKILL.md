@@ -93,9 +93,11 @@ overrides in the generator unless the user asks.
 |---|---|---|
 | `add_slide` | `add_slide(prs, layouts, layout_name)` | Slide object |
 | `title_slide` | `title_slide(prs, layouts, module, subtitle, tag)` | None |
+| `authorship_slide` | `authorship_slide(prs, layouts, author="", employee_id="", version="v1.0", date="")` | None |
 | `chapter_slide` | `chapter_slide(prs, layouts, title, subtitle="")` | None |
 | `content_slide` | `content_slide(prs, layouts, title)` | Slide object |
-| `last_slide` | `last_slide(prs, layouts)` | None |
+| `thank_you_slide` | `thank_you_slide(prs, layouts)` | None |
+| `last_slide` | `last_slide(prs, layouts)` — deprecated alias for `thank_you_slide` | None |
 
 ### Content helpers
 
@@ -188,6 +190,9 @@ def main():
                 "My Presentation Title",
                 "Subtitle line",
                 "Tag line")
+    authorship_slide(prs, layouts, author="Author Name",
+                     employee_id="emp123", version="v1.0",
+                     date="August 2026")
 
     s = content_slide(prs, layouts, "First Section")
     text_box(s, "Content goes here.",
@@ -203,7 +208,7 @@ def main():
     s = content_slide(prs, layouts, "With Callout")
     callout(s, 'tip', "This is a helpful tip.")
 
-    last_slide(prs, layouts)
+    thank_you_slide(prs, layouts)
 
     path = save_deck(prs, os.path.join(OUT_DIR, "my-deck.pptx"))
     print(f"Saved: {path}")
@@ -232,8 +237,8 @@ PDF export requires LibreOffice (`soffice`) installed and available on PATH.
 1. Import `huawei_ppt` at the top of `generate.py` (use `sys.path.insert`
    to point to `templates/ppt/`).
 2. Use `new_deck()` to start from the clean template.
-3. Add slides using `title_slide`, `chapter_slide`, `content_slide`,
-   `last_slide`.
+3. Add slides using `title_slide`, `authorship_slide` (page-2 back cover),
+   `chapter_slide`, `content_slide`, and `thank_you_slide` (closing page).
 4. Add content with `text_box`, `add_table`, `callout`.
 5. Use `table_bottom()` to position callouts below tables.
 6. Save with `save_deck()` (auto-cleans the ZIP).

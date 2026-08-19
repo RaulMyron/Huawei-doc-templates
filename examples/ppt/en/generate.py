@@ -76,12 +76,12 @@ def main():
             top=5.2)
 
     # ═══════════════════════════════════════════════════════════════
-    # CHAPTER 2 — Services
+    # CHAPTER 2 — Services (expanded — the most important section)
     # ═══════════════════════════════════════════════════════════════
     chapter_slide(prs, layouts, "Cloud Services",
-                  "Families, Acronyms and Naming")
+                  "Families, details, and what the hotline needs to know")
 
-    # SLIDE — Service Families
+    # SLIDE — Service Families (overview)
     s = content_slide(prs, layouts, "Cloud Service Families")
     add_table(s,
         ["Family", "Key Services", "Count"],
@@ -93,25 +93,175 @@ def main():
             ["Security", "Anti-DDoS, WAF, IAM, KMS", "4"],
         ])
     callout(s, 'tip',
-            "The hotline must know the official service name for SR routing.",
+            "The hotline must know the official service name for SR routing. "
+            "Each family has its own characteristics and common issues — covered next.",
             top=5.2)
 
-    # SLIDE — Acronyms (no "Full Name PT" column)
+    # SLIDE — Compute in detail
+    s = content_slide(prs, layouts, "Compute — Services in Detail")
+    add_table(s,
+        ["Svc", "What It Is", "When to Use", "Check First"],
+        [
+            ["ECS", "Virtual server you rent in the cloud",
+             "Web apps, APIs, data processing",
+             "VM status, quotas, system events"],
+            ["IMS", "Image/template to create VMs fast",
+             "Repeatable, standardized deployments",
+             "Image exists? Correct version?"],
+            ["AS", "Adds/removes VMs automatically by demand",
+             "Traffic spikes, variable workloads",
+             "Scaling policies, min/max instances"],
+            ["CCE", "Managed Kubernetes (containers)",
+             "Microservices, modern applications",
+             "Pod status, ready nodes, quotas"],
+        ],
+        col_widths=[Inches(0.8), Inches(3.5), Inches(3.2), Inches(4.2)])
+    callout(s, 'infobox',
+            "ECS is the most common service — most compute SRs start here. "
+            "Always confirm: VM name, flavor (CPU/RAM), and current status.",
+            top=5.2)
+
+    # SLIDE — Storage in detail
+    s = content_slide(prs, layouts, "Storage — Services in Detail")
+    add_table(s,
+        ["Svc", "What It Is", "When to Use", "Check First"],
+        [
+            ["EVS", "Virtual disk attached to a VM",
+             "System and data disks",
+             "Capacity, IOPS, attached?"],
+            ["OBS", "Object storage (S3-like)",
+             "Backups, media, static files",
+             "AK/SK valid? Bucket exists?"],
+            ["SFS", "Shared file system",
+             "Files shared across VMs",
+             "Mount point, quota, performance"],
+            ["HBR", "Hybrid backup and recovery",
+             "DR, VM and data backups",
+             "Backup ran? Restore tested?"],
+        ],
+        col_widths=[Inches(0.8), Inches(3.5), Inches(3.2), Inches(4.2)])
+    callout(s, 'warning',
+            "Disk full (>90%) is the most common storage issue. "
+            "Always check capacity and IOPS before escalating.",
+            top=5.2)
+
+    # SLIDE — Network in detail
+    s = content_slide(prs, layouts, "Network — Services in Detail")
+    add_table(s,
+        ["Svc", "What It Is", "When to Use", "Check First"],
+        [
+            ["VPC", "Isolated private network in the cloud",
+             "All cloud resources",
+             "Subnets, route tables, SG"],
+            ["EIP", "Public IP for external access",
+             "Internet-facing services",
+             "EIP associated? Reachability"],
+            ["ELB", "Distributes traffic across servers",
+             "High availability, scaling",
+             "Health checks, backends healthy?"],
+            ["NAT", "Private VMs reach the internet",
+             "VMs without EIP needing internet",
+             "NAT rules, gateway active?"],
+            ["VPN", "Secure tunnel on-prem to cloud",
+             "Hybrid connection, remote access",
+             "Tunnel up? Routes correct?"],
+            ["DNS", "Name resolution to IPs",
+             "All services with names",
+             "Zone exists? Records correct?"],
+        ],
+        col_widths=[Inches(0.8), Inches(3.5), Inches(3.2), Inches(4.2)])
+    callout(s, 'infobox',
+            "Network issues almost always involve Security Groups or VPC. "
+            "Confirm SG (open ports) and route table before escalating.",
+            top=5.2)
+
+    # SLIDE — Database in detail
+    s = content_slide(prs, layouts, "Database — Services in Detail")
+    add_table(s,
+        ["Svc", "What It Is", "When to Use", "Check First"],
+        [
+            ["RDS", "Managed relational DB (MySQL, PG)",
+             "Apps using standard SQL",
+             "Slow log, connections, HA status"],
+            ["GaussDB", "Huawei high-performance database",
+             "Large scale, OLTP workloads",
+             "Performance, sync, connections"],
+            ["DRS", "Data replication and migration",
+             "DB migration, continuous sync",
+             "Sync lag, job status"],
+            ["DDS", "Document database (NoSQL)",
+             "Apps with flexible schema",
+             "Slow queries, indexes, connections"],
+        ],
+        col_widths=[Inches(0.8), Inches(3.5), Inches(3.2), Inches(4.2)])
+    callout(s, 'tip',
+            "RDS is the most used DB. Common issues: slow queries and connection limits. "
+            "Always ask for the slow log and active connection count.",
+            top=5.2)
+
+    # SLIDE — Security in detail
+    s = content_slide(prs, layouts, "Security — Services in Detail")
+    add_table(s,
+        ["Svc", "What It Is", "When to Use", "Check First"],
+        [
+            ["Anti-DDoS", "Protection against denial-of-service",
+             "Public-facing exposed services",
+             "Abnormal traffic, attack event"],
+            ["WAF", "Web application firewall",
+             "Websites and web APIs",
+             "WAF rules, false positives, logs"],
+            ["IAM", "Identity and access management",
+             "All services",
+             "Policies, roles, permissions"],
+            ["KMS", "Encryption key management",
+             "Sensitive data, compliance",
+             "Key exists? Usage permission?"],
+        ],
+        col_widths=[Inches(0.8), Inches(3.5), Inches(3.2), Inches(4.2)])
+    callout(s, 'warning',
+            "Never ask for customer credentials. For access issues, "
+            "check the IAM policy and guide the customer to verify permissions.",
+            top=5.2)
+
+    # SLIDE — Hotline Quick Reference
+    s = content_slide(prs, layouts, "Quick Reference — Hotline by Family")
+    add_table(s,
+        ["Family", "First Thing to Check", "Escalate When"],
+        [
+            ["Compute", "VM status, quotas, system events",
+             "Won't boot after basic checks"],
+            ["Storage", "Capacity, IOPS, disk attachment",
+             "Data loss risk"],
+            ["Network", "VPC, Security Group, EIP, routes",
+             "Total connectivity loss"],
+            ["Database", "Slow log, connections, HA status",
+             "Data corruption or HA failover"],
+            ["Security", "IAM policy, WAF rules, traffic",
+             "Active attack or total block"],
+        ],
+        col_widths=[Inches(1.8), Inches(5.5), Inches(4.4)])
+    callout(s, 'tip',
+            "This table is your pocket guide. Before escalating any SR, "
+            "always run through the middle-column checks first.",
+            top=5.2)
+
+    # SLIDE — Key Acronyms (no Full Name column)
     s = content_slide(prs, layouts, "Key Acronyms")
     add_table(s,
-        ["Acronym", "Full Name", "Description"],
+        ["Acronym", "Description"],
         [
-            ["ECS", "Elastic Cloud Server", "Scalable virtual server"],
-            ["EVS", "Elastic Volume Service", "Elastic block storage"],
-            ["VPC", "Virtual Private Cloud", "Isolated virtual network"],
-            ["ELB", "Elastic Load Balance", "Load balancer"],
-            ["RDS", "Relational Database Service", "Managed relational DB"],
-            ["OBS", "Object Storage Service", "Object storage"],
-            ["IAM", "Identity & Access Management", "Identity management"],
-            ["SR", "Service Request", "Service request ticket"],
-            ["ITR", "Issue To Resolve", "Incident to resolution"],
-            ["TAC", "Technical Assistance Center", "Technical support center"],
-        ])
+            ["ECS", "Elastic Cloud Server — scalable virtual server"],
+            ["EVS", "Elastic Volume Service — elastic block storage"],
+            ["VPC", "Virtual Private Cloud — isolated virtual network"],
+            ["ELB", "Elastic Load Balance — load balancer"],
+            ["RDS", "Relational Database Service — managed relational DB"],
+            ["OBS", "Object Storage Service — object storage"],
+            ["IAM", "Identity & Access Management — identity management"],
+            ["SR", "Service Request — service ticket"],
+            ["ITR", "Issue To Resolve — incident to resolution"],
+            ["TAC", "Technical Assistance Center — technical support center"],
+        ],
+        col_widths=[Inches(1.5), Inches(10.2)])
 
     # SLIDE — Naming Convention
     s = content_slide(prs, layouts, "Naming Convention")
@@ -145,7 +295,7 @@ def main():
         {'text': 'Diagnose and resolve', 'fill': GRAY_BG},
         {'type': 'arrow'},
         {'text': 'Verify and close SR', 'fill': GRAY_BG},
-    ], left=4.5, top=TOP_CONTENT + 0.1, box_width=4.0, box_height=0.5, gap=0.25)
+    ], left=4.5, top=TOP_CONTENT + 0.1, box_width=4.0, box_height=0.45, gap=0.2)
 
     # SLIDE — TAC Email
     s = content_slide(prs, layouts, "TAC Team Notification")

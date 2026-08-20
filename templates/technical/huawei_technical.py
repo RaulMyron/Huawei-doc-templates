@@ -539,6 +539,8 @@ def create_technical_report(replacements, template_path=None):
         replacements: dict of placeholder name → text values. Supported
             placeholders::
 
+                TITLE               — Report title on the cover page
+                RELEASE_DATE        — Release date on the cover page
                 PROBLEM_DESCRIPTION  — Problem Description and Impact section
                 ROOT_CAUSE_ANALYSIS — Root Cause Analysis section
                 ROOT_CAUSE          — Root Cause section

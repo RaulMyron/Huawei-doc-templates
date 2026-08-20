@@ -10,6 +10,9 @@ OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def main():
     replacements = {
+        'TITLE': '[Relatório de Análise] A lista de projetos empresariais não é '
+                 'exibida na página de criação do ECS na 8.5.1 no site do Brasil',
+        'RELEASE_DATE': '2025-08-13',
         'PROBLEM_DESCRIPTION':
             'No site do Brasil do HCS 8.5.1, o projeto empresarial padrão '
             'não é exibido na página de criação do ECS. Isso impede que os '

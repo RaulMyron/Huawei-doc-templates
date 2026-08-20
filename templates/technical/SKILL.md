@@ -114,6 +114,13 @@ with `{{PLACEHOLDER}}` markers that are filled at generation time.
 | Installation Scenario | `{{SCENARIO}}` | `Standard Scenario` |
 | Trigger Condition | `{{TRIGGER_CONDITION}}` | (also in table) |
 
+### Cover page placeholders
+
+| Cell | Placeholder | Example |
+|---|---|---|
+| Report title | `{{TITLE}}` | `[Analysis Report] ...` |
+| Release date | `{{RELEASE_DATE}}` | `2025-08-13` |
+
 ### Other template content (preserved, not placeholder-driven)
 
 | Section | Content |
@@ -210,6 +217,8 @@ OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def main():
     replacements = {
+        'TITLE': '[Analysis Report] Report title here',
+        'RELEASE_DATE': '2025-08-13',
         'PROBLEM_DESCRIPTION': 'Describe the problem and its impact.',
         'ROOT_CAUSE_ANALYSIS': '1. First analysis step\n2. Second step',
         'ROOT_CAUSE': 'The identified root cause.',
